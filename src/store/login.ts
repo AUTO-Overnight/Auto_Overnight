@@ -38,11 +38,15 @@ export const loginSlice = createSlice({
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginError = 'fail';
 		},
+		setIdPw: (state, action: PayloadAction<User>) => {
+			state.id = action.payload.id;
+			state.pw = action.payload.pw;
+		},
 	},
 	extraReducers: {},
 });
 
-export const { GET_LOGIN_SUCCESS, GET_LOGIN_FAILURE, initialLogin } =
+export const { GET_LOGIN_SUCCESS, GET_LOGIN_FAILURE, initialLogin, setIdPw } =
 	loginSlice.actions;
 
 export default loginSlice.reducer;
