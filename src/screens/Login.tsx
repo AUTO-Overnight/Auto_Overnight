@@ -20,13 +20,13 @@ import { useAutoFocus, AutoFocusProvider } from '../contexts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useCallback } from 'react';
-import { getLogin, initialLogin } from '../store/login';
+import { getLogin, initialLogin, setIdPw } from '../store/login';
 import { useEffect } from 'react';
-
+import type { User } from '../interface';
 export default function MainNavigator() {
 	const focus = useAutoFocus();
-	const [_id, setId] = useState<string>('');
-	const [_pw, setPW] = useState<string>('');
+	const [id, setId] = useState<string>('');
+	const [pw, setPW] = useState<string>('');
 	const { token, loginError, loadingLogin } = useSelector(
 		({ login, loading }: RootState) => ({
 			token: login.token,
@@ -36,14 +36,15 @@ export default function MainNavigator() {
 	);
 	const dispatch = useDispatch();
 	const onSubmit = useCallback(() => {
-		dispatch(getLogin({ _id, _pw }));
+		dispatch(getLogin({ id, pw }));
+		dispatch(setIdPw({ id, pw }));
 		setId((notUsed) => '');
 		setPW((notUsed) => '');
-	}, []);
+		dispatch(initialLogin());
+	}, [id, pw]);
 	useEffect(() => {
 		token && Alert.alert('로그인 성공');
 		loginError && Alert.alert('로그인 실패!!!');
-		dispatch(initialLogin());
 	}, [token, loginError]);
 	return (
 		<View style={[styles.view]}>
@@ -59,7 +60,7 @@ export default function MainNavigator() {
 						<TextInput
 							onFocus={focus}
 							style={[styles.textInput]}
-							value={_id}
+							value={id}
 							onChangeText={(id) => setId((text) => id)}
 							placeholder="enter your ID"
 						/>
@@ -71,7 +72,7 @@ export default function MainNavigator() {
 						<TextInput
 							onFocus={focus}
 							style={[styles.textInput]}
-							value={_pw}
+							value={pw}
 							onChangeText={(pw) => setPW((text) => pw)}
 							placeholder="enter your PW"
 						/>
