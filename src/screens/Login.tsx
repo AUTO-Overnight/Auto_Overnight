@@ -16,6 +16,7 @@ import {
 	TopBar,
 	MaterialCommunityIcon as Icon,
 } from '../theme';
+import { useNavigation } from '@react-navigation/native';
 import { useAutoFocus, AutoFocusProvider } from '../contexts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -24,6 +25,7 @@ import { getLogin, initialLogin, setIdPw } from '../store/login';
 import { useEffect } from 'react';
 import type { User } from '../interface';
 export default function MainNavigator() {
+	// text
 	const focus = useAutoFocus();
 	const [id, setId] = useState<string>('');
 	const [pw, setPW] = useState<string>('');
@@ -46,50 +48,52 @@ export default function MainNavigator() {
 		token && Alert.alert('로그인 성공');
 		loginError && Alert.alert('로그인 실패!!!');
 	}, [token, loginError]);
+	const navigation = useNavigation();
+	const goTabNavigator = useCallback(
+		() => navigation.navigate('TabNavigator'),
+		[]
+	);
 	return (
-		<View style={[styles.view]}>
-			<TopBar>
-				<UnderlineText onPress={Keyboard.dismiss} style={[styles.text]}>
-					dismiss keyboard
-				</UnderlineText>
-			</TopBar>
-			<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
-				<View style={[styles.textView]}>
-					<Text style={[styles.text]}>ID</Text>
-					<View border style={[styles.textInputView]}>
-						<TextInput
-							onFocus={focus}
-							style={[styles.textInput]}
-							value={id}
-							onChangeText={(id) => setId((text) => id)}
-							placeholder="enter your ID"
-						/>
+		<SafeAreaView>
+			<View style={[styles.view]}>
+				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
+					<View style={[styles.textView]}>
+						<Text style={[styles.text]}>ID</Text>
+						<View border style={[styles.textInputView]}>
+							<TextInput
+								onFocus={focus}
+								style={[styles.textInput]}
+								value={id}
+								onChangeText={(id) => setId((text) => id)}
+								placeholder="enter your ID"
+							/>
+						</View>
 					</View>
-				</View>
-				<View style={[styles.textView]}>
-					<Text style={[styles.text]}>PW</Text>
-					<View border style={[styles.textInputView]}>
-						<TextInput
-							onFocus={focus}
-							style={[styles.textInput]}
-							value={pw}
-							onChangeText={(pw) => setPW((text) => pw)}
-							placeholder="enter your PW"
-						/>
+					<View style={[styles.textView]}>
+						<Text style={[styles.text]}>PW</Text>
+						<View border style={[styles.textInputView]}>
+							<TextInput
+								onFocus={focus}
+								style={[styles.textInput]}
+								value={pw}
+								onChangeText={(pw) => setPW((text) => pw)}
+								placeholder="enter your PW"
+							/>
+						</View>
 					</View>
-				</View>
-				{loadingLogin && <ActivityIndicator size="large" />}
-				<TouchableView
-					notification
-					style={[styles.touchableView]}
-					onPress={onSubmit}
-				>
-					<Text style={[styles.text, { marginRight: 5 }]}>Login</Text>
-					<Icon name="login" size={24} />
-				</TouchableView>
-			</AutoFocusProvider>
-			<View style={[{ marginBottom: Platform.select({ ios: 50 }) }]} />
-		</View>
+					{loadingLogin && <ActivityIndicator size="large" />}
+					<TouchableView
+						notification
+						style={[styles.touchableView]}
+						onPress={goTabNavigator}
+					>
+						<Text style={[styles.text, { marginRight: 5 }]}>Login</Text>
+						<Icon name="login" size={24} />
+					</TouchableView>
+				</AutoFocusProvider>
+				<View style={[{ marginBottom: Platform.select({ ios: 50 }) }]} />
+			</View>
+		</SafeAreaView>
 	);
 }
 const styles = StyleSheet.create({
