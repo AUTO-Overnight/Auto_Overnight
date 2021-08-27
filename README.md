@@ -40,7 +40,7 @@ name에는 학생 이름, stayoutlist에는 외박신청내역이 담깁니다.
 ``` 
 return {
     statusCode: 200,
-    stayoutlist: response
+    stayoutlist: response(XML 형태)
  }
 ```
 
