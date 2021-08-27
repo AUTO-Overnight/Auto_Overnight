@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import createRequestSaga from '../hooks/createRequestSaga';
+import { createRequestSaga } from '../hooks';
 import * as api from '../lib/api/login';
 import { takeLatest } from 'redux-saga/effects';
 import { createAction } from 'redux-actions';
