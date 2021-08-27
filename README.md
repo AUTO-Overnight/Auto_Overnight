@@ -29,7 +29,7 @@ return {
 
 로그인을 성공하면 statusCode, cookies, name, stayoutlist를 return 합니다.
 
-name에는 학생 이름, stayoutlist에는 외박신청내역이 담깁니다.
+name에는 학생 이름, stayoutlist에는 현재 학기의 외박신청내역이 담깁니다.
 
 ### sendStayOut
 
@@ -48,7 +48,7 @@ return {
 
 외박신청에 성공하면 statusCode, stayoutlist를 return 합니다.
 
-stayoutlist에는 외박 신청 내역이 담깁니다.
+stayoutlist에는 현재 학기의 외박 신청 내역이 담깁니다.
 
 ### findStayOutList
 
@@ -67,7 +67,7 @@ return {
 
 조회에 성공하면 statusCode, stayoutlist를 return 합니다.
 
-stayoutlist에는 외박 신청 내역이 담깁니다.
+stayoutlist에는 요청받은 년도, 학기의 외박 신청 내역이 담깁니다.
 
 ### findPointList
 
@@ -86,7 +86,7 @@ return {
 
 조회에 성공하면 statusCode, pointlist를 return 합니다.
 
-pointlist 상벌점 내역이 담깁니다.
+pointlist 요청받은 년도, 학기의 상벌점 내역이 담깁니다.
 
 
 
