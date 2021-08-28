@@ -1,15 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
-import {SafeAreaView, View, UnderlineText,TopBar,
-NavigationHeader, MaterialCommunityIcon as Icon, TouchableView} from '../theme';
+import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
 import { ScrollEnabledProvider, useScrollEnabled } from '../contexts';
-import { Colors } from 'react-native-paper';
 import { LeftRightNavigation } from '../components';
 import type { LeftRightNavigationMethods } from '../components';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
@@ -19,6 +17,9 @@ import { LocaleConfig } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
 import { addDay, removeAllDays } from '../store/calendar';
 import { RootState } from '../store';
+import { useCalendarTheme } from '../hooks';
+import { useModalView } from '../hooks/useModal';
+// import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -30,9 +31,6 @@ LocaleConfig.locales['ko'] = {
   today: 'Aujourd'
 };
 LocaleConfig.defaultLocale = 'ko';
-// const dayjs = require('dayjs');
-// const timezone = require('dayjs/plugin/timezone');
-// const utc = require('dayjs/plugin/utc');
 
 export default function Home() {
 	const { day } = useSelector(({ calendar }: RootState) => ({
@@ -54,21 +52,23 @@ export default function Home() {
 	}, []);
 	// for people
 	const [scrollEnabled] = useScrollEnabled();
-
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
-
 	const flatListRef = useRef<FlatList | null>(null);
+
 	// calendar
 	const [today, setToday] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
 	);
+	const { theme, isDark } = useCalendarTheme();
+	console.log(theme);
 
-	console.log('오늘은', today);
-	// console.log(today);
 	const [selected, setSelected] = useState<string>('');
 
 	const onDayPress = useCallback(
 		(day: DateObject) => {
+			if (dayjs(today).isBefore(day.dateString)) {
+				setModalVisible((visible) => !visible);
+			}
 			const date = day.dateString;
 			setSelected(date);
 			dispatch(addDay(date));
@@ -79,6 +79,8 @@ export default function Home() {
 	const onRemoveAllDays = useCallback(() => {
 		dispatch(removeAllDays());
 	}, []);
+	// modal
+	const { ModalView, setModalVisible } = useModalView();
 	return (
 		<SafeAreaView>
 			<ScrollEnabledProvider>
@@ -88,23 +90,21 @@ export default function Home() {
 						Left={() => <Icon name="menu" size={30} onPress={open} />}
 						Right={() => <Icon name="logout" size={30} onPress={logout} />}
 					/>
-					<TouchableView style={styles.touchableView} notification>
-						<UnderlineText
-							onPress={onRemoveAllDays}
-							style={[
-								styles.text,
-								{ textAlign: 'right', color: Colors.red100 },
-							]}
-						>
-							remove all
-						</UnderlineText>
+					{isDark && (
+						<Calendar markedDates={day} onDayPress={onDayPress} theme={theme} />
+					)}
+					{!isDark && (
+						<Calendar markedDates={day} onDayPress={onDayPress} theme={theme} />
+					)}
+					{/*버튼*/}
+					<TouchableView
+						onPress={onRemoveAllDays}
+						style={styles.touchableView}
+						notification
+					>
+						<Text style={[styles.text]}>모두 삭제</Text>
 					</TouchableView>
-					<Calendar
-						markedDates={day}
-						onDayLongPress={() => console.log('byebye')}
-						onDayPress={onDayPress}
-						theme={calendarTheme}
-					/>
+
 					<LeftRightNavigation
 						ref={leftRef}
 						distance={40}
@@ -121,33 +121,12 @@ const styles = StyleSheet.create({
 	view: { flex: 1 },
 	text: { marginRight: 10, fontSize: 20 },
 	touchableView: {
+		marginTop: 30,
 		flexDirection: 'row',
 		height: 50,
-		borderRadius: 10,
-		width: '90%',
+		borderRadius: 30,
+		width: '80%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 	},
 });
-
-const calendarTheme = {
-	backgroundColor: Colors.grey900, // 뒷배경
-	calendarBackground: Colors.grey900, // 뒷배경
-	textSectionTitleColor: Colors.blue700, // 요일 색상
-	textSectionTitleDisabledColor: Colors.red800,
-	selectedDayBackgroundColor: Colors.red800,
-	selectedDayTextColor: Colors.red800,
-	// todayTextColor: Colors.red800,
-	dayTextColor: Colors.white,
-	textDisabledColor: Colors.black,
-	dayTextAtIndex0: Colors.red900,
-
-	monthTextColor: Colors.white,
-	indicatorColor: Colors.black,
-	// textDayFontWeight: '300',
-	// textMonthFontWeight: 'bold',
-	// textDayHeaderFontWeight: '300',
-	textDayFontSize: 18,
-	textMonthFontSize: 18,
-	textDayHeaderFontSize: 18,
-};
