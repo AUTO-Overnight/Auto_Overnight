@@ -18,7 +18,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addDay, removeAllDays } from '../store/calendar';
 import { RootState } from '../store';
 import { useCalendarTheme } from '../hooks';
-import { useModalView } from '../hooks/useModal';
 // import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -80,7 +79,6 @@ export default function Home() {
 		dispatch(removeAllDays());
 	}, []);
 	// modal
-	const { ModalView, setModalVisible } = useModalView();
 	return (
 		<SafeAreaView>
 			<ScrollEnabledProvider>
