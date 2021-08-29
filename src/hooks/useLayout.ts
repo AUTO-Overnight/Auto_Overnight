@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { LayoutChangeEvent, LayoutRectangle } from 'react-native';
-import { Animated } from 'react-native';
 
 export const useLayout = (): [
 	LayoutRectangle,
