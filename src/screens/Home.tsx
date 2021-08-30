@@ -51,10 +51,7 @@ export default function Home() {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const goLeft = useCallback(() => navigation.navigate('HomeLeft'), []);
-	const goRight = useCallback(
-		() => navigation.navigate('HomeRight', { name: 'Jack', age: 32 }),
-		[]
-	);
+	const goRight = useCallback(() => navigation.navigate('Week'), []);
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
@@ -117,8 +114,8 @@ export default function Home() {
 				<View style={[styles.view]}>
 					<NavigationHeader
 						title="Home"
-						Left={() => <Icon name="menu" size={30} onPress={open} />}
-						Right={() => <Icon name="logout" size={30} onPress={logout} />}
+						Left={() => <Icon name="menu" size={35} onPress={open} />}
+						Right={() => <Icon name="logout" size={35} onPress={logout} />}
 					/>
 					{/*달력*/}
 					{isDark && (
@@ -128,14 +125,20 @@ export default function Home() {
 						<Calendar markedDates={day} onDayPress={onDayPress} theme={theme} />
 					)}
 					{/*버튼*/}
+					<View style={{ flex: 1 }} />
 					<TouchableView
 						onPress={onRemoveAllDays}
-						style={styles.touchableView}
-						notification
+						style={[styles.touchableView, { backgroundColor: Colors.red300 }]}
 					>
-						<Text style={[styles.text]}>모두 삭제</Text>
+						<Text style={[styles.text, { fontWeight: '500' }]}>모두삭제</Text>
 					</TouchableView>
-					<View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
+					<TouchableView
+						onPress={onRemoveAllDays}
+						style={[styles.touchableView, { backgroundColor: Colors.blue300 }]}
+					>
+						<Text style={[styles.text, { fontWeight: '500' }]}>신청하기</Text>
+					</TouchableView>
+					{/* <View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
 						<AnimatedIcon
 							style={iconAnimStyle}
 							name="soccer-ball-o"
@@ -143,14 +146,14 @@ export default function Home() {
 							color={Colors.blue500}
 							onPress={avatarPressed}
 						/>
-					</View>
+					</View> */}
 					<LeftRightNavigation
 						ref={leftRef}
 						distance={40}
 						flatListRef={flatListRef}
-						onLeftToRight={goLeft}
+						// onLeftToRight={goLeft}
 						onRightToLeft={goRight}
-					></LeftRightNavigation>
+					/>
 				</View>
 			</ScrollEnabledProvider>
 		</SafeAreaView>
@@ -158,7 +161,7 @@ export default function Home() {
 }
 const styles = StyleSheet.create({
 	view: { flex: 1 },
-	text: { marginRight: 10, fontSize: 20 },
+	text: { marginRight: 10, fontSize: 20, color: 'white' },
 	touchableView: {
 		marginTop: 30,
 		flexDirection: 'row',
