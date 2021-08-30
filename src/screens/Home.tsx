@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, Animated } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
@@ -17,8 +17,17 @@ import { LocaleConfig } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
 import { addDay, removeAllDays } from '../store/calendar';
 import { RootState } from '../store';
-import { useCalendarTheme } from '../hooks';
-// import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {
+	useAnimatedValue,
+	useCalendarTheme,
+	useLayout,
+	useTransformStyle,
+} from '../hooks';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { interpolate } from '../utils';
+import { useToggle } from '../hooks/useToggle';
+import { Easing } from 'react-native-reanimated';
+import { Colors } from 'react-native-paper';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -30,6 +39,9 @@ LocaleConfig.locales['ko'] = {
   today: 'Aujourd'
 };
 LocaleConfig.defaultLocale = 'ko';
+
+const AnimatedIcon = Animated.createAnimatedComponent(FontAwesomeIcon);
+const iconSize = 50;
 
 export default function Home() {
 	const { day } = useSelector(({ calendar }: RootState) => ({
@@ -59,15 +71,14 @@ export default function Home() {
 		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
 	);
 	const { theme, isDark } = useCalendarTheme();
-	console.log(theme);
 
 	const [selected, setSelected] = useState<string>('');
 
 	const onDayPress = useCallback(
 		(day: DateObject) => {
-			if (dayjs(today).isBefore(day.dateString)) {
-				setModalVisible((visible) => !visible);
-			}
+			// if (dayjs(today).isBefore(day.dateString)) {
+			// 	setModalVisible((visible) => !visible);
+			// }
 			const date = day.dateString;
 			setSelected(date);
 			dispatch(addDay(date));
@@ -78,7 +89,28 @@ export default function Home() {
 	const onRemoveAllDays = useCallback(() => {
 		dispatch(removeAllDays());
 	}, []);
-	// modal
+	// Animation
+	const [started, toggleStarted] = useToggle(false);
+	const animValue = useAnimatedValue(0);
+
+	const avatarPressed = useCallback(
+		() =>
+			Animated.timing(animValue, {
+				useNativeDriver: false,
+				toValue: started ? 0 : 1,
+				easing: Easing.bounce,
+			}).start(toggleStarted),
+		[started]
+	);
+
+	const [layout, setLayout] = useLayout();
+	const iconAnimStyle = useTransformStyle(
+		{
+			translateX: interpolate(animValue, [0, layout.width - iconSize]),
+			rotate: interpolate(animValue, ['0deg', '720deg']),
+		},
+		[layout.width]
+	);
 	return (
 		<SafeAreaView>
 			<ScrollEnabledProvider>
@@ -88,6 +120,7 @@ export default function Home() {
 						Left={() => <Icon name="menu" size={30} onPress={open} />}
 						Right={() => <Icon name="logout" size={30} onPress={logout} />}
 					/>
+					{/*달력*/}
 					{isDark && (
 						<Calendar markedDates={day} onDayPress={onDayPress} theme={theme} />
 					)}
@@ -102,7 +135,15 @@ export default function Home() {
 					>
 						<Text style={[styles.text]}>모두 삭제</Text>
 					</TouchableView>
-
+					<View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
+						<AnimatedIcon
+							style={iconAnimStyle}
+							name="soccer-ball-o"
+							size={iconSize}
+							color={Colors.blue500}
+							onPress={avatarPressed}
+						/>
+					</View>
 					<LeftRightNavigation
 						ref={leftRef}
 						distance={40}
