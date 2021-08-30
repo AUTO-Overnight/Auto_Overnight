@@ -2,6 +2,7 @@ import React from 'react';
 import type { FC, ComponentProps } from 'react';
 import { View as RNView } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { Colors } from 'react-native-paper';
 
 export type ViewProps = ComponentProps<typeof RNView> & {
 	border?: boolean;
@@ -21,15 +22,14 @@ export const View: FC<ViewProps> = ({
 	...props
 }) => {
 	const { colors } = useTheme();
+
 	const backgroundColor = card
 		? colors.card
-		: colors.border
-		? primary
-			? colors.primary
-			: notification
-			? colors.border
-			: colors.background
-		: colors.border;
+		: primary
+		? colors.primary
+		: notification
+		? colors.notification
+		: colors.background;
 	const borderColor = border ? colors.border : undefined;
 	const borderWidth = border ? 1 : undefined;
 	return (
