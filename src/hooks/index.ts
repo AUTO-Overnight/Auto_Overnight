@@ -4,3 +4,4 @@ export * from './usePanResponder';
 export * from './useCalendarTheme';
 export * from './useTransformStyle';
 export * from './useLayout';
+export * from './useAnimatedValue';
