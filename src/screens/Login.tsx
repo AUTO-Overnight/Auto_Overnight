@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
-import {
-	Platform,
-	StyleSheet,
-	Keyboard,
-	Alert,
-	ActivityIndicator,
-} from 'react-native';
+import { Platform, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import {
 	SafeAreaView,
 	View,
 	Text,
-	UnderlineText,
 	TextInput,
 	TouchableView,
-	TopBar,
 	MaterialCommunityIcon as Icon,
 } from '../theme';
 import { useNavigation } from '@react-navigation/native';
@@ -23,36 +15,40 @@ import { RootState } from '../store';
 import { useCallback } from 'react';
 import { getLogin, initialLogin, setIdPw } from '../store/login';
 import { useEffect } from 'react';
-import type { User } from '../interface';
+import { Colors } from 'react-native-paper';
 export default function MainNavigator() {
 	// text
 	const focus = useAutoFocus();
-	const [id, setId] = useState<string>('');
-	const [pw, setPW] = useState<string>('');
-	const { token, loginError, loadingLogin } = useSelector(
+	const [id, setId] = useState<string>('2015132012');
+	const [pw, setPW] = useState<string>('qkrrkd12!');
+	const { cookies, loginError, loadingLogin, dateList, name } = useSelector(
 		({ login, loading }: RootState) => ({
-			token: login.token,
+			cookies: login.cookies,
+			name: login.name,
 			loginError: login.loginError,
+			dateList: login.dateList,
 			loadingLogin: loading['login/GET_LOGIN'],
 		})
 	);
 	const dispatch = useDispatch();
 	const onSubmit = useCallback(() => {
-		dispatch(getLogin({ id, pw }));
 		dispatch(setIdPw({ id, pw }));
-		setId((notUsed) => '');
-		setPW((notUsed) => '');
-		dispatch(initialLogin());
+		dispatch(getLogin({ id, pw }));
+		// setId((notUsed) => '');
+		// setPW((notUsed) => '');
+		// dispatch(initialLogin());
 	}, [id, pw]);
 	useEffect(() => {
-		token && Alert.alert('로그인 성공');
+		if (name) {
+			navigation.navigate('TabNavigator');
+		}
 		loginError && Alert.alert('로그인 실패!!!');
-	}, [token, loginError]);
+	}, [loginError, dateList]);
 	const navigation = useNavigation();
-	const goTabNavigator = useCallback(
-		() => navigation.navigate('TabNavigator'),
-		[]
-	);
+	// const goTabNavigator = useCallback(
+	// 	() => navigation.navigate('TabNavigator'),
+	// 	[]
+	// );
 	return (
 		<SafeAreaView>
 			<View style={[styles.view]}>
@@ -81,11 +77,12 @@ export default function MainNavigator() {
 							/>
 						</View>
 					</View>
+					<View style={{ marginBottom: 20 }} />
 					{loadingLogin && <ActivityIndicator size="large" />}
 					<TouchableView
 						notification
 						style={[styles.touchableView]}
-						onPress={goTabNavigator}
+						onPress={onSubmit}
 					>
 						<Text style={[styles.text, { marginRight: 5 }]}>Login</Text>
 						<Icon name="login" size={24} />
@@ -112,7 +109,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		height: 50,
 		borderRadius: 10,
-		width: '90%',
+		width: '97%',
+		backgroundColor: Colors.blueA400,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
