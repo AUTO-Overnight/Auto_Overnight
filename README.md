@@ -28,6 +28,8 @@ Based in React Native
 {
     "cookies": "_SSO_Global_Logout_url=get%5Ehttps%3A%2F%2Fportal.kpu.ac.kr%3A443%2Fsso%2Flogout.jsp%24get%5Ehttps%3A%2F%2Fiis.kpu.ac.kr%3A443%2Fcom%2FSsoCtr%2Fj_logout.do%24; kalogin=cTOY5WTXaWNWjA==$server; JSESSIONID=m1Y065aTXSKsmRDvwcIqUPkOBRXPaLpXLs5Jia3YNSGdyKa0pkrNR0gutMiLf1Np.amV1c19kb21haW4vanN2XzI=",
     "name": "홍길동",
+    "yy" : 2021,
+    "tmGbn" : 2,
     "outStayFrDt": [
         "20210830",
         "20210827",
@@ -46,7 +48,9 @@ Based in React Native
 }
 ```
 
-쿠키, 외박 신청 내역, 이름을 return 합니다
+yy  년도
+
+tmGbn  학기 구분 / 1학기 : 1 / 2학기 : 2 / 여름학기 : 5 / 겨울학기 : 6
 
 outStayStGbn  1 : 미승인 / 2 : 승인
 
