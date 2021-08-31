@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { StyleSheet, FlatList, Animated } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
@@ -15,7 +15,15 @@ import utc from 'dayjs/plugin/utc';
 import type { DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDay, removeAllDays } from '../store/calendar';
+import {
+	addDay,
+	initial,
+	removeAllDays,
+	sendDates,
+	sendPrepare,
+	setExistDays,
+	togglePrepare,
+} from '../store/calendar';
 import { RootState } from '../store';
 import {
 	useAnimatedValue,
@@ -28,6 +36,8 @@ import { interpolate } from '../utils';
 import { useToggle } from '../hooks/useToggle';
 import { Easing } from 'react-native-reanimated';
 import { Colors } from 'react-native-paper';
+import { logoutHome } from '../store/login';
+import { CalendarAPI } from '../interface';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -36,7 +46,7 @@ LocaleConfig.locales['ko'] = {
   monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
   dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
   dayNamesShort: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-  today: 'Aujourd'
+  today: 'today'
 };
 LocaleConfig.defaultLocale = 'ko';
 
@@ -44,28 +54,52 @@ const AnimatedIcon = Animated.createAnimatedComponent(FontAwesomeIcon);
 const iconSize = 50;
 
 export default function Home() {
-	const { day } = useSelector(({ calendar }: RootState) => ({
+	const {
+		day,
+		dateList,
+		sendDays,
+		cookies,
+		isWeekend,
+		id,
+		prepare,
+		outStayFrDtL,
+	} = useSelector(({ calendar, login }: RootState) => ({
 		day: calendar.day,
+		dateList: login.dateList,
+		sendDays: calendar.sendDays,
+		cookies: login.cookies,
+		isWeekend: calendar.isWeekend,
+		id: login.id,
+		prepare: calendar.prepare,
+		outStayFrDtL: calendar.outStayFrDtL,
 	}));
 	// navigation
+	useEffect(() => {
+		dispatch(setExistDays(dateList));
+		outStayFrDtL && dispatch(setExistDays(outStayFrDtL));
+	}, [dateList, outStayFrDtL]);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const goLeft = useCallback(() => navigation.navigate('HomeLeft'), []);
+	// const goLeft = useCallback(() => navigation.navigate('HomeLeft'), []);
 	const goRight = useCallback(() => navigation.navigate('Week'), []);
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
 	const logout = useCallback(() => {
+		dispatch(logoutHome());
 		navigation.navigate('Login');
 	}, []);
-	// for people
+
 	const [scrollEnabled] = useScrollEnabled();
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
 
 	// calendar
-	const [today, setToday] = useState(
+	const [today] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
+	);
+	const [sendingToday] = useState(
+		dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD')
 	);
 	const { theme, isDark } = useCalendarTheme();
 
@@ -73,9 +107,14 @@ export default function Home() {
 
 	const onDayPress = useCallback(
 		(day: DateObject) => {
-			// if (dayjs(today).isBefore(day.dateString)) {
-			// 	setModalVisible((visible) => !visible);
-			// }
+			if (dayjs(today).isAfter(day.dateString)) {
+				return;
+			} else if (String(dayjs(today)) === day.dateString) {
+				const date = day.dateString;
+				setSelected(date);
+				dispatch(addDay(date));
+				console.log('touch');
+			}
 			const date = day.dateString;
 			setSelected(date);
 			dispatch(addDay(date));
@@ -83,31 +122,57 @@ export default function Home() {
 		},
 		[day]
 	);
+	useEffect(() => {
+		let data: CalendarAPI;
+		if (prepare) {
+			data = {
+				dateList: sendDays,
+				isWeekend: isWeekend,
+				sendingToday: sendingToday,
+				id: id,
+				cookies: cookies,
+			};
+			console.log(data);
+			dispatch(sendDates(data));
+			dispatch(removeAllDays());
+			dispatch(togglePrepare());
+		}
+	}, [prepare]);
+	useEffect(() => {
+		dispatch(setExistDays(outStayFrDtL));
+	}, [outStayFrDtL]);
+	const onSendDays = useCallback(() => {
+		dispatch(sendPrepare());
+	}, [sendDays]);
 	const onRemoveAllDays = useCallback(() => {
-		dispatch(removeAllDays());
-	}, []);
+		// dispatch(removeAllDays());
+		dispatch(initial());
+
+		outStayFrDtL && dispatch(setExistDays(outStayFrDtL));
+		dispatch(setExistDays(dateList));
+	}, [outStayFrDtL]);
 	// Animation
-	const [started, toggleStarted] = useToggle(false);
-	const animValue = useAnimatedValue(0);
+	// const [started, toggleStarted] = useToggle(false);
+	// const animValue = useAnimatedValue(0);
 
-	const avatarPressed = useCallback(
-		() =>
-			Animated.timing(animValue, {
-				useNativeDriver: false,
-				toValue: started ? 0 : 1,
-				easing: Easing.bounce,
-			}).start(toggleStarted),
-		[started]
-	);
+	// const avatarPressed = useCallback(
+	// 	() =>
+	// 		Animated.timing(animValue, {
+	// 			useNativeDriver: false,
+	// 			toValue: started ? 0 : 1,
+	// 			easing: Easing.bounce,
+	// 		}).start(toggleStarted),
+	// 	[started]
+	// );
 
-	const [layout, setLayout] = useLayout();
-	const iconAnimStyle = useTransformStyle(
-		{
-			translateX: interpolate(animValue, [0, layout.width - iconSize]),
-			rotate: interpolate(animValue, ['0deg', '720deg']),
-		},
-		[layout.width]
-	);
+	// const [layout, setLayout] = useLayout();
+	// const iconAnimStyle = useTransformStyle(
+	// 	{
+	// 		translateX: interpolate(animValue, [0, layout.width - iconSize]),
+	// 		rotate: interpolate(animValue, ['0deg', '720deg']),
+	// 	},
+	// 	[layout.width]
+	// );
 	return (
 		<SafeAreaView>
 			<ScrollEnabledProvider>
@@ -119,22 +184,38 @@ export default function Home() {
 					/>
 					{/*달력*/}
 					{isDark && (
-						<Calendar markedDates={day} onDayPress={onDayPress} theme={theme} />
+						<Calendar
+							// style={styles.calendar}
+							markedDates={day}
+							onDayPress={onDayPress}
+							theme={theme}
+						/>
 					)}
 					{!isDark && (
-						<Calendar markedDates={day} onDayPress={onDayPress} theme={theme} />
+						<Calendar
+							// style={styles.calendar}
+							markedDates={day}
+							onDayPress={onDayPress}
+							theme={theme}
+						/>
 					)}
 					{/*버튼*/}
-					<View style={{ flex: 1 }} />
+					<View style={{ flex: 0.4 }} />
 					<TouchableView
 						onPress={onRemoveAllDays}
-						style={[styles.touchableView, { backgroundColor: Colors.red300 }]}
+						style={[
+							styles.touchableView,
+							{ backgroundColor: isDark ? Colors.red400 : Colors.red200 },
+						]}
 					>
 						<Text style={[styles.text, { fontWeight: '500' }]}>모두삭제</Text>
 					</TouchableView>
 					<TouchableView
-						onPress={onRemoveAllDays}
-						style={[styles.touchableView, { backgroundColor: Colors.blue300 }]}
+						onPress={onSendDays}
+						style={[
+							styles.touchableView,
+							{ backgroundColor: isDark ? Colors.purple400 : Colors.purple200 },
+						]}
 					>
 						<Text style={[styles.text, { fontWeight: '500' }]}>신청하기</Text>
 					</TouchableView>
@@ -161,13 +242,14 @@ export default function Home() {
 }
 const styles = StyleSheet.create({
 	view: { flex: 1 },
-	text: { marginRight: 10, fontSize: 20, color: 'white' },
+	text: { marginRight: 10, fontSize: 20, color: Colors.white },
+	calendar: { height: 50 },
 	touchableView: {
 		marginTop: 30,
 		flexDirection: 'row',
-		height: 50,
-		borderRadius: 30,
-		width: '80%',
+		height: 60,
+		borderRadius: 10,
+		width: '90%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 	},

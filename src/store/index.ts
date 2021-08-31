@@ -3,7 +3,7 @@ import { all } from 'redux-saga/effects';
 import { persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import counter from './counter';
-import calendar from './calendar';
+import calendar, { calendarSaga } from './calendar';
 import loading from './loading';
 import login, { loginSaga } from './login';
 // import storageSession from 'redux-persist/lib/storage/session';
@@ -17,5 +17,5 @@ export default persistReducer(persistConfig, rootReducer);
 export type RootState = ReturnType<typeof rootReducer>;
 
 export function* rootSaga() {
-	yield all([loginSaga()]);
+	yield all([loginSaga(), calendarSaga()]);
 }
