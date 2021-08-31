@@ -9,8 +9,13 @@ import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
 import { Avatar } from '../components';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
+	const { name } = useSelector(({ login }: RootState) => ({
+		name: login.name,
+	}));
 	const { navigation } = props;
 	const close = useCallback(
 		() => navigation.dispatch(DrawerActions.closeDrawer()),
