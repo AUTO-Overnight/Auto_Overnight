@@ -7,6 +7,7 @@
 		"@react-navigation/native": "^6.0.2",
 		"@react-navigation/stack": "^6.0.7",
 		"@reduxjs/toolkit": "^1.6.1",
+		"@types/redux-actions": "^2.6.2",
 		"axios": "^0.21.1",
 		"dayjs": "^1.10.6",
 		"expo": "~42.0.1",
