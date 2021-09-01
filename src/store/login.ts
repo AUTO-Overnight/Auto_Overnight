@@ -3,19 +3,30 @@ import { createRequestSaga } from '../hooks';
 import * as api from '../lib/api/login';
 import { takeLatest } from 'redux-saga/effects';
 import { createAction } from 'redux-actions';
-import type { Login, User, LoginResponse } from '../interface/login';
+import type {
+	Login,
+	User,
+	LoginResponse,
+	updateStay,
+} from '../interface/login';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/ko';
+import utc from 'dayjs/plugin/utc';
 
 const initialState: Login = {
 	id: '',
 	pw: '',
 	cookies: '',
 	loginError: '',
-	dateList: [],
-	isSuccess: [],
-	semester: '',
+	outStayFrDtL: [],
+	outStayStGbn: [],
+	outStayToDt: [],
+	tmGbn: '',
 	thisYear: '',
 	data: {},
 	name: '',
+	successList: [],
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -36,8 +47,8 @@ export const loginSlice = createSlice({
 			state.loginError = '';
 			state.cookies = '';
 			state.name = '';
-			state.dateList = [];
-			state.isSuccess = [];
+			state.outStayStGbn = [];
+			state.outStayStGbn = [];
 			state.loginError = '';
 		},
 		logoutHome: (state) => {
@@ -46,19 +57,46 @@ export const loginSlice = createSlice({
 			state.loginError = '';
 			state.cookies = '';
 			state.name = '';
-			state.dateList = [];
-			state.isSuccess = [];
+			state.outStayFrDtL = [];
+			state.outStayStGbn = [];
 			state.loginError = '';
 		},
 		GET_LOGIN_SUCCESS: (state, action: PayloadAction<LoginResponse>) => {
 			state.cookies = action.payload.cookies;
 			state.name = action.payload.name;
-			state.isSuccess = action.payload.outStayStGbn;
-			state.dateList = action.payload.outStayToDt;
+			state.outStayStGbn = action.payload.outStayStGbn;
+			state.outStayToDt = action.payload.outStayToDt;
+			state.outStayFrDtL = action.payload.outStayFrDt;
 			state.thisYear = action.payload.yy;
+			state.tmGbn = action.payload.tmGbn;
 		},
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginError = action.payload;
+		},
+		makeSuccessList: (state, action: PayloadAction<updateStay | null>) => {
+			if (action.payload.outStayFrDtLCal.length) {
+				state.outStayToDt = action.payload.outStayToDtCal;
+				state.outStayFrDtL = action.payload.outStayFrDtLCal;
+			}
+			let len: number;
+			if (state.outStayFrDtL) len = state.outStayFrDtL.length;
+			let day: any;
+			state.successList = [];
+			for (let i = 0; i < len; i++) {
+				if (state.outStayToDt[i] === state.outStayFrDtL[i])
+					// 시작 일 끝 일 같은 경우
+					state.successList.push(state.outStayToDt[i]);
+				else {
+					const diff = dayjs(state.outStayToDt[i]).diff(
+						state.outStayFrDtL[i],
+						'd'
+					);
+					for (let j = 0; j <= diff; j++) {
+						day = dayjs(state.outStayFrDtL[i]).add(j).format('YYYYMMDD');
+						state.successList.push(day);
+					}
+				}
+			}
 		},
 		setIdPw: (state, action: PayloadAction<User>) => {
 			state.id = action.payload.id;
@@ -74,6 +112,7 @@ export const {
 	initialLogin,
 	setIdPw,
 	logoutHome,
+	makeSuccessList,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
