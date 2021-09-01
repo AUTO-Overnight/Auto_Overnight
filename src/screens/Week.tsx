@@ -33,28 +33,7 @@ export default function Week() {
 		const id = setTimeout(() => setLoading((loading) => !loading), 3000);
 		return clearTimeout(id);
 	}, [loading]);
-	const [buttonList] = useState([
-		{
-			iconName: 'lock-outline',
-			text: '1일 신청',
-			color: 'white',
-		},
-		{
-			iconName: 'lock-outline',
-			text: '1주 신청',
-			color: 'white',
-		},
-		{
-			iconName: 'lock-outline',
-			text: '2주 신청',
-			color: 'white',
-		},
-		{
-			iconName: 'lock-outline',
-			text: '4주 신청',
-			color: 'white',
-		},
-	]);
+
 	return (
 		<SafeAreaView>
 			<View style={[styles.view]}>
@@ -63,26 +42,7 @@ export default function Week() {
 					Left={() => <Icon name="menu" size={35} onPress={open} />}
 					Right={() => <Icon name="logout" size={35} onPress={logout} />}
 				/>
-				<View style={{ flex: 1 }} />
-				{buttonList.map((list) => (
-					<TouchableView
-						key={list.key}
-						// onPress={pressLoading}
-						style={[
-							styles.touchableView,
-							{ backgroundColor: Colors.blue300, marginBottom: 30 },
-						]}
-					>
-						{!loading && (
-							<Text
-								style={{ color: list.color, fontSize: 18, fontWeight: '700' }}
-							>
-								{list.text}
-							</Text>
-						)}
-						{loading && <ActivityIndicator size="large" />}
-					</TouchableView>
-				))}
+
 				<LeftRightNavigation
 					ref={leftRef}
 					distance={40}
