@@ -16,17 +16,18 @@ import { useCallback } from 'react';
 import { getLogin, initialLogin, setIdPw } from '../store/login';
 import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
+import useSendButtons from '../hooks/useSendButtons';
 export default function MainNavigator() {
 	// text
 	const focus = useAutoFocus();
-	const [id, setId] = useState<string>('2015132012');
-	const [pw, setPW] = useState<string>('qkrrkd12!');
-	const { cookies, loginError, loadingLogin, dateList, name } = useSelector(
+	const [id, setId] = useState<string>('');
+	const [pw, setPW] = useState<string>('');
+	const { cookies, loginError, loadingLogin, outStayStGbn, name } = useSelector(
 		({ login, loading }: RootState) => ({
 			cookies: login.cookies,
 			name: login.name,
 			loginError: login.loginError,
-			dateList: login.dateList,
+			outStayStGbn: login.outStayStGbn,
 			loadingLogin: loading['login/GET_LOGIN'],
 		})
 	);
@@ -41,9 +42,10 @@ export default function MainNavigator() {
 	useEffect(() => {
 		if (name) {
 			navigation.navigate('TabNavigator');
+		} else {
+			loginError && Alert.alert('로그인 실패!!!');
 		}
-		loginError && Alert.alert('로그인 실패!!!');
-	}, [loginError, dateList]);
+	}, [loginError, name]);
 	const navigation = useNavigation();
 	// const goTabNavigator = useCallback(
 	// 	() => navigation.navigate('TabNavigator'),
