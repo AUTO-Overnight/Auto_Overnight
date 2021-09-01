@@ -170,17 +170,11 @@ schregNo  학번
 
 ```
 {
-    "yy" : "2021",
-    "tmGbn" : "5",
     "schregNo" : "",
     "userNm" : "홍길동",
     "cookies" : ""
 }
 ```
-
-yy  년도
-
-tmGbn  학기 구분 / 1학기 : 1 / 2학기 : 2 / 여름학기 : 5 / 겨울학기 : 6
 
 schregNo  학번
 
