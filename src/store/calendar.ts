@@ -21,9 +21,9 @@ const initialState: Day = {
 	isWeekend: [],
 	sendResponse: {},
 	prepare: false,
-	outStayFrDtL: [],
-	outStayToDt: [],
-	outStayStGbn: [],
+	outStayFrDtLCal: [],
+	outStayToDtCal: [],
+	outStayStGbnCal: [],
 };
 
 const SEND_DATES = 'calendar/SEND_DATES';
@@ -47,9 +47,9 @@ export const calendarSlice = createSlice({
 			state.day = {};
 		},
 		SEND_DATES_SUCCESS: (state, action: PayloadAction<DaySuccess>) => {
-			state.outStayFrDtL = action.payload.outStayFrDt;
-			state.outStayStGbn = action.payload.outStayStGbn;
-			state.outStayToDt = action.payload.outStayToDt;
+			state.outStayFrDtLCal = action.payload.outStayFrDt;
+			state.outStayStGbnCal = action.payload.outStayStGbn;
+			state.outStayToDtCal = action.payload.outStayToDt;
 		},
 		addDay: (state, action: PayloadAction<any>) => {
 			if (state.day[action.payload]) {
@@ -91,11 +91,12 @@ export const calendarSlice = createSlice({
 		togglePrepare: (state) => {
 			state.prepare = false;
 		},
-		setExistDays: (state, action: PayloadAction<any>) => {
-			// const days = Object.values(action.payload);
+		setExistDays: (state, action: PayloadAction<Array<number>>) => {
 			state.data = action.payload;
+
 			state.data.map((date) => {
-				const setDay = dayjs(date).format('YYYY-MM-DD');
+				const setDay = dayjs(String(date)).format('YYYY-MM-DD');
+
 				state.day[setDay] = {
 					marked: true,
 					dotColor: 'red',
