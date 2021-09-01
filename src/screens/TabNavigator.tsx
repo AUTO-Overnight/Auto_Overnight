@@ -25,7 +25,7 @@ const screenOptions = ({
 		tabBarIcon: ({ focused, color, size }: TabBarIconProps) => {
 			const { name } = route;
 			const focusedSize = focused ? size + 6 : size;
-			const focusedColor = focused ? Colors.lightBlue500 : color;
+			const focusedColor = focused ? Colors.red500 : Colors.red300;
 			const [icon, iconOutline] = icons[name];
 			const iconName = focused ? icon : iconOutline;
 			return <Icon name={iconName} size={focusedSize} color={focusedColor} />;
