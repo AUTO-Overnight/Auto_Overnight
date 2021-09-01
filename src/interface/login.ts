@@ -4,11 +4,18 @@ export interface Login {
 	cookies: string;
 	loginError: string;
 	thisYear: string;
-	semester: string;
-	dateList: Array<any>;
-	isSuccess: Array<any>;
+	tmGbn: string;
 	data: any;
 	name: string;
+	outStayFrDtL: Array<any>;
+	outStayToDt: Array<any>;
+	outStayStGbn: Array<any>;
+	successList: Array<any>;
+}
+
+export interface updateStay {
+	outStayFrDtLCal?: Array<any>;
+	outStayToDtCal?: Array<any>;
 }
 
 export interface User {
