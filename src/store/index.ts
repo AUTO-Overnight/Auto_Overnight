@@ -6,16 +6,23 @@ import counter from './counter';
 import calendar, { calendarSaga } from './calendar';
 import loading from './loading';
 import login, { loginSaga } from './login';
+import bonus, { bonusSaga } from './bonus';
 // import storageSession from 'redux-persist/lib/storage/session';
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
 	blacklist: ['calendar'],
 };
-const rootReducer = combineReducers({ counter, login, loading, calendar });
+const rootReducer = combineReducers({
+	counter,
+	login,
+	loading,
+	calendar,
+	bonus,
+});
 export default persistReducer(persistConfig, rootReducer);
 export type RootState = ReturnType<typeof rootReducer>;
 
 export function* rootSaga() {
-	yield all([loginSaga(), calendarSaga()]);
+	yield all([loginSaga(), calendarSaga(), bonusSaga()]);
 }

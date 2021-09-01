@@ -4,12 +4,6 @@ import { Provider, useSelector } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-// import {
-//   PaperThemeDefault,
-//   PaperThemeDark,
-//   CombinedDefaultTheme,
-//   CombinedDarkTheme,
-// } from 'app/config/theme-config';
 import { applyMiddleware, createStore } from 'redux';
 // import {IThemeState} from 'app/models/reducers/theme';
 import rootReducer, { rootSaga } from './src/store';

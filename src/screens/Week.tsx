@@ -66,7 +66,7 @@ export default function Week() {
 				<View style={{ flex: 1 }} />
 				{buttonList.map((list) => (
 					<TouchableView
-						key={list.text}
+						key={list.key}
 						// onPress={pressLoading}
 						style={[
 							styles.touchableView,

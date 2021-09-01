@@ -28,16 +28,19 @@ import { RootState } from '../store';
 import {
 	useAnimatedValue,
 	useCalendarTheme,
+	useGetBonusPoint,
 	useLayout,
 	useTransformStyle,
 } from '../hooks';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { interpolate } from '../utils';
-import { useToggle } from '../hooks/useToggle';
-import { Easing } from 'react-native-reanimated';
+// import { interpolate } from '../utils';
+// import { useToggle } from '../hooks/useToggle';
+// import { Easing } from 'react-native-reanimated';
 import { Colors } from 'react-native-paper';
-import { logoutHome } from '../store/login';
+import { logoutHome, makeSuccessList } from '../store/login';
 import { CalendarAPI } from '../interface';
+import { useMemo } from 'react';
+import useSendButtons from '../hooks/useSendButtons';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -56,28 +59,31 @@ const iconSize = 50;
 export default function Home() {
 	const {
 		day,
-		dateList,
 		sendDays,
 		cookies,
 		isWeekend,
 		id,
 		prepare,
 		outStayFrDtL,
+		outStayToDt,
+		outStayToDtCal,
+		outStayFrDtLCal,
+		successList,
 	} = useSelector(({ calendar, login }: RootState) => ({
 		day: calendar.day,
-		dateList: login.dateList,
 		sendDays: calendar.sendDays,
 		cookies: login.cookies,
 		isWeekend: calendar.isWeekend,
 		id: login.id,
 		prepare: calendar.prepare,
-		outStayFrDtL: calendar.outStayFrDtL,
+		outStayToDt: login.outStayToDt,
+		outStayFrDtL: login.outStayFrDtL,
+		outStayToDtCal: calendar.outStayToDtCal,
+		outStayFrDtLCal: calendar.outStayFrDtLCal,
+		successList: login.successList,
 	}));
 	// navigation
-	useEffect(() => {
-		dispatch(setExistDays(dateList));
-		outStayFrDtL && dispatch(setExistDays(outStayFrDtL));
-	}, [dateList, outStayFrDtL]);
+	// useEffect(() => {}, [outStayFrDtL]);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	// const goLeft = useCallback(() => navigation.navigate('HomeLeft'), []);
@@ -93,35 +99,47 @@ export default function Home() {
 	const [scrollEnabled] = useScrollEnabled();
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
+	const bonus = useGetBonusPoint();
+	const { buttonList } = useSendButtons();
+	console.log(bonus);
+	// const bonus = useMemo(() => {
+	// 	useGetBonusPoint();
+	// }, []);
 
 	// calendar
-	const [today] = useState(
-		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
-	);
-	const [sendingToday] = useState(
-		dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD')
-	);
+	// prettier-ignore
+	const [today] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD'));
+	// prettier-ignore
+	const [sendingToday] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD'));
 	const { theme, isDark } = useCalendarTheme();
-
 	const [selected, setSelected] = useState<string>('');
-
 	const onDayPress = useCallback(
+		// 이전 날짜 분리 로직
 		(day: DateObject) => {
+			let date: string;
 			if (dayjs(today).isAfter(day.dateString)) {
 				return;
 			} else if (String(dayjs(today)) === day.dateString) {
-				const date = day.dateString;
+				date = day.dateString;
 				setSelected(date);
 				dispatch(addDay(date));
 				console.log('touch');
 			}
-			const date = day.dateString;
+			date = day.dateString;
 			setSelected(date);
 			dispatch(addDay(date));
 			console.log('touch');
 		},
 		[day]
 	);
+	useEffect(() => {
+		if (outStayFrDtLCal)
+			dispatch(makeSuccessList({ outStayFrDtLCal, outStayToDtCal }));
+		else dispatch(makeSuccessList);
+	}, [outStayFrDtLCal, outStayToDtCal]);
+	useEffect(() => {
+		dispatch(setExistDays(successList));
+	}, [successList]);
 	useEffect(() => {
 		let data: CalendarAPI;
 		if (prepare) {
@@ -134,22 +152,17 @@ export default function Home() {
 			};
 			console.log(data);
 			dispatch(sendDates(data));
-			dispatch(removeAllDays());
 			dispatch(togglePrepare());
 		}
 	}, [prepare]);
-	useEffect(() => {
-		dispatch(setExistDays(outStayFrDtL));
-	}, [outStayFrDtL]);
+
 	const onSendDays = useCallback(() => {
 		dispatch(sendPrepare());
 	}, [sendDays]);
 	const onRemoveAllDays = useCallback(() => {
 		// dispatch(removeAllDays());
 		dispatch(initial());
-
-		outStayFrDtL && dispatch(setExistDays(outStayFrDtL));
-		dispatch(setExistDays(dateList));
+		dispatch(setExistDays(successList));
 	}, [outStayFrDtL]);
 	// Animation
 	// const [started, toggleStarted] = useToggle(false);
@@ -219,6 +232,30 @@ export default function Home() {
 					>
 						<Text style={[styles.text, { fontWeight: '500' }]}>신청하기</Text>
 					</TouchableView>
+					<View
+						style={{
+							flexDirection: 'row',
+							width: '24%',
+							marginLeft: '2%',
+							justifyContent: 'space-between',
+						}}
+					>
+						{buttonList.map((list) => (
+							<TouchableView
+								key={list.key}
+								style={[
+									styles.smallTouchableView,
+									{
+										backgroundColor: isDark ? Colors.blue800 : Colors.blue300,
+									},
+								]}
+							>
+								<Text style={[{ color: Colors.white, fontWeight: '500' }]}>
+									{list.text}
+								</Text>
+							</TouchableView>
+						))}
+					</View>
 					{/* <View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
 						<AnimatedIcon
 							style={iconAnimStyle}
@@ -244,6 +281,15 @@ const styles = StyleSheet.create({
 	view: { flex: 1 },
 	text: { marginRight: 10, fontSize: 20, color: Colors.white },
 	calendar: { height: 50 },
+	smallTouchableView: {
+		marginTop: 30,
+		flexDirection: 'row',
+		height: 60,
+		borderRadius: 10,
+		width: '70%',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+	},
 	touchableView: {
 		marginTop: 30,
 		flexDirection: 'row',

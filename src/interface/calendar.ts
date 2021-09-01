@@ -14,9 +14,9 @@ export interface Day {
 	data: Array<any>;
 	sendResponse: any;
 	prepare: boolean;
-	outStayFrDtL: Array<any>;
-	outStayToDt: Array<any>;
-	outStayStGbn: Array<any>;
+	outStayFrDtLCal: Array<any>;
+	outStayToDtCal: Array<any>;
+	outStayStGbnCal: Array<any>;
 }
 
 export interface DaySuccess {

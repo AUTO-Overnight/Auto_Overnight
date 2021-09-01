@@ -13,8 +13,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
-	const { name } = useSelector(({ login }: RootState) => ({
+	const { name, id } = useSelector(({ login }: RootState) => ({
 		name: login.name,
+		id: login.id,
 	}));
 	const { navigation } = props;
 	const close = useCallback(
@@ -30,16 +31,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 			<View style={[styles.content]}>
 				<View style={[styles.row]}>
 					{/* <Avatar uri={loginUser.avatar} size={40} /> */}
-					<Text style={[styles.text, styles.m]}>Hi There</Text>
+					<Text style={[styles.text, styles.m]}>안녕하세요 {name}님</Text>
 				</View>
 				<View style={[styles.row]}>
-					<UnderlineText
+					<Text
 						numberOfLines={1}
 						ellipsizeMode="tail"
 						style={[styles.text, styles.m]}
 					>
-						wshmin@naver.com
-					</UnderlineText>
+						{id}
+					</Text>
 				</View>
 				<View style={[styles.row, { marginTop: 20 }]}>
 					<Switch />
