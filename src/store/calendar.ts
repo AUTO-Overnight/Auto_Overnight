@@ -13,6 +13,20 @@ import type { CalendarAPI, Day, DaySuccess } from '../interface';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+function pushDayIsWeek({ state, day }) {
+	const formDay = dayjs(day).format('YYYY-MM-DD');
+	if (!state.day[formDay]) {
+		state.sendDays.push(dayjs(day).format('YYYYMMDD'));
+		state.day[formDay] = {
+			selected: true,
+			disableTouchEvent: false,
+			selectedColor: Colors.red100,
+			selectedTextColor: Colors.black,
+			delete: true,
+		};
+	}
+}
+
 const initialState: Day = {
 	day: {},
 	today: dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD'),
@@ -24,6 +38,7 @@ const initialState: Day = {
 	outStayFrDtLCal: [],
 	outStayToDtCal: [],
 	outStayStGbnCal: [],
+	mode: 'day',
 };
 
 const SEND_DATES = 'calendar/SEND_DATES';
@@ -45,6 +60,8 @@ export const calendarSlice = createSlice({
 	reducers: {
 		initial: (state) => {
 			state.day = {};
+			state.sendDays = [];
+			state.isWeekend = [];
 		},
 		SEND_DATES_SUCCESS: (state, action: PayloadAction<DaySuccess>) => {
 			state.outStayFrDtLCal = action.payload.outStayFrDt;
@@ -64,6 +81,40 @@ export const calendarSlice = createSlice({
 				};
 			}
 		},
+		addDayList: (
+			state,
+			action: PayloadAction<{ weekKey: number; weekDay: any }>
+		) => {
+			state.sendDays = [];
+			state.isWeekend = [];
+			let day = action.payload.weekDay;
+			console.log(day, action.payload.weekDay, action.payload.weekKey);
+			switch (action.payload.weekKey) {
+				case 1:
+					pushDayIsWeek({ state, day });
+					break;
+				case 2:
+					for (let i = 0; i <= 7 * 1; i++) {
+						pushDayIsWeek({ state, day });
+						day = Number(dayjs(day).add(1, 'd'));
+					}
+					break;
+				case 3:
+					for (let i = 0; i <= 7 * 2; i++) {
+						pushDayIsWeek({ state, day });
+						day = Number(dayjs(day).add(1, 'd'));
+					}
+					break;
+				case 4:
+					for (let i = 0; i <= 7 * 4; i++) {
+						pushDayIsWeek({ state, day });
+						day = Number(dayjs(day).add(1, 'd'));
+					}
+					break;
+			}
+			console.log(state.isWeekend);
+			console.log(state.sendDays);
+		},
 		sendPrepare: (state) => {
 			const data = state.data;
 			const day = state.day;
@@ -74,7 +125,6 @@ export const calendarSlice = createSlice({
 			const pushDays = Object.keys(day);
 			state.sendDays = [];
 			state.isWeekend = [];
-			console.log(pushDays);
 			pushDays.map((day) => {
 				if (day) {
 					state.sendDays.push(dayjs(day).format('YYYYMMDD'));
@@ -93,10 +143,8 @@ export const calendarSlice = createSlice({
 		},
 		setExistDays: (state, action: PayloadAction<Array<number>>) => {
 			state.data = action.payload;
-
 			state.data.map((date) => {
 				const setDay = dayjs(String(date)).format('YYYY-MM-DD');
-
 				state.day[setDay] = {
 					marked: true,
 					dotColor: 'red',
@@ -108,6 +156,9 @@ export const calendarSlice = createSlice({
 		removeAllDays: (state) => {
 			state.day = {};
 		},
+		setMode: (state, action: PayloadAction<string>) => {
+			state.mode = action.payload;
+		},
 	},
 });
 
@@ -118,6 +169,8 @@ export const {
 	initial,
 	sendPrepare,
 	togglePrepare,
+	addDayList,
+	setMode,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

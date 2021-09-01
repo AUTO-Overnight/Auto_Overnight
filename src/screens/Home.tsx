@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { StyleSheet, FlatList, Animated } from 'react-native';
+import {
+	StyleSheet,
+	FlatList,
+	Animated,
+	Modal,
+	Alert,
+	TouchableHighlight,
+} from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
@@ -17,11 +24,13 @@ import { LocaleConfig } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	addDay,
+	addDayList,
 	initial,
 	removeAllDays,
 	sendDates,
 	sendPrepare,
 	setExistDays,
+	setMode,
 	togglePrepare,
 } from '../store/calendar';
 import { RootState } from '../store';
@@ -31,6 +40,7 @@ import {
 	useGetBonusPoint,
 	useLayout,
 	useTransformStyle,
+	useModal,
 } from '../hooks';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 // import { interpolate } from '../utils';
@@ -53,8 +63,8 @@ LocaleConfig.locales['ko'] = {
 };
 LocaleConfig.defaultLocale = 'ko';
 
-const AnimatedIcon = Animated.createAnimatedComponent(FontAwesomeIcon);
-const iconSize = 50;
+// const AnimatedIcon = Animated.createAnimatedComponent(FontAwesomeIcon);
+// const iconSize = 50;
 
 export default function Home() {
 	const {
@@ -69,6 +79,7 @@ export default function Home() {
 		outStayToDtCal,
 		outStayFrDtLCal,
 		successList,
+		mode,
 	} = useSelector(({ calendar, login }: RootState) => ({
 		day: calendar.day,
 		sendDays: calendar.sendDays,
@@ -81,6 +92,7 @@ export default function Home() {
 		outStayToDtCal: calendar.outStayToDtCal,
 		outStayFrDtLCal: calendar.outStayFrDtLCal,
 		successList: login.successList,
+		mode: calendar.mode,
 	}));
 	// navigation
 	// useEffect(() => {}, [outStayFrDtL]);
@@ -93,15 +105,16 @@ export default function Home() {
 	}, []);
 	const logout = useCallback(() => {
 		dispatch(logoutHome());
+
 		navigation.navigate('Login');
 	}, []);
 
 	const [scrollEnabled] = useScrollEnabled();
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
-	const bonus = useGetBonusPoint();
+	// const bonus = useGetBonusPoint();
 	const { buttonList } = useSendButtons();
-	console.log(bonus);
+
 	// const bonus = useMemo(() => {
 	// 	useGetBonusPoint();
 	// }, []);
@@ -113,25 +126,57 @@ export default function Home() {
 	const [sendingToday] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD'));
 	const { theme, isDark } = useCalendarTheme();
 	const [selected, setSelected] = useState<string>('');
+	const [weekDay, setWeekDay] = useState(
+		dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD')
+	);
+	const [ready, toggleReady] = useState<boolean>(false);
+	const [weekKey, setWeekKey] = useState<number>(0);
 	const onDayPress = useCallback(
 		// 이전 날짜 분리 로직
 		(day: DateObject) => {
 			let date: string;
-			if (dayjs(today).isAfter(day.dateString)) {
-				return;
-			} else if (String(dayjs(today)) === day.dateString) {
-				date = day.dateString;
-				setSelected(date);
-				dispatch(addDay(date));
-				console.log('touch');
+			switch (mode) {
+				case 'day': {
+					if (dayjs(today).isAfter(day.dateString)) {
+						return;
+					} else if (String(dayjs(today)) === day.dateString) {
+						date = day.dateString;
+						dispatch(addDay(date));
+						console.log('touch');
+					}
+					date = day.dateString;
+					dispatch(addDay(date));
+					break;
+				}
+				case 'month': {
+					if (dayjs(today).isAfter(day.dateString)) {
+						return;
+					} else if (String(dayjs(today)) === day.dateString) {
+						date = day.dateString;
+						setWeekDay(date);
+					}
+					date = day.dateString;
+					setWeekDay(date);
+					toggleReady(true);
+					break;
+				}
 			}
-			date = day.dateString;
-			setSelected(date);
-			dispatch(addDay(date));
-			console.log('touch');
+
+			// console.log('touch');
 		},
 		[day]
 	);
+
+	const onPressDays = useCallback((key) => {
+		toggleReady(false);
+		setModalVisible(!modalVisible);
+		onRemoveAllDays();
+		dispatch(setMode('month'));
+		setWeekKey(key);
+	}, []);
+	useEffect(() => {
+		ready && dispatch(addDayList({ weekKey, weekDay }));
+	}, [weekDay, weekKey, ready]);
 	useEffect(() => {
 		if (outStayFrDtLCal)
 			dispatch(makeSuccessList({ outStayFrDtLCal, outStayToDtCal }));
@@ -158,11 +203,14 @@ export default function Home() {
 
 	const onSendDays = useCallback(() => {
 		dispatch(sendPrepare());
+		toggleReady(false);
+		dispatch(initial());
 	}, [sendDays]);
 	const onRemoveAllDays = useCallback(() => {
 		// dispatch(removeAllDays());
 		dispatch(initial());
 		dispatch(setExistDays(successList));
+		toggleReady(false);
 	}, [outStayFrDtL]);
 	// Animation
 	// const [started, toggleStarted] = useToggle(false);
@@ -186,6 +234,8 @@ export default function Home() {
 	// 	},
 	// 	[layout.width]
 	// );
+	// const [modalVisible, setModalVisible] = useState(true);
+	const { modalVisible, setModalVisible, ModalView } = useModal();
 	return (
 		<SafeAreaView>
 			<ScrollEnabledProvider>
@@ -196,6 +246,7 @@ export default function Home() {
 						Right={() => <Icon name="logout" size={35} onPress={logout} />}
 					/>
 					{/*달력*/}
+
 					{isDark && (
 						<Calendar
 							// style={styles.calendar}
@@ -227,7 +278,9 @@ export default function Home() {
 						onPress={onSendDays}
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? Colors.purple400 : Colors.purple200 },
+							{
+								backgroundColor: isDark ? Colors.purple400 : Colors.purple200,
+							},
 						]}
 					>
 						<Text style={[styles.text, { fontWeight: '500' }]}>신청하기</Text>
@@ -243,6 +296,7 @@ export default function Home() {
 						{buttonList.map((list) => (
 							<TouchableView
 								key={list.key}
+								onPress={() => onPressDays(list.key)}
 								style={[
 									styles.smallTouchableView,
 									{
@@ -253,9 +307,11 @@ export default function Home() {
 								<Text style={[{ color: Colors.white, fontWeight: '500' }]}>
 									{list.text}
 								</Text>
+								<ModalView />
 							</TouchableView>
 						))}
 					</View>
+
 					{/* <View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
 						<AnimatedIcon
 							style={iconAnimStyle}
