@@ -17,6 +17,7 @@ export interface Day {
 	outStayFrDtLCal: Array<any>;
 	outStayToDtCal: Array<any>;
 	outStayStGbnCal: Array<any>;
+	mode: string;
 }
 
 export interface DaySuccess {
