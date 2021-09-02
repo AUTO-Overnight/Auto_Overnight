@@ -17,6 +17,12 @@ function pushDayIsWeek({ state, day }) {
 	const formDay = dayjs(day).format('YYYY-MM-DD');
 	if (!state.day[formDay]) {
 		state.sendDays.push(dayjs(day).format('YYYYMMDD'));
+		const dayNumber = Number(dayjs(day).day);
+		if (dayNumber === 0 || dayNumber === 6) {
+			state.isWeekend.push(1);
+		} else {
+			state.isWeekend.push(0);
+		}
 		state.day[formDay] = {
 			selected: true,
 			disableTouchEvent: false,
@@ -94,19 +100,19 @@ export const calendarSlice = createSlice({
 					pushDayIsWeek({ state, day });
 					break;
 				case 2:
-					for (let i = 0; i <= 7 * 1; i++) {
+					for (let i = 0; i < 7 * 1; i++) {
 						pushDayIsWeek({ state, day });
 						day = Number(dayjs(day).add(1, 'd'));
 					}
 					break;
 				case 3:
-					for (let i = 0; i <= 7 * 2; i++) {
+					for (let i = 0; i < 7 * 2; i++) {
 						pushDayIsWeek({ state, day });
 						day = Number(dayjs(day).add(1, 'd'));
 					}
 					break;
 				case 4:
-					for (let i = 0; i <= 7 * 4; i++) {
+					for (let i = 0; i < 7 * 4; i++) {
 						pushDayIsWeek({ state, day });
 						day = Number(dayjs(day).add(1, 'd'));
 					}
