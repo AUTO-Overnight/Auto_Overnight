@@ -11,7 +11,7 @@ import bonus, { bonusSaga } from './bonus';
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['calendar'],
+	blacklist: ['calendar', 'login', 'bonus'],
 };
 const rootReducer = combineReducers({
 	counter,

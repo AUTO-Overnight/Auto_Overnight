@@ -7,8 +7,9 @@ import {
 	TextInput,
 	TouchableView,
 	MaterialCommunityIcon as Icon,
+	Switch,
 } from '../theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { useAutoFocus, AutoFocusProvider } from '../contexts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -47,13 +48,11 @@ export default function MainNavigator() {
 		}
 	}, [loginError, name]);
 	const navigation = useNavigation();
-	// const goTabNavigator = useCallback(
-	// 	() => navigation.navigate('TabNavigator'),
-	// 	[]
-	// );
+	const isDark = useTheme().dark;
 	return (
 		<SafeAreaView>
 			<View style={[styles.view]}>
+				<Switch></Switch>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
 					<View style={[styles.textView]}>
 						<Text style={[styles.text]}>ID</Text>
@@ -70,6 +69,11 @@ export default function MainNavigator() {
 					<View style={[styles.textView]}>
 						<Text style={[styles.text]}>PW</Text>
 						<View border style={[styles.textInputView]}>
+							{/* <Icon
+								name="passport-biometric"
+								size={24}
+								style={{ position: 'absolute', marginTop: 13 }}
+							/> */}
 							<TextInput
 								onFocus={focus}
 								style={[styles.textInput]}
@@ -80,14 +84,26 @@ export default function MainNavigator() {
 						</View>
 					</View>
 					<View style={{ marginBottom: 20 }} />
-					{loadingLogin && <ActivityIndicator size="large" />}
+
 					<TouchableView
 						notification
-						style={[styles.touchableView]}
+						style={[
+							styles.touchableView,
+							{ backgroundColor: isDark ? Colors.red500 : Colors.red200 },
+						]}
 						onPress={onSubmit}
 					>
-						<Text style={[styles.text, { marginRight: 5 }]}>Login</Text>
-						<Icon name="login" size={24} />
+						{loadingLogin && <ActivityIndicator size="large" />}
+						{!loadingLogin && (
+							<>
+								<Text
+									style={[styles.text, { marginRight: 5, color: Colors.white }]}
+								>
+									Login
+								</Text>
+								<Icon name="login" size={24} style={{ color: Colors.white }} />
+							</>
+						)}
 					</TouchableView>
 				</AutoFocusProvider>
 				<View style={[{ marginBottom: Platform.select({ ios: 50 }) }]} />
@@ -112,7 +128,6 @@ const styles = StyleSheet.create({
 		height: 50,
 		borderRadius: 10,
 		width: '97%',
-		backgroundColor: Colors.blueA400,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

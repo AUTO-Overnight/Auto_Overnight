@@ -8,16 +8,19 @@ import {
 	View,
 } from 'react-native';
 import type { ReactNode } from 'react';
+import { Colors } from 'react-native-paper';
+import { useTheme } from '@react-navigation/native';
 export function useModal(): {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 	ModalView: ReactNode;
 } {
 	const [modalVisible, setModalVisible] = useState(false);
+	const isDark = useTheme().dark;
 	const ModalView: ReactNode = useCallback(() => {
 		return (
 			<Modal
-				animationType="slide"
+				animationType="fade"
 				transparent={true}
 				visible={modalVisible}
 				onRequestClose={() => {
@@ -29,7 +32,10 @@ export function useModal(): {
 						<Text style={styles.modalText}>시작일을 클릭해 주세요</Text>
 
 						<TouchableHighlight
-							style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+							style={{
+								...styles.openButton,
+								backgroundColor: isDark ? Colors.red400 : Colors.red200,
+							}}
 							onPress={() => {
 								setModalVisible(!modalVisible);
 							}}
@@ -40,7 +46,7 @@ export function useModal(): {
 				</View>
 			</Modal>
 		);
-	}, [modalVisible]);
+	}, [modalVisible, isDark]);
 	return { modalVisible, setModalVisible, ModalView };
 }
 
@@ -53,11 +59,11 @@ const styles = StyleSheet.create({
 	},
 	modalView: {
 		margin: 20,
-		backgroundColor: 'white',
+		backgroundColor: Colors.white,
 		borderRadius: 20,
 		padding: 35,
 		alignItems: 'center',
-		shadowColor: '#000',
+		shadowColor: Colors.black,
 		shadowOffset: {
 			width: 0,
 			height: 2,
@@ -70,10 +76,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#F194FF',
 		borderRadius: 20,
 		padding: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
 		elevation: 2,
 	},
 	textStyle: {
-		color: 'white',
+		color: Colors.white,
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},
