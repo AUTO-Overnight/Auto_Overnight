@@ -8,11 +8,16 @@ import React, {
 import { Button, Colors } from 'react-native-paper';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, Text, TouchableView} from '../theme';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import {
+	DrawerActions,
+	useNavigation,
+	useTheme,
+} from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import { ActivityIndicator, Text as RNText } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
+import { BonusTable } from '../components';
 export default function Week() {
 	const navigation = useNavigation();
 	const open = useCallback(() => {
@@ -33,7 +38,7 @@ export default function Week() {
 		const id = setTimeout(() => setLoading((loading) => !loading), 3000);
 		return clearTimeout(id);
 	}, [loading]);
-
+	const isDark = useTheme().dark;
 	return (
 		<SafeAreaView>
 			<View style={[styles.view]}>
@@ -42,7 +47,7 @@ export default function Week() {
 					Left={() => <Icon name="menu" size={35} onPress={open} />}
 					Right={() => <Icon name="logout" size={35} onPress={logout} />}
 				/>
-
+				<BonusTable isDark={isDark} />
 				<LeftRightNavigation
 					ref={leftRef}
 					distance={40}
