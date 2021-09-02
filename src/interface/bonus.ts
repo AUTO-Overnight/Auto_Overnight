@@ -6,8 +6,6 @@ export interface Bonus {
 }
 
 export interface BonusAPI {
-	year: string;
-	tmGbn: string;
 	id: string;
 	name: string;
 	cookies: string;
