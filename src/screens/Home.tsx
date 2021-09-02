@@ -40,8 +40,8 @@ import {
 	useGetBonusPoint,
 	useLayout,
 	useTransformStyle,
-	useModal,
 } from '../hooks';
+import { useModal } from '../components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 // import { interpolate } from '../utils';
 // import { useToggle } from '../hooks/useToggle';
@@ -112,7 +112,7 @@ export default function Home() {
 	const [scrollEnabled] = useScrollEnabled();
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
-	// const bonus = useGetBonusPoint();
+
 	const { buttonList } = useSendButtons();
 
 	// const bonus = useMemo(() => {
@@ -124,6 +124,9 @@ export default function Home() {
 	const [today] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD'));
 	// prettier-ignore
 	const [sendingToday] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD'));
+	const [maxDate] = useState(
+		dayjs().tz('Asia/Seoul').locale('ko').add(45, 'd').format('YYYY-MM-DD')
+	);
 	const { theme, isDark } = useCalendarTheme();
 	const [selected, setSelected] = useState<string>('');
 	const [weekDay, setWeekDay] = useState(
@@ -167,13 +170,16 @@ export default function Home() {
 		[day]
 	);
 
-	const onPressDays = useCallback((key) => {
-		toggleReady(false);
-		setModalVisible(!modalVisible);
-		onRemoveAllDays();
-		dispatch(setMode('month'));
-		setWeekKey(key);
-	}, []);
+	const onPressDays = useCallback(
+		(key) => {
+			toggleReady(false);
+			onRemoveAllDays();
+			setModalVisible(!modalVisible);
+			dispatch(setMode('month'));
+			setWeekKey(key);
+		},
+		[outStayFrDtL, successList]
+	);
 	useEffect(() => {
 		ready && dispatch(addDayList({ weekKey, weekDay }));
 	}, [weekDay, weekKey, ready]);
@@ -199,19 +205,21 @@ export default function Home() {
 			dispatch(sendDates(data));
 			dispatch(togglePrepare());
 		}
-	}, [prepare]);
+	}, [prepare, sendDays, isWeekend]);
 
 	const onSendDays = useCallback(() => {
+		if (!sendDays.length) {
+			Alert.alert('선택된 날짜가 없습니다');
+			return;
+		}
 		dispatch(sendPrepare());
 		toggleReady(false);
-		dispatch(initial());
 	}, [sendDays]);
 	const onRemoveAllDays = useCallback(() => {
-		// dispatch(removeAllDays());
 		dispatch(initial());
 		dispatch(setExistDays(successList));
 		toggleReady(false);
-	}, [outStayFrDtL]);
+	}, [outStayFrDtL, successList]);
 	// Animation
 	// const [started, toggleStarted] = useToggle(false);
 	// const animValue = useAnimatedValue(0);
@@ -249,7 +257,7 @@ export default function Home() {
 
 					{isDark && (
 						<Calendar
-							// style={styles.calendar}
+							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
 							theme={theme}
@@ -257,7 +265,7 @@ export default function Home() {
 					)}
 					{!isDark && (
 						<Calendar
-							// style={styles.calendar}
+							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
 							theme={theme}
@@ -300,7 +308,7 @@ export default function Home() {
 								style={[
 									styles.smallTouchableView,
 									{
-										backgroundColor: isDark ? Colors.blue800 : Colors.blue300,
+										backgroundColor: isDark ? Colors.blue600 : Colors.blue200,
 									},
 								]}
 							>
