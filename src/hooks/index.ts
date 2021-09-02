@@ -7,4 +7,6 @@ export * from './useLayout';
 export * from './useAnimatedValue';
 export * from './useGetBonusPoint';
 export * from './useSendButtons';
-export * from './useModal';
+export * from './useBreakPoint';
+export * from './useScreenDimensions';
+export * from './useMakeBonusArray';
