@@ -16,7 +16,7 @@ import { useTheme } from '@react-navigation/native';
 
 // Table header items
 const head = ['상벌구분', '점수', '일자'];
-
+const list = ['상/벌점', '내역이', '없습니다.'];
 // Table data rows
 // const data = [
 // 	['ADBE', '4', '$270.45', '$1,081.80', '$278.25', '$1,113.00'],
@@ -53,7 +53,15 @@ export const BonusTable = ({ isDark }) => {
 	const dispatch = useDispatch();
 
 	console.log(isDark);
-	const bonusList = useMemo(
+
+	useEffect(() => {
+		if (!ardInptDt.length) {
+			bonusList.push(list);
+		} else {
+			bonusList.pop();
+		}
+	}, [ardInptDt]);
+	let bonusList = useMemo(
 		() => makeBonusArray({ ardInptDt, cmpScr, lifSstArdCtnt, lifSstArdGbn }),
 		[ardInptDt]
 	);
@@ -116,15 +124,15 @@ const styles = StyleSheet.create({
 	},
 	head: {
 		height: 35,
-		backgroundColor: Colors.red300,
+		backgroundColor: '#222831',
 	},
 	dataRow: {
 		height: 25,
 	},
 	border: {
-		borderWidth: 1,
+		borderWidth: 0.5,
 
-		borderColor: Colors.red400,
+		borderColor: Colors.white,
 	},
 	table: {
 		marginTop: 20,

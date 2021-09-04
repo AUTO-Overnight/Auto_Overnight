@@ -18,6 +18,7 @@ export interface Day {
 	outStayToDtCal: Array<any>;
 	outStayStGbnCal: Array<any>;
 	mode: string;
+	isDarkMode: boolean;
 }
 
 export interface DaySuccess {

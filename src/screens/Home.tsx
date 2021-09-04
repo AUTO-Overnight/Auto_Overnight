@@ -1,13 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import {
-	StyleSheet,
-	FlatList,
-	Animated,
-	Modal,
-	Alert,
-	TouchableHighlight,
-} from 'react-native';
+import { StyleSheet, FlatList, Alert } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
@@ -19,9 +12,11 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
-import type { DateObject } from 'react-native-calendars';
+import type { DateObject, HeaderComponentProps } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
+import type { CalendarThemeIdStyle } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
 	addDay,
 	addDayList,
@@ -31,13 +26,13 @@ import {
 	sendPrepare,
 	setExistDays,
 	setMode,
+	toggleDark,
 	togglePrepare,
 } from '../store/calendar';
 import { RootState } from '../store';
 import {
 	useAnimatedValue,
 	useCalendarTheme,
-	useGetBonusPoint,
 	useLayout,
 	useTransformStyle,
 } from '../hooks';
@@ -58,7 +53,9 @@ LocaleConfig.locales['ko'] = {
   monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
   dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  dayNamesShort: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+//   dayNamesShort: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+//   dayNamesShort: ['S','M','T','W','T','F','S'],
+  dayNamesShort: ['일','월','화','수','목','금','토'],
   today: 'today'
 };
 LocaleConfig.defaultLocale = 'ko';
@@ -128,12 +125,18 @@ export default function Home() {
 		dayjs().tz('Asia/Seoul').locale('ko').add(45, 'd').format('YYYY-MM-DD')
 	);
 	const { theme, isDark } = useCalendarTheme();
+	const backWhiteColor = isDark ? 'black' : '#F6F6F6';
+	useEffect(() => {
+		dispatch(toggleDark(isDark));
+	}, [isDark]);
 	const [selected, setSelected] = useState<string>('');
 	const [weekDay, setWeekDay] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD')
 	);
+
 	const [ready, toggleReady] = useState<boolean>(false);
 	const [weekKey, setWeekKey] = useState<number>(0);
+
 	const onDayPress = useCallback(
 		// 이전 날짜 분리 로직
 		(day: DateObject) => {
@@ -145,13 +148,13 @@ export default function Home() {
 					} else if (String(dayjs(today)) === day.dateString) {
 						date = day.dateString;
 						dispatch(addDay(date));
-						console.log('touch');
 					}
 					date = day.dateString;
 					dispatch(addDay(date));
 					break;
 				}
 				case 'month': {
+					if (ready) return;
 					if (dayjs(today).isAfter(day.dateString)) {
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
@@ -161,11 +164,10 @@ export default function Home() {
 					date = day.dateString;
 					setWeekDay(date);
 					toggleReady(true);
+					dispatch(setMode('none'));
 					break;
 				}
 			}
-
-			// console.log('touch');
 		},
 		[day]
 	);
@@ -180,6 +182,10 @@ export default function Home() {
 		},
 		[outStayFrDtL, successList]
 	);
+	const onPressDay = useCallback(() => {
+		dispatch(setMode('day'));
+		onRemoveAllDays();
+	}, []);
 	useEffect(() => {
 		ready && dispatch(addDayList({ weekKey, weekDay }));
 	}, [weekDay, weekKey, ready]);
@@ -208,11 +214,11 @@ export default function Home() {
 	}, [prepare, sendDays, isWeekend]);
 
 	const onSendDays = useCallback(() => {
-		if (!sendDays.length) {
+		dispatch(sendPrepare());
+		if (mode === 'month' && !sendDays.length) {
 			Alert.alert('선택된 날짜가 없습니다');
 			return;
 		}
-		dispatch(sendPrepare());
 		toggleReady(false);
 	}, [sendDays]);
 	const onRemoveAllDays = useCallback(() => {
@@ -247,47 +253,62 @@ export default function Home() {
 	return (
 		<SafeAreaView>
 			<ScrollEnabledProvider>
-				<View style={[styles.view]}>
+				<View style={[styles.view, , { backgroundColor: backWhiteColor }]}>
 					<NavigationHeader
 						title="Home"
 						Left={() => <Icon name="menu" size={35} onPress={open} />}
 						Right={() => <Icon name="logout" size={35} onPress={logout} />}
 					/>
 					{/*달력*/}
-
 					{isDark && (
 						<Calendar
 							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
+							style={{ height: 365 }}
 							theme={theme}
+							displayLoadingIndicator={true}
+							// hideExtraDays={true}
 						/>
 					)}
+
 					{!isDark && (
 						<Calendar
 							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
+							style={{ height: 365 }}
 							theme={theme}
+							displayLoadingIndicator={true}
+							// hideExtraDays={true}
 						/>
 					)}
 					{/*버튼*/}
-					<View style={{ flex: 0.4 }} />
+					{/* <View style={{ height: '100%', flex: 1 }}> */}
 					<TouchableView
 						onPress={onRemoveAllDays}
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? Colors.red400 : Colors.red200 },
+							{
+								backgroundColor: isDark ? '#345B63' : '#98ddca',
+							},
 						]}
 					>
-						<Text style={[styles.text, { fontWeight: '500' }]}>모두삭제</Text>
+						<Text
+							style={[
+								styles.text,
+								{ fontWeight: '500', color: isDark ? 'white' : 'white' },
+							]}
+						>
+							모두삭제
+						</Text>
 					</TouchableView>
 					<TouchableView
 						onPress={onSendDays}
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? Colors.purple400 : Colors.purple200,
+								backgroundColor: isDark ? '#152D35' : '#FFAAA7',
 							},
 						]}
 					>
@@ -296,19 +317,22 @@ export default function Home() {
 					<View
 						style={{
 							flexDirection: 'row',
-							width: '24%',
-							marginLeft: '2%',
+							width: '24.3%',
+							marginLeft: '0.5%',
 							justifyContent: 'space-between',
+							backgroundColor: backWhiteColor,
 						}}
 					>
 						{buttonList.map((list) => (
 							<TouchableView
 								key={list.key}
-								onPress={() => onPressDays(list.key)}
+								onPress={() =>
+									list.key === 1 ? onPressDay() : onPressDays(list.key)
+								}
 								style={[
 									styles.smallTouchableView,
 									{
-										backgroundColor: isDark ? Colors.blue600 : Colors.blue200,
+										backgroundColor: isDark ? '#023035' : '#EA829C',
 									},
 								]}
 							>
@@ -318,8 +342,9 @@ export default function Home() {
 								<ModalView />
 							</TouchableView>
 						))}
+						{/* </View> */}
 					</View>
-
+					<View style={{ height: 200, backgroundColor: backWhiteColor }} />
 					{/* <View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
 						<AnimatedIcon
 							style={iconAnimStyle}
@@ -345,22 +370,29 @@ const styles = StyleSheet.create({
 	view: { flex: 1 },
 	text: { marginRight: 10, fontSize: 20, color: Colors.white },
 	calendar: { height: 50 },
+
 	smallTouchableView: {
-		marginTop: 30,
+		// marginTop: '30%',
 		flexDirection: 'row',
 		height: 60,
 		borderRadius: 10,
 		width: '70%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
+		marginTop: '29%',
+		borderColor: Colors.white,
 	},
 	touchableView: {
-		marginTop: 30,
-		flexDirection: 'row',
+		// flex: 0.1,
+		flexDirection: 'column',
 		height: 60,
 		borderRadius: 10,
 		width: '90%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
+		marginLeft: '-1%',
+		marginTop: '7%',
+
+		// marginBottom: '7%',
 	},
 });
