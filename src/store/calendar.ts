@@ -26,8 +26,9 @@ function pushDayIsWeek({ state, day }) {
 		state.day[formDay] = {
 			selected: true,
 			disableTouchEvent: false,
-			selectedColor: Colors.red100,
-			selectedTextColor: Colors.black,
+			selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.red700,
+			selectedTextColor: Colors.white,
+			textDayFontWeight: 900,
 			delete: true,
 		};
 	}
@@ -44,7 +45,9 @@ const initialState: Day = {
 	outStayFrDtLCal: [],
 	outStayToDtCal: [],
 	outStayStGbnCal: [],
+
 	mode: 'day',
+	isDarkMode: null,
 };
 
 const SEND_DATES = 'calendar/SEND_DATES';
@@ -81,8 +84,8 @@ export const calendarSlice = createSlice({
 				state.day[action.payload] = {
 					selected: true,
 					disableTouchEvent: false,
-					selectedColor: Colors.red100,
-					selectedTextColor: Colors.black,
+					selectedColor: Colors.cyan900,
+					selectedTextColor: Colors.white,
 					delete: true,
 				};
 			}
@@ -153,7 +156,7 @@ export const calendarSlice = createSlice({
 				const setDay = dayjs(String(date)).format('YYYY-MM-DD');
 				state.day[setDay] = {
 					marked: true,
-					dotColor: 'red',
+					dotColor: 'yellow',
 					activeOpacity: 0,
 					delete: false,
 				};
@@ -164,6 +167,9 @@ export const calendarSlice = createSlice({
 		},
 		setMode: (state, action: PayloadAction<string>) => {
 			state.mode = action.payload;
+		},
+		toggleDark: (state, action: PayloadAction<boolean>) => {
+			state.isDarkMode = action.payload;
 		},
 	},
 });
@@ -177,6 +183,7 @@ export const {
 	togglePrepare,
 	addDayList,
 	setMode,
+	toggleDark,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;
