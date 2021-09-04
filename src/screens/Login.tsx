@@ -76,6 +76,7 @@ export default function MainNavigator() {
 							/> */}
 							<TextInput
 								onFocus={focus}
+								autoCapitalize="none"
 								style={[styles.textInput]}
 								value={pw}
 								onChangeText={(pw) => setPW((text) => pw)}
