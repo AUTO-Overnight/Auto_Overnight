@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { Table, Row } from 'react-native-table-component';
 import { StyleSheet } from 'react-native';
-import { makeBonusArray, useBreakpoint, useGetBonusPoint } from '../hooks';
+import { makeBonusArray, useBreakpoint } from '../hooks';
 import { dataViewToScreenSize } from './dataViewToScreenSize';
 import { Colors } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ import { useTheme } from '@react-navigation/native';
 // import { useBreakpoint } from '../Hooks/useBreakpoint';
 
 // Table header items
-const head = ['상벌구분', '점수', '일자'];
+const head = ['상/벌 구분', '점수', '일자'];
 const list = ['상/벌점', '내역이', '없습니다.'];
 // Table data rows
 // const data = [
@@ -54,17 +54,15 @@ export const BonusTable = ({ isDark }) => {
 
 	console.log(isDark);
 
-	useEffect(() => {
-		if (!ardInptDt.length) {
-			bonusList.push(list);
-		} else {
-			bonusList.pop();
-		}
-	}, [ardInptDt]);
 	let bonusList = useMemo(
 		() => makeBonusArray({ ardInptDt, cmpScr, lifSstArdCtnt, lifSstArdGbn }),
 		[ardInptDt]
 	);
+	useEffect(() => {
+		if (!ardInptDt.length) {
+			bonusList.push(list);
+		}
+	}, [ardInptDt]);
 	useEffect(() => {
 		const data: BonusAPI = {
 			cookies: cookies,
@@ -73,11 +71,17 @@ export const BonusTable = ({ isDark }) => {
 		};
 		dispatch(getBonus(data));
 	}, [cookies, id, name]);
-	console.log(bonusList);
+	// console.log(bonusList);
 
 	return (
 		<Fragment>
-			<Table borderStyle={styles.border} style={styles.table}>
+			<Table
+				borderStyle={{
+					borderWidth: 1,
+					borderColor: isDark ? '#171b22' : Colors.red200,
+				}}
+				style={styles.table}
+			>
 				<Row
 					data={dataViewToScreenSize(
 						head,
@@ -85,7 +89,10 @@ export const BonusTable = ({ isDark }) => {
 						smallScreenIndices,
 						mediumScreenIndices
 					)}
-					style={styles.head}
+					style={{
+						height: 35,
+						backgroundColor: isDark ? '#222831' : Colors.red300,
+					}}
 					textStyle={{
 						textAlign: 'center',
 						color: isDark ? Colors.white : Colors.white,
@@ -129,11 +136,7 @@ const styles = StyleSheet.create({
 	dataRow: {
 		height: 25,
 	},
-	border: {
-		borderWidth: 0.5,
-
-		borderColor: Colors.white,
-	},
+	border: {},
 	table: {
 		marginTop: 20,
 		marginBottom: 10,
