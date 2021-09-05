@@ -6,3 +6,4 @@ export * from './LeftSwipe';
 export * from './LeftRightNavigation';
 export * from './BonusTable';
 export * from './dataViewToScreenSize';
+export * from './Buttons';

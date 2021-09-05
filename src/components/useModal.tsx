@@ -28,13 +28,25 @@ export function useModal(): {
 				}}
 			>
 				<View style={styles.centeredView}>
-					<View style={{ ...styles.modalView, backgroundColor: '#222831' }}>
-						<Text style={styles.modalText}>시작일을 클릭해 주세요</Text>
+					<View
+						style={{
+							...styles.modalView,
+							backgroundColor: isDark ? '#222831' : Colors.white,
+						}}
+					>
+						<Text
+							style={[
+								styles.modalText,
+								{ color: isDark ? Colors.white : Colors.black },
+							]}
+						>
+							시작일을 클릭해 주세요
+						</Text>
 
 						<TouchableHighlight
 							style={{
 								...styles.openButton,
-								backgroundColor: isDark ? Colors.grey900 : Colors.red200,
+								backgroundColor: isDark ? Colors.grey900 : '#2e8b57',
 							}}
 							onPress={() => {
 								setModalVisible(!modalVisible);

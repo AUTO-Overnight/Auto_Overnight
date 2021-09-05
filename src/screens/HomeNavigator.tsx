@@ -5,7 +5,7 @@ import { useNavigationHorizontalInterpolator } from '../hooks';
 import Home from './Home';
 import HomeLeft from './HomeLeft';
 import HomeRight from './HomeRight';
-import Week from './Week';
+import Week from './Point';
 
 const Stack = createStackNavigator();
 
@@ -28,8 +28,8 @@ export default function MainNavigator() {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			{/* <Stack.Screen name="Home" component={Home} /> */}
-			<Stack.Screen name="Home" component={Home} options={leftOptions} />
-			<Stack.Screen name="Week" component={Week} options={rightOptions} />
+			<Stack.Screen name="외박신청" component={Home} options={leftOptions} />
+			<Stack.Screen name="상/벌점" component={Week} options={rightOptions} />
 		</Stack.Navigator>
 	);
 }

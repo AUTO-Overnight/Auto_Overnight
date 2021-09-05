@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Button } from '../interface/buttons';
-export default function useSendButtons(): { buttonList: Array<Button> } {
+export function useSendButtons(): { buttonList: Array<Button> } {
 	const [buttonList] = useState<Array<Button>>([
 		{
 			key: 1,

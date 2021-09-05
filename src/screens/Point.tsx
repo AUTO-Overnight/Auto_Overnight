@@ -18,7 +18,7 @@ import FontIcon from 'react-native-vector-icons/FontAwesome';
 import { ActivityIndicator, Text as RNText } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
 import { BonusTable } from '../components';
-export default function Week() {
+export default function Point() {
 	const navigation = useNavigation();
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
@@ -43,7 +43,7 @@ export default function Week() {
 		<SafeAreaView>
 			<View style={[styles.view]}>
 				<NavigationHeader
-					title="Week"
+					title="Point"
 					Left={() => <Icon name="menu" size={35} onPress={open} />}
 					Right={() => <Icon name="logout" size={35} onPress={logout} />}
 				/>
