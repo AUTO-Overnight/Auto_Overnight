@@ -74,6 +74,20 @@ export const calendarSlice = createSlice({
 			state.sendDays = [];
 			state.isWeekend = [];
 		},
+		logoutInitial: (state) => {
+			state.sendDays = [];
+			state.data = [];
+			state.isWeekend = [];
+			state.sendResponse = {};
+			state.prepare = false;
+			state.outStayFrDtLCal = [];
+			state.outStayToDtCal = [];
+			state.outStayStGbnCal = [];
+			state.mode = 'day';
+			state.isDarkMode = null;
+			state.count = 0;
+			state.confirmList = [];
+		},
 		SEND_DATES_SUCCESS: (state, action: PayloadAction<DaySuccess>) => {
 			state.outStayFrDtLCal = action.payload.outStayFrDt;
 			state.outStayStGbnCal = action.payload.outStayStGbn;
@@ -213,6 +227,7 @@ export const {
 	setMode,
 	toggleDark,
 	makeCountZero,
+	logoutInitial,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;
