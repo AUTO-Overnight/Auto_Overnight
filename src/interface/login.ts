@@ -11,11 +11,17 @@ export interface Login {
 	outStayToDt: Array<any>;
 	outStayStGbn: Array<any>;
 	successList: Array<any>;
+	isConfirmArray: Array<confirm>;
 }
 
+export interface confirm {
+	day: string;
+	isConfirm: boolean;
+}
 export interface updateStay {
 	outStayFrDtLCal?: Array<any>;
 	outStayToDtCal?: Array<any>;
+	outStayStGbnCal?: Array<any>;
 }
 
 export interface User {
