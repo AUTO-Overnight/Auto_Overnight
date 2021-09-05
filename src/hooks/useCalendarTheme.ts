@@ -10,36 +10,32 @@ export const useCalendarTheme = (): {
 } => {
 	const isDark = useTheme().dark;
 	const [theme, setTheme] = useState<CalendarTheme>({
-		backgroundColor: isDark ? '#222831' : Colors.white, // 뒷배경
-		calendarBackground: isDark ? '#222831' : Colors.white, // 뒷배경
-		textSectionTitleColor: isDark ? Colors.white : Colors.black, // 요일 색상
-		// textSectionTitleDisabledColor: Colors.red800,
-		// selectedDayBackgroundColor: Colors.red800,
-		// selectedDayTextColor: Colors.red800,
-		dayTextColor: isDark ? Colors.white : Colors.black,
-		textDisabledColor: Colors.grey700,
-		monthTextColor: isDark ? Colors.white : Colors.black,
-		// indicatorColor: Colors.black,
+		backgroundColor: isDark ? '#222831' : '#256f46', // 뒷배경
+		calendarBackground: isDark ? '#222831' : '#256f46', // 뒷배경
+		textSectionTitleColor: Colors.white, // 요일 색상
+		dayTextColor: Colors.white,
+		textDisabledColor: isDark ? Colors.grey700 : '#a6a6a6',
+		monthTextColor: Colors.white,
 		textDayFontSize: 18,
-		arrowColor: isDark ? Colors.yellow900 : '#FFAAA7',
+		arrowColor: isDark ? Colors.orange600 : Colors.yellow400,
 		textMonthFontSize: 18,
 		textDayHeaderFontSize: 18,
-		todayTextColor: isDark ? Colors.yellow900 : Colors.red500,
+		todayTextColor: isDark ? Colors.orange600 : Colors.yellow400,
 	});
 
 	useEffect(() => {
 		if (isDark) {
 			setTheme((prevState) => ({
 				...prevState,
-				backgroundColor: Colors.white,
-				calendarBackground: Colors.white, // 뒷배경
-				dayTextColor: Colors.black,
-				monthTextColor: Colors.black,
-				textSectionTitleColor: Colors.black, // 요일 색상
-				textDisabledColor: Colors.grey700,
-				todayTextColor: Colors.red500,
+				backgroundColor: '#256f46',
+				calendarBackground: '#256f46', // 뒷배경
+				dayTextColor: Colors.white,
+				monthTextColor: Colors.white,
+				textSectionTitleColor: Colors.white, // 요일 색상
+				textDisabledColor: '#a6a6a6',
+				todayTextColor: Colors.yellow400,
 				textDayFontSize: 18,
-				arrowColor: '#345B63',
+				arrowColor: Colors.yellow400,
 				textMonthFontSize: 18,
 				textDayHeaderFontSize: 18,
 			}));
@@ -53,7 +49,8 @@ export const useCalendarTheme = (): {
 				monthTextColor: Colors.white,
 				textSectionTitleColor: Colors.white, // 요일 색상
 				textDisabledColor: Colors.grey700,
-				todayTextColor: Colors.yellowA400,
+				todayTextColor: Colors.orange600,
+				arrowColor: Colors.orange600,
 				textDayFontSize: 18,
 				textMonthFontSize: 18,
 				textDayHeaderFontSize: 18,
