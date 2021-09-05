@@ -12,6 +12,7 @@ export interface Login {
 	outStayStGbn: Array<any>;
 	successList: Array<any>;
 	isConfirmArray: Array<confirm>;
+	rememberID: boolean;
 }
 
 export interface confirm {
@@ -25,8 +26,8 @@ export interface updateStay {
 }
 
 export interface User {
-	id: string;
-	pw: string;
+	userId: string;
+	userPw: string;
 }
 
 export interface LoginResponse {
