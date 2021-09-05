@@ -9,7 +9,7 @@ import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
 import * as api from '../lib/api';
-import type { CalendarAPI, Day, DaySuccess } from '../interface';
+import type { CalendarAPI, Day, DaySuccess, setExist } from '../interface';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -17,6 +17,7 @@ function pushDayIsWeek({ state, day }) {
 	const formDay = dayjs(day).format('YYYY-MM-DD');
 	if (!state.day[formDay]) {
 		state.sendDays.push(dayjs(day).format('YYYYMMDD'));
+		state.count += 1;
 		const dayNumber = Number(dayjs(day).day);
 		if (dayNumber === 0 || dayNumber === 6) {
 			state.isWeekend.push(1);
@@ -26,8 +27,8 @@ function pushDayIsWeek({ state, day }) {
 		state.day[formDay] = {
 			selected: true,
 			disableTouchEvent: false,
-			selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.red700,
-			selectedTextColor: Colors.white,
+			selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.yellow300,
+			selectedTextColor: state.isDarkMode ? Colors.white : Colors.black,
 			textDayFontWeight: 900,
 			delete: true,
 		};
@@ -45,9 +46,10 @@ const initialState: Day = {
 	outStayFrDtLCal: [],
 	outStayToDtCal: [],
 	outStayStGbnCal: [],
-
 	mode: 'day',
 	isDarkMode: null,
+	count: 0,
+	confirmList: [],
 };
 
 const SEND_DATES = 'calendar/SEND_DATES';
@@ -79,16 +81,22 @@ export const calendarSlice = createSlice({
 		},
 		addDay: (state, action: PayloadAction<any>) => {
 			if (state.day[action.payload]) {
-				if (state.day[action.payload].delete) delete state.day[action.payload];
+				if (state.day[action.payload].delete) {
+					delete state.day[action.payload], (state.count -= 1);
+				}
 			} else {
+				state.count += 1;
 				state.day[action.payload] = {
 					selected: true,
 					disableTouchEvent: false,
-					selectedColor: Colors.cyan900,
-					selectedTextColor: Colors.white,
+					selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.yellow300,
+					selectedTextColor: state.isDarkMode ? Colors.white : Colors.black,
 					delete: true,
 				};
 			}
+		},
+		makeCountZero: (state) => {
+			state.count = 0;
 		},
 		addDayList: (
 			state,
@@ -150,16 +158,36 @@ export const calendarSlice = createSlice({
 		togglePrepare: (state) => {
 			state.prepare = false;
 		},
-		setExistDays: (state, action: PayloadAction<Array<number>>) => {
-			state.data = action.payload;
+		setExistDays: (state, action: PayloadAction<setExist>) => {
+			if (action.payload.successList.length === 0) {
+				console.log('이게뭐고');
+				return;
+			}
+
+			state.data = action.payload.successList;
+			state.confirmList = action.payload.isConfirmArray;
 			state.data.map((date) => {
 				const setDay = dayjs(String(date)).format('YYYY-MM-DD');
 				state.day[setDay] = {
 					marked: true,
-					dotColor: 'yellow',
+					dotColor: Colors.red600,
 					activeOpacity: 0,
 					delete: false,
 				};
+			});
+			if (!state.confirmList) return;
+			state.confirmList.map((date, index) => {
+				if (date.isConfirm) {
+					const setDay = dayjs(String(date.day)).format('YYYY-MM-DD');
+					// if(date.isConfirm)
+
+					state.day[setDay] = {
+						marked: true,
+						dotColor: Colors.yellow600,
+						activeOpacity: 0,
+						delete: false,
+					};
+				}
 			});
 		},
 		removeAllDays: (state) => {
@@ -184,6 +212,7 @@ export const {
 	addDayList,
 	setMode,
 	toggleDark,
+	makeCountZero,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;
