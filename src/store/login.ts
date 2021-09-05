@@ -27,6 +27,7 @@ const initialState: Login = {
 	data: {},
 	name: '',
 	successList: [],
+	isConfirmArray: [],
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -73,27 +74,57 @@ export const loginSlice = createSlice({
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginError = action.payload;
 		},
-		makeSuccessList: (state, action: PayloadAction<updateStay | null>) => {
+		makeSuccessList: (state, action: PayloadAction<updateStay>) => {
 			if (action.payload.outStayFrDtLCal.length) {
 				state.outStayToDt = action.payload.outStayToDtCal;
 				state.outStayFrDtL = action.payload.outStayFrDtLCal;
+				state.outStayStGbn = action.payload.outStayStGbnCal;
 			}
 			let len: number;
 			if (state.outStayFrDtL) len = state.outStayFrDtL.length;
-			let day: any;
+			// let day: any;
 			state.successList = [];
+			state.isConfirmArray = [];
 			for (let i = 0; i < len; i++) {
-				if (state.outStayToDt[i] === state.outStayFrDtL[i])
+				if (state.outStayToDt[i] === state.outStayFrDtL[i]) {
 					// 시작 일 끝 일 같은 경우
 					state.successList.push(state.outStayToDt[i]);
+					if (state.outStayStGbn[i] === '2') {
+						state.isConfirmArray.push({
+							day: state.outStayToDt[i],
+							isConfirm: true,
+						});
+					} else {
+						state.isConfirmArray.push({
+							day: state.outStayToDt[i],
+							isConfirm: false,
+						});
+					}
+					// if()
+				}
+				// state.isConfirmArray.push({})
 				else {
-					const diff = dayjs(state.outStayToDt[i]).diff(
-						state.outStayFrDtL[i],
-						'd'
+					console.log('안같아');
+					const diff = Number(
+						dayjs(state.outStayToDt[i]).diff(state.outStayFrDtL[i], 'd')
 					);
+					console.log(diff);
 					for (let j = 0; j <= diff; j++) {
-						day = dayjs(state.outStayFrDtL[i]).add(j).format('YYYYMMDD');
+						let day = dayjs(state.outStayFrDtL[i])
+							.add(j, 'd')
+							.format('YYYYMMDD');
 						state.successList.push(day);
+						if (state.outStayStGbn[i] === '2') {
+							state.isConfirmArray.push({
+								day: day,
+								isConfirm: true,
+							});
+						} else {
+							state.isConfirmArray.push({
+								day: day,
+								isConfirm: false,
+							});
+						}
 					}
 				}
 			}
