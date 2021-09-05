@@ -6,7 +6,7 @@ import { useSendButtons } from '../hooks';
 import { StyleSheet, View, Text } from 'react-native';
 export function Buttons({ onPressDay, onPressDays, isDark, backWhiteColor }) {
 	const { buttonList } = useSendButtons();
-	const bottomColor = '#8b4513';
+	const bottomColor = '#65351d';
 	// const bottomColor = Colors.blue300;
 	return (
 		<View
