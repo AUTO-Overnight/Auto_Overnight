@@ -9,6 +9,8 @@ import {
 	MaterialCommunityIcon as Icon,
 	Switch,
 } from '../theme';
+
+import { Switch as RNSwitch } from 'react-native';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { useAutoFocus, AutoFocusProvider } from '../contexts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,26 +21,29 @@ import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
 export default function MainNavigator() {
 	// text
-	const focus = useAutoFocus();
-	const [id, setId] = useState<string>('');
-	const [pw, setPW] = useState<string>('');
-	const { cookies, loginError, loadingLogin, outStayStGbn, name } = useSelector(
-		({ login, loading }: RootState) => ({
+	const { cookies, loginError, loadingLogin, outStayStGbn, name, id, pw } =
+		useSelector(({ login, loading }: RootState) => ({
 			cookies: login.cookies,
 			name: login.name,
 			loginError: login.loginError,
 			outStayStGbn: login.outStayStGbn,
 			loadingLogin: loading['login/GET_LOGIN'],
-		})
-	);
+			id: login.id,
+			pw: login.pw,
+		}));
+	const focus = useAutoFocus();
+	const [userId, setId] = useState<string>(id);
+	const [userPw, setPW] = useState<string>(pw);
+	const [isEnabled, setIsEnabled] = useState(false);
+	const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 	const dispatch = useDispatch();
 	const onSubmit = useCallback(() => {
-		dispatch(setIdPw({ id, pw }));
-		dispatch(getLogin({ id, pw }));
+		dispatch(setIdPw({ userId, userPw }));
+		dispatch(getLogin({ userId, userPw }));
 		// setId((notUsed) => '');
 		// setPW((notUsed) => '');
 		// dispatch(initialLogin());
-	}, [id, pw]);
+	}, [userId, userPw]);
 	useEffect(() => {
 		if (name) {
 			navigation.navigate('TabNavigator');
@@ -54,42 +59,83 @@ export default function MainNavigator() {
 				<Switch></Switch>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
 					<View style={[styles.textView]}>
-						<Text style={[styles.text]}>ID</Text>
-						<View border style={[styles.textInputView]}>
+						{/* <Text style={[styles.text]}>ID</Text> */}
+						<View
+							style={[
+								styles.textInputView,
+								{ backgroundColor: isDark ? '#222831' : Colors.red300 },
+							]}
+						>
+							<Icon
+								name="account"
+								size={30}
+								style={{
+									color: isDark ? Colors.white : Colors.white,
+									marginTop: 5,
+									paddingRight: 10,
+								}}
+							/>
 							<TextInput
 								onFocus={focus}
-								style={[styles.textInput]}
-								value={id}
-								onChangeText={(id) => setId((text) => id)}
-								placeholder="enter your ID"
+								style={[
+									styles.textInput,
+									{ color: isDark ? Colors.white : Colors.white },
+								]}
+								value={userId}
+								onChangeText={(useId) => setId((text) => useId)}
+								placeholder="Enter your ID"
+								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey200}
 							/>
 						</View>
 					</View>
 					<View style={[styles.textView]}>
-						<Text style={[styles.text]}>PW</Text>
-						<View border style={[styles.textInputView]}>
-							{/* <Icon
-								name="passport-biometric"
-								size={24}
-								style={{ position: 'absolute', marginTop: 13 }}
-							/> */}
+						{/* <Text style={[styles.text]}>PW</Text> */}
+						<View
+							style={[
+								styles.textInputView,
+								{ backgroundColor: isDark ? '#222831' : Colors.red300 },
+							]}
+						>
+							<Icon
+								name="lock"
+								size={30}
+								style={{
+									color: isDark ? Colors.white : Colors.white,
+									marginTop: 5,
+									paddingRight: 10,
+								}}
+							/>
 							<TextInput
 								onFocus={focus}
 								autoCapitalize="none"
-								style={[styles.textInput]}
-								value={pw}
-								onChangeText={(pw) => setPW((text) => pw)}
-								placeholder="enter your PW"
+								style={[
+									styles.textInput,
+									{ color: isDark ? Colors.white : Colors.white },
+								]}
+								value={userPw}
+								onChangeText={(userPw) => setPW((text) => userPw)}
+								placeholder="Enter your PW"
+								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey300}
 							/>
 						</View>
 					</View>
-					<View style={{ marginBottom: 20 }} />
 
+					<View style={styles.container}>
+						<RNSwitch
+							trackColor={{ false: '#767577', true: '#222831' }}
+							thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+							ios_backgroundColor="#3e3e3e"
+							onValueChange={toggleSwitch}
+							value={isEnabled}
+						/>
+						<Text style={{ fontSize: 20 }}>Remember</Text>
+					</View>
+					<View style={{ marginBottom: 20 }} />
 					<TouchableView
 						notification
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? Colors.red500 : Colors.red200 },
+							{ backgroundColor: isDark ? '#152D35' : '#FACE7F' },
 						]}
 						onPress={onSubmit}
 					>
@@ -121,14 +167,30 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	textView: { width: '100%', padding: 5, marginBottom: 10 },
-	textInput: { fontSize: 24, padding: 10 },
-	textInputView: { marginTop: 5, borderRadius: 10 },
+	textInput: { fontSize: 24, flex: 1 },
+	textInputView: {
+		flexDirection: 'row',
+		// borderWidth: 2,
+		borderRadius: 10,
+		// borderColor: 'white',
+		// paddingBottom: 10,
+		padding: 10,
+		// height: 55,
+		color: Colors.white,
+	},
 	touchableView: {
 		flexDirection: 'row',
-		height: 50,
+		height: 55,
 		borderRadius: 10,
 		width: '97%',
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	container: {
+		width: '100%',
+		flexDirection: 'column',
+		marginRight: 10,
+		alignItems: 'flex-end',
+		justifyContent: 'center',
 	},
 });
