@@ -17,7 +17,6 @@ import { useCallback } from 'react';
 import { getLogin, initialLogin, setIdPw } from '../store/login';
 import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
-import useSendButtons from '../hooks/useSendButtons';
 export default function MainNavigator() {
 	// text
 	const focus = useAutoFocus();
