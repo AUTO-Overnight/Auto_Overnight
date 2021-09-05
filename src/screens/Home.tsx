@@ -21,6 +21,7 @@ import {
 	addDay,
 	addDayList,
 	initial,
+	logoutInitial,
 	makeCountZero,
 	removeAllDays,
 	sendDates,
@@ -43,7 +44,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 // import { useToggle } from '../hooks/useToggle';
 // import { Easing } from 'react-native-reanimated';
 import { Colors } from 'react-native-paper';
-import { logoutHome, makeSuccessList } from '../store/login';
+import { initialLogin, logoutHome, makeSuccessList } from '../store/login';
 import { CalendarAPI } from '../interface';
 import { useMemo } from 'react';
 // import useSendButtons from '../hooks/useSendButtons';
@@ -114,6 +115,7 @@ export default function Home() {
 	}, []);
 	const logout = useCallback(() => {
 		dispatch(logoutHome());
+		dispatch(logoutInitial());
 
 		navigation.navigate('Login');
 	}, []);
@@ -315,7 +317,7 @@ export default function Home() {
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#345B63' : Colors.red300,
+								backgroundColor: isDark ? '#345B63' : Colors.red200,
 							},
 						]}
 					>
