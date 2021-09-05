@@ -28,6 +28,7 @@ const initialState: Login = {
 	name: '',
 	successList: [],
 	isConfirmArray: [],
+	rememberID: false,
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -45,22 +46,25 @@ export const loginSlice = createSlice({
 	initialState,
 	reducers: {
 		initialLogin: (state) => {
-			state.loginError = '';
-			state.cookies = '';
-			state.name = '';
-			state.outStayStGbn = [];
-			state.outStayStGbn = [];
-			state.loginError = '';
+			state = initialState;
 		},
 		logoutHome: (state) => {
 			state.id = '';
 			state.pw = '';
-			state.loginError = '';
 			state.cookies = '';
-			state.name = '';
+			state.loginError = '';
 			state.outStayFrDtL = [];
 			state.outStayStGbn = [];
-			state.loginError = '';
+			state.outStayToDt = [];
+			state.tmGbn = '';
+			state.thisYear = '';
+			state.data = {};
+			state.name = '';
+			state.successList = [];
+			state.isConfirmArray = [];
+		},
+		toggleRemember: (state, action: PayloadAction<boolean>) => {
+			state.rememberID = action.payload;
 		},
 		GET_LOGIN_SUCCESS: (state, action: PayloadAction<LoginResponse>) => {
 			state.cookies = action.payload.cookies;
@@ -130,8 +134,8 @@ export const loginSlice = createSlice({
 			}
 		},
 		setIdPw: (state, action: PayloadAction<User>) => {
-			state.id = action.payload.id;
-			state.pw = action.payload.pw;
+			state.id = action.payload.userId;
+			state.pw = action.payload.userPw;
 		},
 	},
 	extraReducers: {},
@@ -144,6 +148,7 @@ export const {
 	setIdPw,
 	logoutHome,
 	makeSuccessList,
+	toggleRemember,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
