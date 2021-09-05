@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeNavigator from './HomeNavigator';
-import Week from './Week';
+import Point from './Point';
 import type { RouteProp, ParamListBase } from '@react-navigation/native';
 import Home from './Home';
 import { useNavigationHorizontalInterpolator } from '../hooks';
@@ -12,8 +12,8 @@ import { useTheme } from '@react-navigation/native';
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 const icons: Record<string, string[]> = {
-	Home: ['home-circle', 'home-circle-outline'],
-	Week: ['brightness-2', 'brightness-3'],
+	Point: ['trophy-variant', 'trophy-variant-outline'],
+	Calendar: ['brightness-2', 'brightness-3'],
 };
 
 const screenOptions = ({
@@ -25,13 +25,13 @@ const screenOptions = ({
 	return {
 		tabBarIcon: ({ focused, color, size }: TabBarIconProps) => {
 			const { name } = route;
-			const focusedSize = focused ? size + 6 : size;
+			const focusedSize = focused ? 20 + 3 : 20;
 			const focusedColor = isDark
 				? focused
-					? Colors.grey300
+					? Colors.yellow600
 					: Colors.grey800
 				: focused
-				? Colors.black
+				? Colors.yellow600
 				: Colors.black;
 			const [icon, iconOutline] = icons[name];
 			const iconName = focused ? icon : iconOutline;
@@ -62,18 +62,19 @@ export default function TabNavigator() {
 	return (
 		<Tab.Navigator screenOptions={screenOptions}>
 			<Tab.Screen
-				name="Home"
+				name="Calendar"
 				component={Home}
 				options={{
-					tabBarIconStyle: { marginTop: 8 },
+					tabBarIconStyle: { marginTop: 2 },
+
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
 			/>
 			<Tab.Screen
-				name="Week"
-				component={Week}
+				name="Point"
+				component={Point}
 				options={{
-					tabBarIconStyle: { marginTop: 8 },
+					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
 			/>
