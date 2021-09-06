@@ -40,8 +40,15 @@ export default function Point() {
 	}, [loading]);
 	const isDark = useTheme().dark;
 	return (
-		<SafeAreaView>
-			<View style={[styles.view]}>
+		<SafeAreaView
+			style={{ backgroundColor: isDark ? Colors.black : Colors.green100 }}
+		>
+			<View
+				style={[
+					styles.view,
+					{ backgroundColor: isDark ? Colors.black : Colors.green100 },
+				]}
+			>
 				<NavigationHeader
 					title="Point"
 					Left={() => <Icon name="menu" size={35} onPress={open} />}
