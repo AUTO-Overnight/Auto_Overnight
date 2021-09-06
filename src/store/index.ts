@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import { persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import counter from './counter';
 import calendar, { calendarSaga } from './calendar';
 import loading from './loading';
 import login, { loginSaga } from './login';
@@ -11,10 +10,9 @@ import bonus, { bonusSaga } from './bonus';
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['calendar', 'login', 'bonus'],
+	blacklist: ['calendar', 'bonus'],
 };
 const rootReducer = combineReducers({
-	counter,
 	login,
 	loading,
 	calendar,
