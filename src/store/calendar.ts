@@ -119,7 +119,6 @@ export const calendarSlice = createSlice({
 			state.sendDays = [];
 			state.isWeekend = [];
 			let day = action.payload.weekDay;
-			console.log(day, action.payload.weekDay, action.payload.weekKey);
 			switch (action.payload.weekKey) {
 				case 1:
 					pushDayIsWeek({ state, day });
@@ -143,8 +142,6 @@ export const calendarSlice = createSlice({
 					}
 					break;
 			}
-			console.log(state.isWeekend);
-			console.log(state.sendDays);
 		},
 		sendPrepare: (state) => {
 			const data = state.data;
@@ -174,7 +171,6 @@ export const calendarSlice = createSlice({
 		},
 		setExistDays: (state, action: PayloadAction<setExist>) => {
 			if (action.payload.successList.length === 0) {
-				console.log('이게뭐고');
 				return;
 			}
 
