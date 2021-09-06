@@ -1,0 +1,16 @@
+{
+	"expo": {
+		"name": "Auto Overnight",
+		"icon": "./src/assets/images/icon.png",
+		"version": "1.0.0",
+		"slug": "Night",
+		"ios": {
+			"bundleIdentifier": "com.ww8007.AutoOvernight",
+			"buildNumber": "1.0.0"
+		},
+		"android": {
+			"package": "com.ww8007.AutoOvernight",
+			"versionCode": 1
+		}
+	}
+}
