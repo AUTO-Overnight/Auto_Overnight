@@ -28,8 +28,8 @@ export default function MainNavigator() {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			{/* <Stack.Screen name="Home" component={Home} /> */}
-			<Stack.Screen name="외박신청" component={Home} options={leftOptions} />
-			<Stack.Screen name="상/벌점" component={Week} options={rightOptions} />
+			<Stack.Screen name="Home" component={Home} options={leftOptions} />
+			<Stack.Screen name="Point" component={Week} options={rightOptions} />
 		</Stack.Navigator>
 	);
 }
