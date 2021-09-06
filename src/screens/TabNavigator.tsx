@@ -71,7 +71,6 @@ export default function TabNavigator() {
 	const navigation = useNavigation();
 	useEffect(() => {
 		if (name) {
-			console.log(name, '잇다고,,');
 			navigation.navigate('Calendar');
 		}
 	}, [name]);
@@ -85,13 +84,6 @@ export default function TabNavigator() {
 				component={Home}
 				options={{
 					tabBarIconStyle: { marginTop: 2 },
-					// headerTintColor: isDark ? Colors.black : Colors.green700,
-					// headerPressColor: isDark ? Colors.black : Colors.green700,
-					// tabBarActiveBackgroundColor: isDark ? Colors.black : Colors.green700,
-					// tabBarInactiveTintColor: isDark ? Colors.black : Colors.green700,
-					// // tabBarInactiveBackgroundColor: isDark
-					// // 	? Colors.black
-					// // 	: Colors.green700,
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
 			/>
@@ -101,14 +93,6 @@ export default function TabNavigator() {
 				options={{
 					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
-
-					// headerTintColor: isDark ? Colors.black : Colors.green700,
-					// headerPressColor: isDark ? Colors.black : Colors.green700,
-					// tabBarActiveBackgroundColor: isDark ? Colors.black : Colors.green700,
-					// tabBarInactiveTintColor: isDark ? Colors.black : Colors.green700,
-					// tabBarInactiveBackgroundColor: isDark
-					// 	? Colors.black
-					// 	: Colors.green700,
 				}}
 			/>
 		</Tab.Navigator>
