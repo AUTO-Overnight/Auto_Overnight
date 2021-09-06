@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,6 +9,10 @@ import Home from './Home';
 import { useNavigationHorizontalInterpolator } from '../hooks';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { useTheme } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { useNavigation } from '@react-navigation/core';
+
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 const icons: Record<string, string[]> = {
@@ -37,7 +41,9 @@ const screenOptions = ({
 			const iconName = focused ? icon : iconOutline;
 			return <Icon name={iconName} size={focusedSize} color={focusedColor} />;
 		},
+
 		headerShown: false,
+		color: 'black',
 	};
 };
 const Tab = createBottomTabNavigator();
@@ -59,14 +65,33 @@ export default function TabNavigator() {
 		[]
 	);
 	const isDark = useTheme().dark;
+	const { name } = useSelector(({ calendar, login }: RootState) => ({
+		name: login.name,
+	}));
+	const navigation = useNavigation();
+	useEffect(() => {
+		if (name) {
+			console.log(name, '잇다고,,');
+			navigation.navigate('Calendar');
+		}
+	}, [name]);
 	return (
-		<Tab.Navigator screenOptions={screenOptions}>
+		<Tab.Navigator
+			sceneContainerStyle={{ backgroundColor: 'black ' }}
+			screenOptions={screenOptions}
+		>
 			<Tab.Screen
 				name="Calendar"
 				component={Home}
 				options={{
 					tabBarIconStyle: { marginTop: 2 },
-
+					// headerTintColor: isDark ? Colors.black : Colors.green700,
+					// headerPressColor: isDark ? Colors.black : Colors.green700,
+					// tabBarActiveBackgroundColor: isDark ? Colors.black : Colors.green700,
+					// tabBarInactiveTintColor: isDark ? Colors.black : Colors.green700,
+					// // tabBarInactiveBackgroundColor: isDark
+					// // 	? Colors.black
+					// // 	: Colors.green700,
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
 			/>
@@ -76,6 +101,14 @@ export default function TabNavigator() {
 				options={{
 					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
+
+					// headerTintColor: isDark ? Colors.black : Colors.green700,
+					// headerPressColor: isDark ? Colors.black : Colors.green700,
+					// tabBarActiveBackgroundColor: isDark ? Colors.black : Colors.green700,
+					// tabBarInactiveTintColor: isDark ? Colors.black : Colors.green700,
+					// tabBarInactiveBackgroundColor: isDark
+					// 	? Colors.black
+					// 	: Colors.green700,
 				}}
 			/>
 		</Tab.Navigator>
