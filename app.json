@@ -1,9 +1,9 @@
 {
 	"expo": {
-		"name": "Auto Overnight",
+		"name": "KPU 자동 외박 신청",
 		"icon": "./src/assets/images/icon.png",
 		"version": "1.0.0",
-		"slug": "Night",
+		"slug": "ww8007",
 		"ios": {
 			"bundleIdentifier": "com.ww8007.AutoOvernight",
 			"buildNumber": "1.0.0"
