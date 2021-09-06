@@ -16,26 +16,61 @@ import { useAutoFocus, AutoFocusProvider } from '../contexts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useCallback } from 'react';
-import { getLogin, initialLogin, setIdPw } from '../store/login';
+import 'dayjs/locale/ko';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import {
+	getLogin,
+	initialLogin,
+	setCookieTime,
+	setIdPw,
+	toggleRemember,
+} from '../store/login';
 import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
+import dayjs from 'dayjs';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 export default function MainNavigator() {
 	// text
-	const { cookies, loginError, loadingLogin, outStayStGbn, name, id, pw } =
-		useSelector(({ login, loading }: RootState) => ({
-			cookies: login.cookies,
-			name: login.name,
-			loginError: login.loginError,
-			outStayStGbn: login.outStayStGbn,
-			loadingLogin: loading['login/GET_LOGIN'],
-			id: login.id,
-			pw: login.pw,
-		}));
+	const {
+		cookies,
+		loginError,
+		loadingLogin,
+		outStayStGbn,
+		name,
+		id,
+		pw,
+		rememberID,
+	} = useSelector(({ login, loading }: RootState) => ({
+		cookies: login.cookies,
+		name: login.name,
+		loginError: login.loginError,
+		outStayStGbn: login.outStayStGbn,
+		loadingLogin: loading['login/GET_LOGIN'],
+		id: login.id,
+		pw: login.pw,
+		rememberID: login.rememberID,
+	}));
 	const focus = useAutoFocus();
 	const [userId, setId] = useState<string>(id);
 	const [userPw, setPW] = useState<string>(pw);
 	const [isEnabled, setIsEnabled] = useState(false);
-	const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+	useEffect(() => {
+		if (rememberID === 'auto') setIsEnabled(true);
+		else setIsEnabled(false);
+	}, []);
+	const toggleSwitch = useCallback(() => {
+		setIsEnabled(!isEnabled);
+		console.log(isEnabled);
+		if (isEnabled) {
+			console.log(userId, userPw, '토글 됨');
+			dispatch(toggleRemember('no'));
+		} else {
+			console.log(userId, userPw, '토글 안됨');
+			dispatch(toggleRemember('auto'));
+		}
+	}, [isEnabled]);
 	const dispatch = useDispatch();
 	const onSubmit = useCallback(() => {
 		dispatch(setIdPw({ userId, userPw }));
@@ -44,26 +79,39 @@ export default function MainNavigator() {
 		// setPW((notUsed) => '');
 		// dispatch(initialLogin());
 	}, [userId, userPw]);
+
 	useEffect(() => {
 		if (name) {
 			navigation.navigate('TabNavigator');
 		} else {
-			loginError && Alert.alert('로그인 실패!!!');
+			if (loginError) Alert.alert('로그인 에러');
 		}
 	}, [loginError, name]);
+
 	const navigation = useNavigation();
 	const isDark = useTheme().dark;
 	return (
-		<SafeAreaView>
-			<View style={[styles.view]}>
-				<Switch></Switch>
+		<SafeAreaView
+			style={{ backgroundColor: isDark ? Colors.black : Colors.green200 }}
+		>
+			<View
+				style={[
+					styles.view,
+					{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+				]}
+			>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
-					<View style={[styles.textView]}>
+					<View
+						style={[
+							styles.textView,
+							{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+						]}
+					>
 						{/* <Text style={[styles.text]}>ID</Text> */}
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : Colors.red300 },
+								{ backgroundColor: isDark ? '#222831' : '#2e8b57' },
 							]}
 						>
 							<Icon
@@ -88,12 +136,18 @@ export default function MainNavigator() {
 							/>
 						</View>
 					</View>
-					<View style={[styles.textView]}>
+					<View style={{ marginBottom: 20 }} />
+					<View
+						style={[
+							styles.textView,
+							{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+						]}
+					>
 						{/* <Text style={[styles.text]}>PW</Text> */}
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : Colors.red300 },
+								{ backgroundColor: isDark ? '#222831' : '#2e8b57' },
 							]}
 						>
 							<Icon
@@ -119,27 +173,39 @@ export default function MainNavigator() {
 							/>
 						</View>
 					</View>
-
-					<View style={styles.container}>
+					<View style={{ marginBottom: 20 }} />
+					<View
+						style={[
+							styles.container,
+							{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+						]}
+					>
+						<Switch></Switch>
+						<Text style={{ fontSize: 20 }}>White/Dark</Text>
 						<RNSwitch
-							trackColor={{ false: '#767577', true: '#222831' }}
-							thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+							trackColor={{
+								false: '#767577',
+								true: isDark ? '#222831' : Colors.green300,
+							}}
+							thumbColor={isEnabled ? Colors.yellow400 : '#f4f3f4'}
 							ios_backgroundColor="#3e3e3e"
 							onValueChange={toggleSwitch}
 							value={isEnabled}
 						/>
-						<Text style={{ fontSize: 20 }}>Remember</Text>
+						<Text style={{ fontSize: 20 }}>Auto Login</Text>
 					</View>
-					<View style={{ marginBottom: 20 }} />
+					<View style={{ marginBottom: 40 }} />
 					<TouchableView
 						notification
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? '#152D35' : '#FACE7F' },
+							{ backgroundColor: isDark ? '#152D35' : '#2E7D32' },
 						]}
 						onPress={onSubmit}
 					>
-						{loadingLogin && <ActivityIndicator size="large" />}
+						{loadingLogin && (
+							<ActivityIndicator size="large" color={Colors.white} />
+						)}
 						{!loadingLogin && (
 							<>
 								<Text
@@ -166,7 +232,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	textView: { width: '100%', padding: 5, marginBottom: 10 },
+	textView: {
+		width: '100%',
+		padding: 0,
+
+		marginBottom: 10,
+	},
 	textInput: { fontSize: 24, flex: 1 },
 	textInputView: {
 		flexDirection: 'row',
@@ -182,15 +253,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		height: 55,
 		borderRadius: 10,
-		width: '97%',
+		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	container: {
 		width: '100%',
-		flexDirection: 'column',
+		flexDirection: 'row',
 		marginRight: 10,
-		alignItems: 'flex-end',
-		justifyContent: 'center',
+		alignItems: 'center',
+		justifyContent: 'space-evenly',
 	},
 });
