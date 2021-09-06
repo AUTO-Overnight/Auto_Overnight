@@ -13,7 +13,8 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
-
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const initialState: Login = {
 	id: '',
 	pw: '',
@@ -28,7 +29,8 @@ const initialState: Login = {
 	name: '',
 	successList: [],
 	isConfirmArray: [],
-	rememberID: false,
+	rememberID: '',
+	cookieTime: '',
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -46,11 +48,6 @@ export const loginSlice = createSlice({
 	initialState,
 	reducers: {
 		initialLogin: (state) => {
-			state = initialState;
-		},
-		logoutHome: (state) => {
-			state.id = '';
-			state.pw = '';
 			state.cookies = '';
 			state.loginError = '';
 			state.outStayFrDtL = [];
@@ -63,7 +60,20 @@ export const loginSlice = createSlice({
 			state.successList = [];
 			state.isConfirmArray = [];
 		},
-		toggleRemember: (state, action: PayloadAction<boolean>) => {
+		logoutHome: (state) => {
+			state.cookies = '';
+			state.loginError = '';
+			state.outStayFrDtL = [];
+			state.outStayStGbn = [];
+			state.outStayToDt = [];
+			state.tmGbn = '';
+			state.thisYear = '';
+			state.data = {};
+			state.name = '';
+			state.successList = [];
+			state.isConfirmArray = [];
+		},
+		toggleRemember: (state, action: PayloadAction<string>) => {
 			state.rememberID = action.payload;
 		},
 		GET_LOGIN_SUCCESS: (state, action: PayloadAction<LoginResponse>) => {
@@ -74,6 +84,7 @@ export const loginSlice = createSlice({
 			state.outStayFrDtL = action.payload.outStayFrDt;
 			state.thisYear = action.payload.yy;
 			state.tmGbn = action.payload.tmGbn;
+			state.cookieTime = dayjs().tz('Asia/Seoul').locale('ko');
 		},
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginError = action.payload;
@@ -108,11 +119,9 @@ export const loginSlice = createSlice({
 				}
 				// state.isConfirmArray.push({})
 				else {
-					console.log('안같아');
 					const diff = Number(
 						dayjs(state.outStayToDt[i]).diff(state.outStayFrDtL[i], 'd')
 					);
-					console.log(diff);
 					for (let j = 0; j <= diff; j++) {
 						let day = dayjs(state.outStayFrDtL[i])
 							.add(j, 'd')
@@ -137,6 +146,9 @@ export const loginSlice = createSlice({
 			state.id = action.payload.userId;
 			state.pw = action.payload.userPw;
 		},
+		setCookieTime: (state, action: PayloadAction<any>) => {
+			state.cookieTime = action.payload;
+		},
 	},
 	extraReducers: {},
 });
@@ -149,6 +161,7 @@ export const {
 	logoutHome,
 	makeSuccessList,
 	toggleRemember,
+	setCookieTime,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
