@@ -16,7 +16,7 @@ import type { DateObject, HeaderComponentProps } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import type { CalendarThemeIdStyle } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
-
+import type { ConfigType } from 'dayjs';
 import {
 	addDay,
 	addDayList,
@@ -31,7 +31,7 @@ import {
 	toggleDark,
 	togglePrepare,
 } from '../store/calendar';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 import {
 	useAnimatedValue,
 	useCalendarTheme,
@@ -44,9 +44,15 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 // import { useToggle } from '../hooks/useToggle';
 // import { Easing } from 'react-native-reanimated';
 import { Colors } from 'react-native-paper';
-import { initialLogin, logoutHome, makeSuccessList } from '../store/login';
+import {
+	getLogin,
+	initialLogin,
+	logoutHome,
+	makeSuccessList,
+} from '../store/login';
 import { CalendarAPI } from '../interface';
 import { useMemo } from 'react';
+import { produceWithPatches } from 'immer';
 // import useSendButtons from '../hooks/useSendButtons';
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -72,6 +78,7 @@ export default function Home() {
 		cookies,
 		isWeekend,
 		id,
+		pw,
 		prepare,
 		outStayFrDtL,
 		outStayToDt,
@@ -84,12 +91,17 @@ export default function Home() {
 		count,
 		data,
 		isConfirmArray,
+		cookieTime,
+		rememberID,
+		name,
 	} = useSelector(({ calendar, login }: RootState) => ({
 		day: calendar.day,
 		sendDays: calendar.sendDays,
 		cookies: login.cookies,
 		isWeekend: calendar.isWeekend,
 		id: login.id,
+		pw: login.pw,
+		name: login.name,
 		prepare: calendar.prepare,
 		outStayToDt: login.outStayToDt,
 		outStayFrDtL: login.outStayFrDtL,
@@ -100,9 +112,10 @@ export default function Home() {
 		successList: login.successList,
 		mode: calendar.mode,
 		count: calendar.count,
-
+		cookieTime: login.cookieTime,
 		data: login.data,
 		isConfirmArray: login.isConfirmArray,
+		rememberID: login.rememberID,
 	}));
 	// navigation
 	// useEffect(() => {}, [outStayFrDtL]);
@@ -138,12 +151,44 @@ export default function Home() {
 	const [maxDate] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').add(45, 'd').format('YYYY-MM-DD')
 	);
+	const [isOkayDay, setOkayDay] = useState(
+		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
+	);
 	const { theme, isDark } = useCalendarTheme();
 	const backWhiteColor = isDark ? 'black' : '#F6F6F6';
 	useEffect(() => {
 		dispatch(toggleDark(isDark));
 		onRemoveAllDays();
+		return () => dispatch(logoutInitial());
 	}, [isDark]);
+	useEffect(() => {
+		const timer = () => {
+			setTimeout(() => {
+				const time = dayjs().tz('Asia/Seoul').locale('ko');
+				console.log(time);
+				if (dayjs(time).isAfter(dayjs(cookieTime).add(1, 'hours'))) {
+					if (rememberID === 'auto') {
+						dispatch(initialLogin());
+						const user = {
+							userId: id,
+							userPw: pw,
+						};
+						dispatch(getLogin(user));
+						console.log('재로그인');
+					}
+				}
+			}, 10);
+		};
+		const now = timer();
+	}, []);
+	// useEffect(() => {
+	// 	const timer = () => {
+	// 		setInterval(() => {
+	// 			console.log('hihi');
+	// 		}, 5000);
+	// 	};
+	// 	timer();
+	// }, []);
 	const [selected, setSelected] = useState<string>('');
 	const [weekDay, setWeekDay] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD')
@@ -164,6 +209,7 @@ export default function Home() {
 			switch (mode) {
 				case 'day': {
 					if (dayjs(today).isAfter(day.dateString)) {
+						Alert.alert('신청일 이전으로\n 신청할 수 없습니다.');
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
 						date = day.dateString;
@@ -176,11 +222,32 @@ export default function Home() {
 				case 'month': {
 					if (ready) return;
 					if (dayjs(today).isAfter(day.dateString)) {
+						Alert.alert('신청일 이전으로\n 신청할 수 없습니다.');
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
 						date = day.dateString;
 						setWeekDay(date);
 					}
+					if (weekKey === 4) {
+						if (
+							dayjs(day.dateString)
+								.add(28, 'd')
+								.isAfter(dayjs(maxDate).add(1, 'd'))
+						) {
+							Alert.alert('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							return;
+						}
+					} else {
+						if (
+							dayjs(day.dateString)
+								.add((weekKey - 1) * 7, 'd')
+								.isAfter(dayjs(maxDate).add(1, 'd'))
+						) {
+							Alert.alert('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							return;
+						}
+					}
+
 					date = day.dateString;
 					setWeekDay(date);
 					toggleReady(true);
@@ -189,11 +256,12 @@ export default function Home() {
 				}
 			}
 		},
-		[day, count, successList]
+		[day, count, successList, weekKey]
 	);
 
 	const onPressDays = useCallback(
 		(key) => {
+			// if (dayjs(isOkayDay).add())
 			toggleReady(false);
 			onRemoveAllDays();
 			setModalVisible(!modalVisible);
@@ -216,10 +284,10 @@ export default function Home() {
 				makeSuccessList({ outStayFrDtLCal, outStayToDtCal, outStayStGbnCal })
 			);
 		else dispatch(makeSuccessList({ outStayFrDtL, outStayToDt, outStayStGbn }));
-	}, [outStayFrDtLCal, outStayToDtCal, outStayFrDtL, outStayToDt]);
+	}, [outStayFrDtLCal, outStayToDtCal, outStayFrDtL, outStayToDt, cookieTime]);
 	useEffect(() => {
 		if (successList) dispatch(setExistDays({ successList, isConfirmArray }));
-	}, [successList, isDark, isConfirmArray]);
+	}, [successList, isDark, isConfirmArray, cookieTime]);
 	useEffect(() => {
 		let data: CalendarAPI;
 		if (prepare) {
@@ -230,7 +298,7 @@ export default function Home() {
 				id: id,
 				cookies: cookies,
 			};
-			console.log(data);
+			console.log('Sending Data ⭐️');
 			dispatch(sendDates(data));
 			dispatch(togglePrepare());
 		}
@@ -278,13 +346,21 @@ export default function Home() {
 	// const [modalVisible, setModalVisible] = useState(true);
 	const { modalVisible, setModalVisible, ModalView } = useModal();
 	return (
-		<SafeAreaView>
+		<SafeAreaView
+			style={{ backgroundColor: isDark ? Colors.black : Colors.green200 }}
+		>
 			<ScrollEnabledProvider>
-				<View style={[styles.view, , { backgroundColor: backWhiteColor }]}>
+				<View
+					style={[
+						styles.view,
+						,
+						{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+					]}
+				>
 					<NavigationHeader
 						title="Calendar"
-						Left={() => <Icon name="menu" size={35} onPress={open} />}
-						Right={() => <Icon name="logout" size={35} onPress={logout} />}
+						Left={() => <Icon name="menu" size={33} onPress={open} />}
+						Right={() => <Icon name="logout" size={33} onPress={logout} />}
 					/>
 					{/*달력*/}
 					{isDark && (
@@ -317,7 +393,7 @@ export default function Home() {
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#345B63' : Colors.red200,
+								backgroundColor: isDark ? '#345B63' : Colors.red300,
 							},
 						]}
 					>
@@ -392,7 +468,6 @@ const styles = StyleSheet.create({
 		marginTop: '29%',
 	},
 	touchableView: {
-		// flex: 0.1,
 		flexDirection: 'column',
 		height: 60,
 		borderRadius: 10,
@@ -401,28 +476,5 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginLeft: '-1%',
 		marginTop: '7%',
-
-		// marginBottom: '7%',
 	},
-	// view: { flex: 1 },
-	// text: { marginRight: 10, fontSize: 20, color: Colors.white },
-	// calendar: { height: 50 },
-	// smallTouchableView: {
-	// 	marginTop: 30,
-	// 	flexDirection: 'row',
-	// 	height: 60,
-	// 	borderRadius: 10,
-	// 	width: '70%',
-	// 	justifyContent: 'space-evenly',
-	// 	alignItems: 'center',
-	// },
-	// touchableView: {
-	// 	marginTop: 30,
-	// 	flexDirection: 'row',
-	// 	height: 60,
-	// 	borderRadius: 10,
-	// 	width: '90%',
-	// 	justifyContent: 'space-evenly',
-	// 	alignItems: 'center',
-	// },
 });
