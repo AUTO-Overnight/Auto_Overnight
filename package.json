@@ -11,6 +11,7 @@
 		"axios": "^0.21.1",
 		"dayjs": "^1.10.6",
 		"expo": "~42.0.1",
+		"expo-screen-orientation": "^3.2.1",
 		"expo-status-bar": "~1.0.4",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
@@ -37,6 +38,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
 		"@types/react": "~16.9.35",
+		"@types/react-dom": "^17.0.9",
 		"@types/react-native": "~0.63.2",
 		"@types/react-native-calendars": "^1.1264.2",
 		"@types/react-native-table-component": "^1.2.1",
