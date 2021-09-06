@@ -26,12 +26,15 @@ import {
 	DefaultTheme,
 	DarkTheme,
 } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import 'react-native-gesture-handler';
 import { enableScreens } from 'react-native-screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToggleThemeProvider } from './src/contexts';
-
+import { useEffect } from 'react';
+import Loading from './src/screens/Loading';
+import * as ScreenOrientation from 'expo-screen-orientation';
 enableScreens();
 sagaMiddleware.run(rootSaga);
 export default function App() {
@@ -39,10 +42,26 @@ export default function App() {
 	const [theme, setTheme] = useState(
 		scheme === 'dark' ? DarkTheme : DefaultTheme
 	);
+	React.useEffect(() => {
+		lockOrientation();
+	}, []);
+
+	const lockOrientation = async () => {
+		await ScreenOrientation.lockAsync(
+			ScreenOrientation.OrientationLock.PORTRAIT_UP
+		);
+	};
+	const [loading, setLoading] = useState(true);
+	useEffect(() => {
+		setTimeout(() => {
+			setLoading(false);
+		}, 3000);
+	}, []);
 	const toggleTheme = useCallback(
 		() => setTheme(({ dark }) => (dark ? DefaultTheme : DarkTheme)),
 		[]
 	);
+
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
@@ -50,7 +69,8 @@ export default function App() {
 					<ToggleThemeProvider toggleTheme={toggleTheme}>
 						<SafeAreaProvider>
 							<NavigationContainer theme={theme}>
-								<MainNavigator />
+								{loading && <Loading />}
+								{!loading && <MainNavigator />}
 							</NavigationContainer>
 						</SafeAreaProvider>
 					</ToggleThemeProvider>

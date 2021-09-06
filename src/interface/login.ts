@@ -12,7 +12,8 @@ export interface Login {
 	outStayStGbn: Array<any>;
 	successList: Array<any>;
 	isConfirmArray: Array<confirm>;
-	rememberID: boolean;
+	rememberID: string;
+	cookieTime: any;
 }
 
 export interface confirm {

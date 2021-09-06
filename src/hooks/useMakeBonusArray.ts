@@ -20,7 +20,6 @@ export function makeBonusArray({
 		data.push('합산');
 		data.push(sum, '⭐️', '');
 		bonusList.push(data);
-		console.log(sum);
 	}
 
 	return bonusList;

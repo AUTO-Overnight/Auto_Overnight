@@ -14,13 +14,14 @@ export const useCalendarTheme = (): {
 		calendarBackground: isDark ? '#222831' : '#256f46', // 뒷배경
 		textSectionTitleColor: Colors.white, // 요일 색상
 		dayTextColor: Colors.white,
-		textDisabledColor: isDark ? Colors.grey700 : '#a6a6a6',
+		textDisabledColor: isDark ? Colors.grey500 : '#a6a6a6',
 		monthTextColor: Colors.white,
 		textDayFontSize: 18,
-		arrowColor: isDark ? Colors.orange600 : Colors.yellow400,
+		// textSectionTitleDisabledColor: '#a6a6a6',
+		arrowColor: isDark ? Colors.yellow400 : Colors.yellow400,
 		textMonthFontSize: 18,
 		textDayHeaderFontSize: 18,
-		todayTextColor: isDark ? Colors.orange600 : Colors.yellow400,
+		todayTextColor: isDark ? Colors.yellow400 : Colors.yellow400,
 	});
 
 	useEffect(() => {
@@ -32,10 +33,10 @@ export const useCalendarTheme = (): {
 				dayTextColor: Colors.white,
 				monthTextColor: Colors.white,
 				textSectionTitleColor: Colors.white, // 요일 색상
-				textDisabledColor: '#a6a6a6',
+				textDisabledColor: Colors.grey500,
 				todayTextColor: Colors.yellow400,
-				textDayFontSize: 18,
 				arrowColor: Colors.yellow400,
+				textDayFontSize: 18,
 				textMonthFontSize: 18,
 				textDayHeaderFontSize: 18,
 			}));
@@ -48,9 +49,9 @@ export const useCalendarTheme = (): {
 				dayTextColor: Colors.white,
 				monthTextColor: Colors.white,
 				textSectionTitleColor: Colors.white, // 요일 색상
-				textDisabledColor: Colors.grey700,
-				todayTextColor: Colors.orange600,
-				arrowColor: Colors.orange600,
+				textDisabledColor: Colors.grey500,
+				todayTextColor: Colors.yellow400,
+				arrowColor: Colors.yellow400,
 				textDayFontSize: 18,
 				textMonthFontSize: 18,
 				textDayHeaderFontSize: 18,
