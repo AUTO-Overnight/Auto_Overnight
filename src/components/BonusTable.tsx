@@ -52,8 +52,6 @@ export const BonusTable = ({ isDark }) => {
 	}));
 	const dispatch = useDispatch();
 
-	console.log(isDark);
-
 	let bonusList = useMemo(
 		() => makeBonusArray({ ardInptDt, cmpScr, lifSstArdCtnt, lifSstArdGbn }),
 		[ardInptDt]
@@ -71,14 +69,13 @@ export const BonusTable = ({ isDark }) => {
 		};
 		dispatch(getBonus(data));
 	}, [cookies, id, name]);
-	// console.log(bonusList);
 
 	return (
 		<Fragment>
 			<Table
 				borderStyle={{
-					borderWidth: 1,
-					borderColor: isDark ? '#171b22' : Colors.red200,
+					borderWidth: 1.5,
+					borderColor: isDark ? '#171b22' : Colors.green400,
 				}}
 				style={styles.table}
 			>
@@ -90,8 +87,8 @@ export const BonusTable = ({ isDark }) => {
 						mediumScreenIndices
 					)}
 					style={{
-						height: 35,
-						backgroundColor: isDark ? '#222831' : Colors.red300,
+						height: 40,
+						backgroundColor: isDark ? '#2b323d' : Colors.green500,
 					}}
 					textStyle={{
 						textAlign: 'center',
@@ -109,7 +106,10 @@ export const BonusTable = ({ isDark }) => {
 							smallScreenIndices,
 							mediumScreenIndices
 						)}
-						style={styles.dataRow}
+						style={[
+							styles.dataRow,
+							{ backgroundColor: isDark ? '#222831' : Colors.green200 },
+						]}
 						textStyle={{
 							textAlign: 'center',
 							color: isDark ? Colors.white : Colors.black,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 	},
 	border: {},
 	table: {
-		marginTop: 20,
+		// marginTop: 20,
 		marginBottom: 10,
 	},
 });
