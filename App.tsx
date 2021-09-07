@@ -55,7 +55,7 @@ export default function App() {
 	useEffect(() => {
 		setTimeout(() => {
 			setLoading(false);
-		}, 3000);
+		}, 2000);
 	}, []);
 	const toggleTheme = useCallback(
 		() => setTheme(({ dark }) => (dark ? DefaultTheme : DarkTheme)),
@@ -79,9 +79,3 @@ export default function App() {
 		</Provider>
 	);
 }
-
-// const App: React.FC = () => {
-// 	return <RootNavigation />;
-// };
-
-// export default App;
