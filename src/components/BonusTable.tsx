@@ -74,8 +74,15 @@ export const BonusTable = ({ isDark }) => {
 		<Fragment>
 			<Table
 				borderStyle={{
-					borderWidth: 1.5,
-					borderColor: isDark ? '#171b22' : Colors.green400,
+					borderColor: isDark ? '#171b22' : Colors.blue400,
+					// borderTopLeftRadius: 0,
+					// borderTopEndRadius: 0,
+					// borderTopRightRadius: 0,
+					borderRightWidth: 10,
+					borderLeftWidth: 10,
+					borderBottomWidth: 10,
+					borderTopWidth: 10,
+					// borderWidth: 1,
 				}}
 				style={styles.table}
 			>
@@ -88,11 +95,13 @@ export const BonusTable = ({ isDark }) => {
 					)}
 					style={{
 						height: 40,
-						backgroundColor: isDark ? '#2b323d' : Colors.green500,
+						backgroundColor: isDark ? '#2b323d' : Colors.blue300,
+						borderTopLeftRadius: 5,
+						borderTopRightRadius: 5,
 					}}
 					textStyle={{
 						textAlign: 'center',
-						color: isDark ? Colors.white : Colors.white,
+						color: isDark ? Colors.white : Colors.grey900,
 						fontSize: 14,
 					}}
 				/>
@@ -108,11 +117,11 @@ export const BonusTable = ({ isDark }) => {
 						)}
 						style={[
 							styles.dataRow,
-							{ backgroundColor: isDark ? '#222831' : Colors.green200 },
+							{ backgroundColor: isDark ? '#222831' : Colors.blue100 },
 						]}
 						textStyle={{
 							textAlign: 'center',
-							color: isDark ? Colors.white : Colors.black,
+							color: isDark ? Colors.white : Colors.grey900,
 							fontSize: 14,
 						}}
 					/>
@@ -132,13 +141,21 @@ const styles = StyleSheet.create({
 	head: {
 		height: 35,
 		backgroundColor: '#222831',
+		// borderBottomRightRadius: 5,
+		// borderBottomLeftRadius: 5,
 	},
 	dataRow: {
 		height: 25,
+		borderBottomRightRadius: 5,
+		borderBottomLeftRadius: 5,
 	},
 	border: {},
 	table: {
 		// marginTop: 20,
 		marginBottom: 10,
+		width: '90%',
+		justifyContent: 'center',
+		alignSelf: 'center',
+		// borderRadius: 5,
 	},
 });
