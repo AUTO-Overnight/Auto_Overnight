@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableView } from './TouchableView';
 // import { Text, View } from '../theme';
 import { Colors } from 'react-native-paper';
 import { useSendButtons } from '../hooks';
 import { StyleSheet, View, Text } from 'react-native';
+import { green500 } from 'react-native-paper/lib/typescript/styles/colors';
+
+const selectBorderWidth = 3;
+const whiteModeBorderColor = Colors.green300;
+const darkModeBorderColor = Colors.grey700;
 export function Buttons({ onPressDay, onPressDays, isDark, backWhiteColor }) {
+	const [select, setSelect] = useState(1);
 	const { buttonList } = useSendButtons();
-	const bottomColor = '#65351d';
+	const bottomColor = '#c8e473';
 	// const bottomColor = Colors.blue300;
+	useEffect(() => {
+		setSelect(1);
+	}, [isDark]);
 	return (
 		<View
 			style={{
@@ -22,54 +31,98 @@ export function Buttons({ onPressDay, onPressDays, isDark, backWhiteColor }) {
 			}}
 		>
 			<TouchableView
-				onPress={onPressDay}
+				onPress={() => {
+					onPressDay(), setSelect(1);
+				}}
 				style={[
 					styles.smallTouchableView,
 					{
 						backgroundColor: isDark ? '#023035' : bottomColor,
+						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
+						borderWidth: select === 1 ? selectBorderWidth : 0,
 					},
 				]}
 			>
-				<Text style={[{ color: Colors.white, fontWeight: '500' }]}>
+				<Text
+					style={[
+						{
+							color: isDark ? Colors.white : Colors.grey800,
+							fontWeight: '500',
+						},
+					]}
+				>
 					{buttonList[0].text}
 				</Text>
 			</TouchableView>
 			<TouchableView
-				onPress={() => onPressDays(2)}
+				onPress={() => {
+					onPressDays(2), setSelect(2);
+				}}
 				style={[
 					styles.smallTouchableView,
 					{
 						backgroundColor: isDark ? '#023035' : bottomColor,
+						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
+						borderWidth: select === 2 ? selectBorderWidth : 0,
 					},
 				]}
 			>
-				<Text style={[{ color: Colors.white, fontWeight: '500' }]}>
+				<Text
+					style={[
+						{
+							color: isDark ? Colors.white : Colors.grey800,
+							fontWeight: '500',
+						},
+					]}
+				>
 					{buttonList[1].text}
 				</Text>
 			</TouchableView>
 			<TouchableView
-				onPress={() => onPressDays(3)}
+				onPress={() => {
+					onPressDays(3), setSelect(3);
+				}}
 				style={[
 					styles.smallTouchableView,
 					{
 						backgroundColor: isDark ? '#023035' : bottomColor,
+						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
+						borderWidth: select === 3 ? selectBorderWidth : 0,
 					},
 				]}
 			>
-				<Text style={[{ color: Colors.white, fontWeight: '500' }]}>
+				<Text
+					style={[
+						{
+							color: isDark ? Colors.white : Colors.grey800,
+							fontWeight: '500',
+						},
+					]}
+				>
 					{buttonList[2].text}
 				</Text>
 			</TouchableView>
 			<TouchableView
-				onPress={() => onPressDays(4)}
+				onPress={() => {
+					onPressDays(4), setSelect(4);
+				}}
 				style={[
 					styles.smallTouchableView,
 					{
 						backgroundColor: isDark ? '#023035' : bottomColor,
+						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
+						borderWidth: select === 4 ? selectBorderWidth : 0,
 					},
 				]}
 			>
-				<Text style={[{ color: Colors.white, fontWeight: '500' }]}>
+				<Text
+					style={[
+						{
+							color: isDark ? Colors.white : Colors.grey800,
+							fontWeight: '500',
+						},
+					]}
+				>
 					{buttonList[3].text}
 				</Text>
 			</TouchableView>
@@ -81,7 +134,7 @@ const styles = StyleSheet.create({
 		// marginTop: '30%',
 		flexDirection: 'row',
 		height: 60,
-		borderRadius: 10,
+		borderRadius: 12,
 		width: '20%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
