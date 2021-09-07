@@ -59,6 +59,7 @@ export const loginSlice = createSlice({
 			state.name = '';
 			state.successList = [];
 			state.isConfirmArray = [];
+			state.loginError = '';
 		},
 		logoutHome: (state) => {
 			state.cookies = '';
@@ -72,6 +73,7 @@ export const loginSlice = createSlice({
 			state.name = '';
 			state.successList = [];
 			state.isConfirmArray = [];
+			state.loginError = '';
 		},
 		toggleRemember: (state, action: PayloadAction<string>) => {
 			state.rememberID = action.payload;
@@ -85,6 +87,7 @@ export const loginSlice = createSlice({
 			state.thisYear = action.payload.yy;
 			state.tmGbn = action.payload.tmGbn;
 			state.cookieTime = dayjs().tz('Asia/Seoul').locale('ko');
+			state.loginError = '';
 		},
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginError = action.payload;

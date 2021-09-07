@@ -31,27 +31,21 @@ import { Colors } from 'react-native-paper';
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 dayjs.extend(timezone);
+const marginBottom = 35;
 export default function MainNavigator() {
 	// text
-	const {
-		cookies,
-		loginError,
-		loadingLogin,
-		outStayStGbn,
-		name,
-		id,
-		pw,
-		rememberID,
-	} = useSelector(({ login, loading }: RootState) => ({
-		cookies: login.cookies,
-		name: login.name,
-		loginError: login.loginError,
-		outStayStGbn: login.outStayStGbn,
-		loadingLogin: loading['login/GET_LOGIN'],
-		id: login.id,
-		pw: login.pw,
-		rememberID: login.rememberID,
-	}));
+	const { loginError, loadingLogin, name, id, pw, rememberID } = useSelector(
+		({ login, loading }: RootState) => ({
+			cookies: login.cookies,
+			name: login.name,
+			loginError: login.loginError,
+			outStayStGbn: login.outStayStGbn,
+			loadingLogin: loading['login/GET_LOGIN'],
+			id: login.id,
+			pw: login.pw,
+			rememberID: login.rememberID,
+		})
+	);
 	const focus = useAutoFocus();
 	const [userId, setId] = useState<string>(id);
 	const [userPw, setPW] = useState<string>(pw);
@@ -62,12 +56,10 @@ export default function MainNavigator() {
 	}, []);
 	const toggleSwitch = useCallback(() => {
 		setIsEnabled(!isEnabled);
-		console.log(isEnabled);
 		if (isEnabled) {
-			console.log(userId, userPw, '토글 됨');
 			dispatch(toggleRemember('no'));
+			dispatch(initialLogin());
 		} else {
-			console.log(userId, userPw, '토글 안됨');
 			dispatch(toggleRemember('auto'));
 		}
 	}, [isEnabled]);
@@ -75,86 +67,84 @@ export default function MainNavigator() {
 	const onSubmit = useCallback(() => {
 		dispatch(setIdPw({ userId, userPw }));
 		dispatch(getLogin({ userId, userPw }));
-		// setId((notUsed) => '');
-		// setPW((notUsed) => '');
-		// dispatch(initialLogin());
 	}, [userId, userPw]);
-
+	const navigation = useNavigation();
 	useEffect(() => {
-		if (name) {
+		if (name && !loadingLogin) {
 			navigation.navigate('TabNavigator');
 		} else {
 			if (loginError) Alert.alert('로그인 에러');
 		}
-	}, [loginError, name]);
+	}, [loginError, name, loadingLogin]);
 
-	const navigation = useNavigation();
 	const isDark = useTheme().dark;
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : Colors.green200 }}
+			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
 		>
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
 				]}
 			>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
 					<View
 						style={[
 							styles.textView,
-							{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+							{
+								backgroundColor: isDark ? Colors.black : Colors.white,
+								marginBottom: 10,
+							},
 						]}
 					>
-						{/* <Text style={[styles.text]}>ID</Text> */}
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : '#2e8b57' },
+								{ backgroundColor: isDark ? '#222831' : Colors.blue100 },
 							]}
 						>
 							<Icon
 								name="account"
 								size={30}
 								style={{
-									color: isDark ? Colors.white : Colors.white,
+									color: isDark ? Colors.white : Colors.grey900,
 									marginTop: 5,
 									paddingRight: 10,
 								}}
 							/>
 							<TextInput
 								onFocus={focus}
+								keyboardType="number-pad"
 								style={[
 									styles.textInput,
-									{ color: isDark ? Colors.white : Colors.white },
+									{ color: isDark ? Colors.white : Colors.grey900 },
 								]}
 								value={userId}
 								onChangeText={(useId) => setId((text) => useId)}
 								placeholder="Enter your ID"
-								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey200}
+								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>
 						</View>
 					</View>
-					<View style={{ marginBottom: 20 }} />
+					<View style={{ marginBottom: 15 }} />
 					<View
 						style={[
 							styles.textView,
-							{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
 						]}
 					>
-						{/* <Text style={[styles.text]}>PW</Text> */}
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : '#2e8b57' },
+								{ backgroundColor: isDark ? '#222831' : Colors.blue100 },
 							]}
 						>
 							<Icon
 								name="lock"
 								size={30}
 								style={{
-									color: isDark ? Colors.white : Colors.white,
+									color: isDark ? Colors.white : Colors.grey900,
 									marginTop: 5,
 									paddingRight: 10,
 								}}
@@ -162,44 +152,60 @@ export default function MainNavigator() {
 							<TextInput
 								onFocus={focus}
 								autoCapitalize="none"
+								autoCompleteType="password"
+								secureTextEntry={true}
 								style={[
 									styles.textInput,
-									{ color: isDark ? Colors.white : Colors.white },
+									{ color: isDark ? Colors.white : Colors.grey900 },
 								]}
 								value={userPw}
 								onChangeText={(userPw) => setPW((text) => userPw)}
 								placeholder="Enter your PW"
-								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey300}
+								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>
 						</View>
 					</View>
-					<View style={{ marginBottom: 20 }} />
+					<View style={{ marginBottom: 15 }} />
 					<View
 						style={[
 							styles.container,
-							{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
 						]}
 					>
 						<Switch></Switch>
-						<Text style={{ fontSize: 20 }}>White/Dark</Text>
+						<Text
+							style={{
+								fontSize: 20,
+								color: isDark ? Colors.white : Colors.grey800,
+							}}
+						>
+							White/Dark
+						</Text>
 						<RNSwitch
 							trackColor={{
 								false: '#767577',
-								true: isDark ? '#222831' : Colors.green300,
+								true: isDark ? '#222831' : '#3b5998',
 							}}
 							thumbColor={isEnabled ? Colors.yellow400 : '#f4f3f4'}
 							ios_backgroundColor="#3e3e3e"
 							onValueChange={toggleSwitch}
 							value={isEnabled}
 						/>
-						<Text style={{ fontSize: 20 }}>Auto Login</Text>
+						<Text
+							style={{
+								fontSize: 20,
+								color: isDark ? Colors.white : Colors.grey800,
+							}}
+						>
+							Auto Login
+						</Text>
 					</View>
-					<View style={{ marginBottom: 40 }} />
+					<View style={{ marginBottom: 50 }} />
 					<TouchableView
 						notification
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? '#152D35' : '#2E7D32' },
+							{ backgroundColor: isDark ? '#152D35' : '#3b5998' },
 						]}
 						onPress={onSubmit}
 					>
@@ -209,11 +215,21 @@ export default function MainNavigator() {
 						{!loadingLogin && (
 							<>
 								<Text
-									style={[styles.text, { marginRight: 5, color: Colors.white }]}
+									style={[
+										styles.text,
+										{
+											marginRight: 5,
+											color: isDark ? Colors.white : Colors.white,
+										},
+									]}
 								>
 									Login
 								</Text>
-								<Icon name="login" size={24} style={{ color: Colors.white }} />
+								<Icon
+									name="login"
+									size={24}
+									style={{ color: isDark ? Colors.white : Colors.white }}
+								/>
 							</>
 						)}
 					</TouchableView>
@@ -233,32 +249,27 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	textView: {
-		width: '100%',
+		width: '90%',
 		padding: 0,
-
-		marginBottom: 10,
+		marginBottom: marginBottom,
 	},
 	textInput: { fontSize: 24, flex: 1 },
 	textInputView: {
 		flexDirection: 'row',
-		// borderWidth: 2,
 		borderRadius: 10,
-		// borderColor: 'white',
-		// paddingBottom: 10,
 		padding: 10,
-		// height: 55,
 		color: Colors.white,
 	},
 	touchableView: {
 		flexDirection: 'row',
 		height: 55,
 		borderRadius: 10,
-		width: '100%',
+		width: '90%',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	container: {
-		width: '100%',
+		width: '90%',
 		flexDirection: 'row',
 		marginRight: 10,
 		alignItems: 'center',

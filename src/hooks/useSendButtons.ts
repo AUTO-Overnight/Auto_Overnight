@@ -5,25 +5,25 @@ export function useSendButtons(): { buttonList: Array<Button> } {
 		{
 			key: 1,
 			iconName: 'lock-outline',
-			text: '1일 신청',
+			text: '1일 선택',
 			color: 'white',
 		},
 		{
 			key: 2,
 			iconName: 'lock-outline',
-			text: '1주 신청',
+			text: '1주 선택',
 			color: 'white',
 		},
 		{
 			key: 3,
 			iconName: 'lock-outline',
-			text: '2주 신청',
+			text: '2주 선택',
 			color: 'white',
 		},
 		{
 			key: 4,
 			iconName: 'lock-outline',
-			text: '4주 신청',
+			text: '4주 선택',
 			color: 'white',
 		},
 	]);

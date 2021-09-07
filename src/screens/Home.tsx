@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { StyleSheet, FlatList, Alert } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
@@ -12,18 +12,15 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
-import type { DateObject, HeaderComponentProps } from 'react-native-calendars';
+import type { DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
-import type { CalendarThemeIdStyle } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
-import type { ConfigType } from 'dayjs';
 import {
 	addDay,
 	addDayList,
 	initial,
 	logoutInitial,
 	makeCountZero,
-	removeAllDays,
 	sendDates,
 	sendPrepare,
 	setExistDays,
@@ -32,17 +29,8 @@ import {
 	togglePrepare,
 } from '../store/calendar';
 import type { RootState } from '../store';
-import {
-	useAnimatedValue,
-	useCalendarTheme,
-	useLayout,
-	useTransformStyle,
-} from '../hooks';
+import { useCalendarTheme } from '../hooks';
 import { useModal } from '../components';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-// import { interpolate } from '../utils';
-// import { useToggle } from '../hooks/useToggle';
-// import { Easing } from 'react-native-reanimated';
 import { Colors } from 'react-native-paper';
 import {
 	getLogin,
@@ -51,9 +39,6 @@ import {
 	makeSuccessList,
 } from '../store/login';
 import { CalendarAPI } from '../interface';
-import { useMemo } from 'react';
-import { produceWithPatches } from 'immer';
-// import useSendButtons from '../hooks/useSendButtons';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -61,16 +46,11 @@ LocaleConfig.locales['ko'] = {
   monthNames: ['1 /', '2 / ', '3 /', '4 /', '5 /', '6 /', '7 /', '8 /', '9 /', '10 /', '11 /', '12 /'],
   monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-//   dayNamesShort: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-//   dayNamesShort: ['S','M','T','W','T','F','S'],
   dayNamesShort: ['일','월','화','수','목','금','토'],
   today: 'today'
 };
 LocaleConfig.defaultLocale = 'ko';
-
-// const AnimatedIcon = Animated.createAnimatedComponent(FontAwesomeIcon);
-// const iconSize = 50;
-
+const borderRadius = 12;
 export default function Home() {
 	const {
 		day,
@@ -117,12 +97,13 @@ export default function Home() {
 		isConfirmArray: login.isConfirmArray,
 		rememberID: login.rememberID,
 	}));
-	// navigation
-	// useEffect(() => {}, [outStayFrDtL]);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	// const goLeft = useCallback(() => navigation.navigate('HomeLeft'), []);
 	const goRight = useCallback(() => navigation.navigate('Point'), []);
+	const [modalText, setModalText] = useState<string>('');
+	const { modalVisible, setModalVisible, ModalView } = useModal({
+		text: modalText,
+	});
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
@@ -133,27 +114,18 @@ export default function Home() {
 		navigation.navigate('Login');
 	}, []);
 
-	const [scrollEnabled] = useScrollEnabled();
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
 
-	// const { buttonList } = useSendButtons();
-
-	// const bonus = useMemo(() => {
-	// 	useGetBonusPoint();
-	// }, []);
-
-	// calendar
-	// prettier-ignore
-	const [today] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD'));
+	const [today] = useState(
+		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
+	);
 	// prettier-ignore
 	const [sendingToday] = useState(dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD'));
 	const [maxDate] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').add(45, 'd').format('YYYY-MM-DD')
 	);
-	const [isOkayDay, setOkayDay] = useState(
-		dayjs().tz('Asia/Seoul').locale('ko').format('YYYY-MM-DD')
-	);
+
 	const { theme, isDark } = useCalendarTheme();
 	const backWhiteColor = isDark ? 'black' : '#F6F6F6';
 	useEffect(() => {
@@ -165,7 +137,6 @@ export default function Home() {
 		const timer = () => {
 			setTimeout(() => {
 				const time = dayjs().tz('Asia/Seoul').locale('ko');
-				console.log(time);
 				if (dayjs(time).isAfter(dayjs(cookieTime).add(1, 'hours'))) {
 					if (rememberID === 'auto') {
 						dispatch(initialLogin());
@@ -174,22 +145,12 @@ export default function Home() {
 							userPw: pw,
 						};
 						dispatch(getLogin(user));
-						console.log('재로그인');
 					}
 				}
 			}, 10);
 		};
-		const now = timer();
+		timer();
 	}, []);
-	// useEffect(() => {
-	// 	const timer = () => {
-	// 		setInterval(() => {
-	// 			console.log('hihi');
-	// 		}, 5000);
-	// 	};
-	// 	timer();
-	// }, []);
-	const [selected, setSelected] = useState<string>('');
 	const [weekDay, setWeekDay] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').format('YYYYMMDD')
 	);
@@ -201,7 +162,8 @@ export default function Home() {
 		// 이전 날짜 분리 로직
 		(day: DateObject) => {
 			if (count >= 30) {
-				Alert.alert('30일 이상 신청할 수 없습니다.');
+				setModalText('30일 이상 신청할 수 없습니다.');
+				setModalVisible(true);
 				return;
 			}
 			let date: string;
@@ -209,7 +171,8 @@ export default function Home() {
 			switch (mode) {
 				case 'day': {
 					if (dayjs(today).isAfter(day.dateString)) {
-						Alert.alert('신청일 이전으로\n 신청할 수 없습니다.');
+						setModalText('신청일 이전으로 신청할 수 없습니다.');
+						setModalVisible(true);
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
 						date = day.dateString;
@@ -222,7 +185,8 @@ export default function Home() {
 				case 'month': {
 					if (ready) return;
 					if (dayjs(today).isAfter(day.dateString)) {
-						Alert.alert('신청일 이전으로\n 신청할 수 없습니다.');
+						setModalText('신청일 이전으로 신청할 수 없습니다.');
+						setModalVisible(true);
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
 						date = day.dateString;
@@ -234,7 +198,8 @@ export default function Home() {
 								.add(28, 'd')
 								.isAfter(dayjs(maxDate).add(1, 'd'))
 						) {
-							Alert.alert('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							setModalText('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							setModalVisible(true);
 							return;
 						}
 					} else {
@@ -243,7 +208,8 @@ export default function Home() {
 								.add((weekKey - 1) * 7, 'd')
 								.isAfter(dayjs(maxDate).add(1, 'd'))
 						) {
-							Alert.alert('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							setModalText('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							setModalVisible(true);
 							return;
 						}
 					}
@@ -251,7 +217,6 @@ export default function Home() {
 					date = day.dateString;
 					setWeekDay(date);
 					toggleReady(true);
-					dispatch(setMode('none'));
 					break;
 				}
 			}
@@ -261,17 +226,14 @@ export default function Home() {
 
 	const onPressDays = useCallback(
 		(key) => {
-			// if (dayjs(isOkayDay).add())
 			toggleReady(false);
 			onRemoveAllDays();
-			setModalVisible(!modalVisible);
 			dispatch(setMode('month'));
 			setWeekKey(key);
 		},
 		[outStayFrDtL, successList]
 	);
 	const onPressDay = useCallback(() => {
-		setModalVisible(!modalVisible);
 		dispatch(setMode('day'));
 		onRemoveAllDays();
 	}, [successList, outStayFrDtL]);
@@ -298,7 +260,6 @@ export default function Home() {
 				id: id,
 				cookies: cookies,
 			};
-			console.log('Sending Data ⭐️');
 			dispatch(sendDates(data));
 			dispatch(togglePrepare());
 		}
@@ -306,7 +267,8 @@ export default function Home() {
 
 	const onSendDays = useCallback(() => {
 		if (!count) {
-			Alert.alert('선택된 날짜가 없습니다');
+			setModalText('선택된 날짜가 없습니다.');
+			setModalVisible(true);
 			return;
 		}
 		dispatch(sendPrepare());
@@ -318,89 +280,80 @@ export default function Home() {
 		dispatch(setExistDays({ successList, isConfirmArray }));
 		toggleReady(false);
 		dispatch(makeCountZero());
-		dispatch(setMode('day'));
-		// onPressDay();
 	}, [outStayFrDtL, successList]);
-	// Animation
-	// const [started, toggleStarted] = useToggle(false);
-	// const animValue = useAnimatedValue(0);
 
-	// const avatarPressed = useCallback(
-	// 	() =>
-	// 		Animated.timing(animValue, {
-	// 			useNativeDriver: false,
-	// 			toValue: started ? 0 : 1,
-	// 			easing: Easing.bounce,
-	// 		}).start(toggleStarted),
-	// 	[started]
-	// );
-
-	// const [layout, setLayout] = useLayout();
-	// const iconAnimStyle = useTransformStyle(
-	// 	{
-	// 		translateX: interpolate(animValue, [0, layout.width - iconSize]),
-	// 		rotate: interpolate(animValue, ['0deg', '720deg']),
-	// 	},
-	// 	[layout.width]
-	// );
-	// const [modalVisible, setModalVisible] = useState(true);
-	const { modalVisible, setModalVisible, ModalView } = useModal();
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : Colors.green200 }}
+			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
 		>
 			<ScrollEnabledProvider>
 				<View
 					style={[
 						styles.view,
 						,
-						{ backgroundColor: isDark ? Colors.black : Colors.green200 },
+						{
+							backgroundColor: isDark ? Colors.black : '#EDF3F7',
+							alignContent: 'center',
+						},
 					]}
 				>
 					<NavigationHeader
 						title="Calendar"
-						Left={() => <Icon name="menu" size={33} onPress={open} />}
-						Right={() => <Icon name="logout" size={33} onPress={logout} />}
+						Left={() => (
+							<Icon
+								name="menu"
+								size={40}
+								onPress={open}
+								style={{ marginLeft: '3%' }}
+							/>
+						)}
+						Right={() => (
+							<Icon
+								name="logout"
+								size={33}
+								onPress={logout}
+								style={{ marginRight: '3%' }}
+							/>
+						)}
 					/>
 					{/*달력*/}
 					{isDark && (
 						<Calendar
+							style={styles.calendarStyle}
 							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
-							style={{ height: 365 }}
 							theme={theme}
 							displayLoadingIndicator={true}
-							// hideExtraDays={true}
 						/>
 					)}
 
 					{!isDark && (
 						<Calendar
+							style={styles.calendarStyle}
 							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
-							style={{ height: 365 }}
 							theme={theme}
 							displayLoadingIndicator={true}
-							// hideExtraDays={true}
 						/>
 					)}
-					{/*버튼*/}
-					{/* <View style={{ height: '100%', flex: 1 }}> */}
 					<TouchableView
 						onPress={onRemoveAllDays}
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#345B63' : Colors.red300,
+								backgroundColor: isDark ? '#345B63' : '#E4E6EB',
 							},
 						]}
 					>
 						<Text
 							style={[
 								styles.text,
-								{ fontWeight: '500', color: isDark ? 'white' : 'white' },
+								{
+									fontWeight: '400',
+									color: isDark ? Colors.white : Colors.grey800,
+								},
 							]}
 						>
 							모두삭제
@@ -411,11 +364,21 @@ export default function Home() {
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#152D35' : '#2e8b57',
+								backgroundColor: isDark ? '#152D35' : Colors.blue200,
 							},
 						]}
 					>
-						<Text style={[styles.text, { fontWeight: '500' }]}>신청하기</Text>
+						<Text
+							style={[
+								styles.text,
+								{
+									fontWeight: '400',
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						>
+							신청하기
+						</Text>
 					</TouchableView>
 
 					<Buttons
@@ -424,27 +387,11 @@ export default function Home() {
 						isDark={isDark}
 						backWhiteColor={backWhiteColor}
 					/>
-					{/* {buttonList.map((list) => (
-							
-						))} */}
-					<ModalView />
-					{/* </View> */}
-					{/* </View> */}
-					{/* <View style={{ height: 200, backgroundColor: backWhiteColor }} /> */}
-					{/* <View onLayout={setLayout} style={[{ flexDirection: 'row' }]}>
-						<AnimatedIcon
-							style={iconAnimStyle}
-							name="soccer-ball-o"
-							size={iconSize}
-							color={Colors.blue500}
-							onPress={avatarPressed}
-						/>
-					</View> */}
+					<ModalView text={modalText} />
 					<LeftRightNavigation
 						ref={leftRef}
 						distance={40}
 						flatListRef={flatListRef}
-						// onLeftToRight={goLeft}
 						onRightToLeft={goRight}
 					/>
 				</View>
@@ -458,10 +405,9 @@ const styles = StyleSheet.create({
 	calendar: { height: 50 },
 
 	smallTouchableView: {
-		// marginTop: '30%',
 		flexDirection: 'row',
 		height: 60,
-		borderRadius: 10,
+		borderRadius: borderRadius,
 		width: '70%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
@@ -470,11 +416,18 @@ const styles = StyleSheet.create({
 	touchableView: {
 		flexDirection: 'column',
 		height: 60,
-		borderRadius: 10,
+		borderRadius: borderRadius,
 		width: '90%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		marginLeft: '-1%',
 		marginTop: '7%',
+	},
+	calendarStyle: {
+		borderRadius: borderRadius,
+		height: 370,
+		width: '90%',
+		alignContent: 'center',
+		alignSelf: 'center',
 	},
 });

@@ -1,0 +1,16 @@
+{
+	"expo": {
+		"name": "KPU 자동 외박 신청",
+		"icon": "./src/assets/images/icon.png",
+		"version": "1.0.0",
+		"slug": "ww8007",
+		"ios": {
+			"bundleIdentifier": "com.ww8007.AutoOvernight",
+			"buildNumber": "1.0.0"
+		},
+		"android": {
+			"package": "com.ww8007.AutoOvernight",
+			"versionCode": 1
+		}
+	}
+}

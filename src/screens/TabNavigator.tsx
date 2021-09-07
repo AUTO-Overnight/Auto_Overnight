@@ -2,7 +2,6 @@ import React, { useMemo, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeNavigator from './HomeNavigator';
 import Point from './Point';
 import type { RouteProp, ParamListBase } from '@react-navigation/native';
 import Home from './Home';
@@ -50,22 +49,8 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
 	const interpolator = useNavigationHorizontalInterpolator();
-	const leftOptions = useMemo<StackNavigationOptions>(
-		() => ({
-			gestureDirection: 'horizontal-inverted',
-			cardStyleInterpolator: interpolator,
-		}),
-		[]
-	);
-	const rightOptions = useMemo<StackNavigationOptions>(
-		() => ({
-			gestureDirection: 'horizontal',
-			cardStyleInterpolator: interpolator,
-		}),
-		[]
-	);
 	const isDark = useTheme().dark;
-	const { name } = useSelector(({ calendar, login }: RootState) => ({
+	const { name } = useSelector(({ login }: RootState) => ({
 		name: login.name,
 	}));
 	const navigation = useNavigation();

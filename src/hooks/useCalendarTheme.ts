@@ -10,32 +10,32 @@ export const useCalendarTheme = (): {
 } => {
 	const isDark = useTheme().dark;
 	const [theme, setTheme] = useState<CalendarTheme>({
-		backgroundColor: isDark ? '#222831' : '#256f46', // 뒷배경
-		calendarBackground: isDark ? '#222831' : '#256f46', // 뒷배경
-		textSectionTitleColor: Colors.white, // 요일 색상
-		dayTextColor: Colors.white,
+		backgroundColor: isDark ? '#222831' : Colors.white, // 뒷배경
+		calendarBackground: isDark ? '#222831' : Colors.white, // 뒷배경
+		textSectionTitleColor: isDark ? Colors.white : Colors.grey800, // 요일 색상
+		dayTextColor: isDark ? Colors.white : Colors.grey800,
 		textDisabledColor: isDark ? Colors.grey500 : '#a6a6a6',
-		monthTextColor: Colors.white,
+		monthTextColor: isDark ? Colors.white : Colors.grey800,
 		textDayFontSize: 18,
 		// textSectionTitleDisabledColor: '#a6a6a6',
-		arrowColor: isDark ? Colors.yellow400 : Colors.yellow400,
+		arrowColor: isDark ? Colors.yellow400 : '#4A4BFC',
 		textMonthFontSize: 18,
 		textDayHeaderFontSize: 18,
-		todayTextColor: isDark ? Colors.yellow400 : Colors.yellow400,
+		todayTextColor: isDark ? Colors.yellow400 : '#182EEC',
 	});
 
 	useEffect(() => {
 		if (isDark) {
 			setTheme((prevState) => ({
 				...prevState,
-				backgroundColor: '#256f46',
-				calendarBackground: '#256f46', // 뒷배경
-				dayTextColor: Colors.white,
-				monthTextColor: Colors.white,
-				textSectionTitleColor: Colors.white, // 요일 색상
+				backgroundColor: Colors.white,
+				calendarBackground: Colors.white, // 뒷배경
+				dayTextColor: Colors.black,
+				monthTextColor: Colors.black,
+				textSectionTitleColor: Colors.black, // 요일 색상
 				textDisabledColor: Colors.grey500,
-				todayTextColor: Colors.yellow400,
-				arrowColor: Colors.yellow400,
+				todayTextColor: '#182EEC',
+				arrowColor: '#4A4BFC',
 				textDayFontSize: 18,
 				textMonthFontSize: 18,
 				textDayHeaderFontSize: 18,

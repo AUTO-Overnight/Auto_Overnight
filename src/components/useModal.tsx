@@ -10,7 +10,7 @@ import {
 import type { ReactNode } from 'react';
 import { Colors } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
-export function useModal(): {
+export function useModal({ text }): {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 	ModalView: ReactNode;
@@ -40,7 +40,7 @@ export function useModal(): {
 								{ color: isDark ? Colors.white : Colors.black },
 							]}
 						>
-							시작일을 클릭해 주세요
+							{text}
 						</Text>
 
 						<TouchableHighlight
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
 	},
 	modalText: {
 		marginBottom: 15,
+		fontSize: 15,
 		textAlign: 'center',
 		color: Colors.white,
 	},
