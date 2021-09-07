@@ -27,8 +27,8 @@ function pushDayIsWeek({ state, day }) {
 		state.day[formDay] = {
 			selected: true,
 			disableTouchEvent: false,
-			selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.yellow300,
-			selectedTextColor: state.isDarkMode ? Colors.white : Colors.black,
+			selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.blue400,
+			selectedTextColor: state.isDarkMode ? Colors.white : Colors.white,
 			textDayFontWeight: 900,
 			delete: true,
 		};
@@ -77,6 +77,7 @@ export const calendarSlice = createSlice({
 		logoutInitial: (state) => {
 			state.sendDays = [];
 			state.data = [];
+			state.day = {};
 			state.isWeekend = [];
 			state.sendResponse = {};
 			state.prepare = false;
@@ -103,8 +104,8 @@ export const calendarSlice = createSlice({
 				state.day[action.payload] = {
 					selected: true,
 					disableTouchEvent: false,
-					selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.yellow300,
-					selectedTextColor: state.isDarkMode ? Colors.white : Colors.black,
+					selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.blue400,
+					selectedTextColor: state.isDarkMode ? Colors.white : Colors.white,
 					delete: true,
 				};
 			}
@@ -180,7 +181,7 @@ export const calendarSlice = createSlice({
 				const setDay = dayjs(String(date)).format('YYYY-MM-DD');
 				state.day[setDay] = {
 					marked: true,
-					dotColor: Colors.red600,
+					dotColor: state.isDarkMode ? Colors.red500 : '#005EFC',
 					activeOpacity: 0,
 					delete: false,
 				};
@@ -193,7 +194,7 @@ export const calendarSlice = createSlice({
 
 					state.day[setDay] = {
 						marked: true,
-						dotColor: Colors.yellow600,
+						dotColor: state.isDarkMode ? Colors.yellow500 : Colors.red500,
 						activeOpacity: 0,
 						delete: false,
 					};
