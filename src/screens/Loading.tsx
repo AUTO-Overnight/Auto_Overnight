@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, ImageBackground, Image } from 'react-native';
 import { View, Text } from '../theme';
 import { render } from 'react-dom';
 import { Colors } from 'react-native-paper';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { initialLogin } from '../store/login';
+import { getLogin } from '../store/login';
+import type { RootState } from '../store';
 export default function Loading() {
+	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
+		name: login.name,
+		rememberID: login.rememberID,
+		id: login.id,
+		pw: login.pw,
+	}));
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if (rememberID === 'auto') {
+			dispatch(initialLogin());
+			const user = {
+				userId: id,
+				userPw: pw,
+			};
+			dispatch(getLogin(user));
+		} else {
+			dispatch(initialLogin());
+		}
+	}, []);
+
 	return (
 		<View style={[styles.flex]}>
 			<Image
@@ -24,7 +47,6 @@ const styles = StyleSheet.create({
 	flex: {
 		flex: 1,
 		backgroundColor: Colors.black,
-		// flexDirection: 'column',
 		alignContent: 'center',
 		justifyContent: 'center',
 	},
