@@ -11,20 +11,6 @@ import type { RootState } from '../store';
 const Drawer = createDrawerNavigator();
 
 export default function MainNavigator() {
-	const { name, rememberID } = useSelector(
-		({ calendar, login }: RootState) => ({
-			name: login.name,
-			rememberID: login.rememberID,
-		})
-	);
-	const navigation = useNavigation();
-	useEffect(() => {
-		if (name) {
-			console.log(rememberID);
-			console.log(name);
-			navigation.navigate('TabNavigator');
-		}
-	}, [name]);
 	return (
 		<Drawer.Navigator
 			screenOptions={{
