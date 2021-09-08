@@ -310,7 +310,7 @@ export default function Home() {
 						Right={() => (
 							<Icon
 								name="logout"
-								size={33}
+								size={35}
 								onPress={logout}
 								style={{ marginRight: '3%' }}
 							/>
