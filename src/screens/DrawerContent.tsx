@@ -221,7 +221,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 						</Text>
 					</TouchableView>
 					<TouchableView
-						onPress={onClickForm}
+						onPress={onClickOpenChat}
 						style={[
 							styles.touchableView,
 							{ backgroundColor: isDark ? '#142328' : Colors.blue500 },
