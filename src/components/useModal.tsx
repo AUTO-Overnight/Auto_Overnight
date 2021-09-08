@@ -37,7 +37,7 @@ export function useModal({ text }): {
 						<Text
 							style={[
 								styles.modalText,
-								{ color: isDark ? Colors.white : Colors.black },
+								{ color: isDark ? Colors.white : Colors.grey800 },
 							]}
 						>
 							{text}
@@ -46,13 +46,20 @@ export function useModal({ text }): {
 						<TouchableHighlight
 							style={{
 								...styles.openButton,
-								backgroundColor: isDark ? Colors.grey900 : '#2e8b57',
+								backgroundColor: isDark ? Colors.grey900 : Colors.blue200,
 							}}
 							onPress={() => {
 								setModalVisible(!modalVisible);
 							}}
 						>
-							<Text style={styles.textStyle}>O K</Text>
+							<Text
+								style={[
+									styles.textStyle,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								O K
+							</Text>
 						</TouchableHighlight>
 					</View>
 				</View>
@@ -94,7 +101,7 @@ const styles = StyleSheet.create({
 	},
 	textStyle: {
 		color: Colors.white,
-		fontWeight: 'bold',
+
 		textAlign: 'center',
 	},
 	modalText: {
