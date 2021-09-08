@@ -44,7 +44,7 @@ export default function Point() {
 					Right={() => (
 						<Icon
 							name="logout"
-							size={40}
+							size={35}
 							onPress={logout}
 							style={{ marginRight: '3%' }}
 						/>
