@@ -65,6 +65,7 @@ export default function MainNavigator() {
 	}, [isEnabled]);
 	const dispatch = useDispatch();
 	const onSubmit = useCallback(() => {
+		dispatch(initialLogin());
 		dispatch(setIdPw({ userId, userPw }));
 		dispatch(getLogin({ userId, userPw }));
 	}, [userId, userPw]);
@@ -73,7 +74,7 @@ export default function MainNavigator() {
 		if (name && !loadingLogin) {
 			navigation.navigate('TabNavigator');
 		} else {
-			if (loginError) Alert.alert('로그인 에러');
+			if (loginError && !loadingLogin) Alert.alert('로그인 에러');
 		}
 	}, [loginError, name, loadingLogin]);
 
