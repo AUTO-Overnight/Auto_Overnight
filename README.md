@@ -14,7 +14,7 @@
 
 ## **⚙️ System Architecture**
 
-- 추가중...
+<img src="https://user-images.githubusercontent.com/54137044/132570881-92e44105-223b-4898-aaeb-b5340c750f34.png" width="100%" height="400"/>
 
 ## Installation
 
