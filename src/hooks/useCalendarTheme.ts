@@ -21,7 +21,7 @@ export const useCalendarTheme = (): {
 		arrowColor: isDark ? Colors.yellow400 : '#4A4BFC',
 		textMonthFontSize: 18,
 		textDayHeaderFontSize: 18,
-		todayTextColor: isDark ? Colors.yellow400 : '#182EEC',
+		todayTextColor: isDark ? Colors.yellow400 : Colors.red500,
 	});
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ export const useCalendarTheme = (): {
 				monthTextColor: Colors.black,
 				textSectionTitleColor: Colors.black, // 요일 색상
 				textDisabledColor: Colors.grey500,
-				todayTextColor: '#182EEC',
+				todayTextColor: Colors.red500,
 				arrowColor: '#4A4BFC',
 				textDayFontSize: 18,
 				textMonthFontSize: 18,
