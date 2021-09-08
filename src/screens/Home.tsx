@@ -73,8 +73,10 @@ export default function Home() {
 		isConfirmArray,
 		cookieTime,
 		rememberID,
+		loadingCalendar,
+		loadingLogin,
 		name,
-	} = useSelector(({ calendar, login }: RootState) => ({
+	} = useSelector(({ calendar, login, loading }: RootState) => ({
 		day: calendar.day,
 		sendDays: calendar.sendDays,
 		cookies: login.cookies,
@@ -96,6 +98,8 @@ export default function Home() {
 		data: login.data,
 		isConfirmArray: login.isConfirmArray,
 		rememberID: login.rememberID,
+		loadingCalendar: loading['calendar/SEND_DATES'],
+		loadingLogin: loading['login/GET_LOGIN'],
 	}));
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
@@ -385,7 +389,7 @@ export default function Home() {
 						onPressDay={onPressDay}
 						onPressDays={onPressDays}
 						isDark={isDark}
-						backWhiteColor={backWhiteColor}
+						loadingLogin={loadingLogin}
 					/>
 					<ModalView text={modalText} />
 					<LeftRightNavigation
