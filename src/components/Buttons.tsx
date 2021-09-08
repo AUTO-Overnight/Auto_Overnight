@@ -4,19 +4,25 @@ import { TouchableView } from './TouchableView';
 import { Colors } from 'react-native-paper';
 import { useSendButtons } from '../hooks';
 import { StyleSheet, View, Text } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import { green500 } from 'react-native-paper/lib/typescript/styles/colors';
+import { useDispatch } from 'react-redux';
+import { toggleDark } from '../store/calendar';
 
 const selectBorderWidth = 3;
 const whiteModeBorderColor = Colors.green300;
 const darkModeBorderColor = Colors.grey700;
-export function Buttons({ onPressDay, onPressDays, isDark, backWhiteColor }) {
+export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 	const [select, setSelect] = useState(1);
 	const { buttonList } = useSendButtons();
 	const bottomColor = '#c8e473';
+	const isRealDark = useTheme().dark;
+	const dispatch = useDispatch();
 	// const bottomColor = Colors.blue300;
 	useEffect(() => {
 		setSelect(1);
-	}, [isDark]);
+		dispatch(toggleDark(isRealDark));
+	}, [isDark, loadingLogin, isRealDark]);
 	return (
 		<View
 			style={{
