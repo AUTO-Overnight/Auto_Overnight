@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import type { FC } from 'react';
 import {
 	Alert,
 	Modal,
@@ -13,7 +14,7 @@ import { useTheme } from '@react-navigation/native';
 export function useModal({ text }): {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-	ModalView: ReactNode;
+	ModalView: FC;
 } {
 	const [modalVisible, setModalVisible] = useState(false);
 	const isDark = useTheme().dark;
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
 	modalView: {
 		margin: 20,
 		backgroundColor: Colors.white,
-		borderRadius: 20,
+		borderRadius: 12,
 		padding: 35,
 		alignItems: 'center',
 		shadowColor: Colors.black,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
 	},
 	openButton: {
 		backgroundColor: '#F194FF',
-		borderRadius: 10,
+		borderRadius: 12,
 		padding: 10,
 		paddingLeft: 20,
 		paddingRight: 20,
