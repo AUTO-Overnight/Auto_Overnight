@@ -14,7 +14,7 @@
 
 ## **⚙️ System Architecture**
 
-<img src="https://user-images.githubusercontent.com/54137044/132570881-92e44105-223b-4898-aaeb-b5340c750f34.png" width="100%" height="400"/>
+![](https://images.velog.io/images/ww8007/post/2059a245-6fca-4888-b88f-4aa1161d927c/image.png)
 
 ## Installation
 
@@ -41,7 +41,7 @@
 7. 상벌점 내역 확인 및 통합 점수 계산
 8. 화이트/다크 모드 추가 및 디자인 개선
 
-> <img src="https://user-images.githubusercontent.com/54137044/132565805-1c4c7deb-8d0d-4dba-8b0d-95eb6fe9f265.png" width="30%" height="400"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://user-images.githubusercontent.com/54137044/132566198-7fe561b0-c0ce-4af2-a0fb-303dd9eb635a.png" width="30%" height="400"/>
+   <img src="https://user-images.githubusercontent.com/54137044/132565805-1c4c7deb-8d0d-4dba-8b0d-95eb6fe9f265.png" width="30%" height="400"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://user-images.githubusercontent.com/54137044/132566198-7fe561b0-c0ce-4af2-a0fb-303dd9eb635a.png" width="30%" height="400"/>
 
 ### **✔ Commit message**
 
