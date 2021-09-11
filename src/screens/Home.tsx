@@ -141,7 +141,7 @@ export default function Home() {
 		const timer = () => {
 			setTimeout(() => {
 				const time = dayjs().tz('Asia/Seoul').locale('ko');
-				if (dayjs(time).isAfter(dayjs(cookieTime).add(1, 'hours'))) {
+				if (dayjs(time).isAfter(dayjs(cookieTime).add(2, 'hours'))) {
 					if (rememberID === 'auto') {
 						dispatch(initialLogin());
 						const user = {
@@ -175,7 +175,7 @@ export default function Home() {
 			switch (mode) {
 				case 'day': {
 					if (dayjs(today).isAfter(day.dateString)) {
-						setModalText('신청일 이전으로 신청할 수 없습니다.');
+						setModalText('신청일 이전으로 신청할 수\n 없습니다.');
 						setModalVisible(true);
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
@@ -189,7 +189,7 @@ export default function Home() {
 				case 'month': {
 					if (ready) return;
 					if (dayjs(today).isAfter(day.dateString)) {
-						setModalText('신청일 이전으로 신청할 수 없습니다.');
+						setModalText('신청일 이전으로 신청할 수\n 없습니다.');
 						setModalVisible(true);
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
