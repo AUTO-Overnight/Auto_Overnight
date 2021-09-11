@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Linking } from 'react-native';
 // prettier-ignore
 import {View, Text, NavigationHeader,
@@ -16,6 +16,8 @@ import { initialLogin } from '../store/login';
 import { getLogin } from '../store/login';
 import { logoutInitial } from '../store/calendar';
 import { blue200 } from 'react-native-paper/lib/typescript/styles/colors';
+import { useModal } from '../components';
+
 const backWhiteColor = '#FFFF';
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
@@ -48,6 +50,12 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 		};
 		dispatch(getLogin(user));
 	}, [id, pw]);
+	const [text, setModalText] = useState('');
+	const { modalVisible, ModalView, setModalVisible } = useModal({ text });
+	const onPressUpdate = useCallback(() => {
+		setModalText('[업데이트 내역]\n 1.0.1 로딩 애니메이션 추가');
+		setModalVisible(true);
+	}, []);
 	return (
 		<DrawerContentScrollView
 			{...props}
@@ -221,7 +229,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 						</Text>
 					</TouchableView>
 					<TouchableView
-						onPress={onClickOpenChat}
+						onPress={onPressUpdate}
 						style={[
 							styles.touchableView,
 							{ backgroundColor: isDark ? '#142328' : Colors.blue500 },
@@ -233,8 +241,9 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								{ color: isDark ? Colors.white : Colors.grey800 },
 							]}
 						>
-							버그 리포트
+							업데이트 내역
 						</Text>
+						<ModalView />
 					</TouchableView>
 				</View>
 			</View>
