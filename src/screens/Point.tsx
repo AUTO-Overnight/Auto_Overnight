@@ -7,7 +7,7 @@ import {
 	useNavigation,
 	useTheme,
 } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
 import { BonusTable } from '../components';
 export default function Point() {
@@ -31,31 +31,33 @@ export default function Point() {
 					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
 				]}
 			>
-				<NavigationHeader
-					title="Point"
-					Left={() => (
-						<Icon
-							name="menu"
-							size={40}
-							onPress={open}
-							style={{ marginLeft: '3%' }}
-						/>
-					)}
-					Right={() => (
-						<Icon
-							name="logout"
-							size={35}
-							onPress={logout}
-							style={{ marginRight: '3%' }}
-						/>
-					)}
-				/>
-				<BonusTable isDark={isDark} />
-				<LeftRightNavigation
-					ref={leftRef}
-					distance={40}
-					onLeftToRight={goLeft}
-				/>
+				<ScrollView>
+					<NavigationHeader
+						title="Point"
+						Left={() => (
+							<Icon
+								name="menu"
+								size={40}
+								onPress={open}
+								style={{ marginLeft: '3%' }}
+							/>
+						)}
+						Right={() => (
+							<Icon
+								name="logout"
+								size={35}
+								onPress={logout}
+								style={{ marginRight: '3%' }}
+							/>
+						)}
+					/>
+					<BonusTable isDark={isDark} />
+					<LeftRightNavigation
+						ref={leftRef}
+						distance={40}
+						onLeftToRight={goLeft}
+					/>
+				</ScrollView>
 			</View>
 		</SafeAreaView>
 	);
