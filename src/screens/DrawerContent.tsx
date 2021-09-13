@@ -53,8 +53,9 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const [text, setModalText] = useState('');
 	const { modalVisible, ModalView, setModalVisible } = useModal({ text });
 	const onPressUpdate = useCallback(() => {
-		setModalText('[업데이트 내역]\n 1.0.1 로딩 애니메이션 추가');
-		setModalVisible(true);
+		Linking.openURL(
+			'https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight'
+		);
 	}, []);
 	return (
 		<DrawerContentScrollView
@@ -241,7 +242,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								{ color: isDark ? Colors.white : Colors.grey800 },
 							]}
 						>
-							업데이트 내역
+							플레이스토어 이동
 						</Text>
 						<ModalView />
 					</TouchableView>
