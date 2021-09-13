@@ -117,7 +117,12 @@ export default function Home() {
 
 		navigation.navigate('Login');
 	}, []);
-
+	// useEffect(() => {
+	// 	setModalText(
+	// 		'[공지사항]\n 플레이스토어에 앱 출시가 됐습니다. 🎉\n 메뉴 버튼 누르시고 제일 하단 버튼 \n누르시면 이동 가능하십니다.'
+	// 	);
+	// 	setModalVisible(true);
+	// }, []);
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
 
