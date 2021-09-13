@@ -51,9 +51,15 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 		dispatch(getLogin(user));
 	}, [id, pw]);
 	const [text, setModalText] = useState('');
-	const { modalVisible, ModalView, setModalVisible } = useModal({ text });
+	const title = '[업데이트 내역]\n 1.0.2';
+	const { modalVisible, ModalView, setModalVisible } = useModal({
+		text,
+		title,
+	});
 	const onPressUpdate = useCallback(() => {
-		setModalText('[업데이트 내역]\n 1.0.1 로딩 애니메이션 추가');
+		setModalText(
+			' 1. 비밀번호 특수문자 포함 로그인 에러 수정\n 2. 화면 잘림 → 스크롤 기능 추가\n 3. 학번이 숫자가 아닌 경우를 위해 키패드 수정'
+		);
 		setModalVisible(true);
 	}, []);
 	return (
