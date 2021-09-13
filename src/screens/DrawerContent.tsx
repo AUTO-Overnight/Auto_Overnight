@@ -38,7 +38,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	}, []);
 	const onClickForm = useCallback(() => {
 		Linking.openURL(
-			'https://the-form.io/forms/survey/response/7ee611fa-597c-40e6-80b6-d0e905ea2781'
+			'https://the-form.io/forms/survey/response/10ea54f7-8e79-4efa-8593-d150ffdce4ec'
 		);
 	}, []);
 	const onPressReload = useCallback(() => {
