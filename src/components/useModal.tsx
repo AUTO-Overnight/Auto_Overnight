@@ -11,14 +11,21 @@ import {
 import type { ReactNode } from 'react';
 import { Colors } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
-export function useModal({ text }): {
+
+interface modalText {
+	text: string;
+	title: string;
+}
+
+export function useModal({ text, title }: modalText): {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 	ModalView: FC;
 } {
 	const [modalVisible, setModalVisible] = useState(false);
 	const isDark = useTheme().dark;
-	const ModalView: ReactNode = useCallback(() => {
+	const textLength = text.length ? true : false;
+	const ModalView = useCallback(() => {
 		return (
 			<Modal
 				animationType="fade"
@@ -37,12 +44,22 @@ export function useModal({ text }): {
 					>
 						<Text
 							style={[
-								styles.modalText,
+								styles.textStyle,
 								{ color: isDark ? Colors.white : Colors.grey800 },
 							]}
 						>
-							{text}
+							{title}
 						</Text>
+						{textLength && (
+							<Text
+								style={[
+									styles.modalText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{text}
+							</Text>
+						)}
 
 						<TouchableHighlight
 							style={{
@@ -102,13 +119,13 @@ const styles = StyleSheet.create({
 	},
 	textStyle: {
 		color: Colors.white,
-
 		textAlign: 'center',
+		// textAlign: 'center',
 	},
 	modalText: {
 		marginBottom: 15,
-		fontSize: 15,
-		textAlign: 'center',
+		fontSize: 14,
+		textAlign: 'left',
 		color: Colors.white,
 	},
 });
