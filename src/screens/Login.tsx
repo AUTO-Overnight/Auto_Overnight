@@ -116,7 +116,7 @@ export default function MainNavigator() {
 							/>
 							<TextInput
 								onFocus={focus}
-								keyboardType="number-pad"
+								// keyboardType="number-pad"
 								style={[
 									styles.textInput,
 									{ color: isDark ? Colors.white : Colors.grey900 },
