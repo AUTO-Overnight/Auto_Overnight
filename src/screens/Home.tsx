@@ -1,10 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
-import { ScrollEnabledProvider, useScrollEnabled } from '../contexts';
+import {
+	AutoFocusProvider,
+	ScrollEnabledProvider,
+	useScrollEnabled,
+} from '../contexts';
 import { Buttons, LeftRightNavigation } from '../components';
 import type { LeftRightNavigationMethods } from '../components';
 import { Calendar } from 'react-native-calendars';
@@ -105,8 +109,10 @@ export default function Home() {
 	const dispatch = useDispatch();
 	const goRight = useCallback(() => navigation.navigate('Point'), []);
 	const [modalText, setModalText] = useState<string>('');
+	const [modalTitle, setModalTitle] = useState<string>('');
 	const { modalVisible, setModalVisible, ModalView } = useModal({
 		text: modalText,
+		title: modalTitle,
 	});
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
@@ -166,7 +172,8 @@ export default function Home() {
 		// 이전 날짜 분리 로직
 		(day: DateObject) => {
 			if (count >= 30) {
-				setModalText('30일 이상 신청할 수 없습니다.');
+				setModalTitle('30일 이상 신청할 수 없습니다.\n');
+				setModalText('');
 				setModalVisible(true);
 				return;
 			}
@@ -175,7 +182,8 @@ export default function Home() {
 			switch (mode) {
 				case 'day': {
 					if (dayjs(today).isAfter(day.dateString)) {
-						setModalText('신청일 이전으로 신청할 수\n 없습니다.');
+						setModalTitle('신청일 이전으로 신청할 수\n 없습니다.\n');
+						setModalText('');
 						setModalVisible(true);
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
@@ -189,7 +197,8 @@ export default function Home() {
 				case 'month': {
 					if (ready) return;
 					if (dayjs(today).isAfter(day.dateString)) {
-						setModalText('신청일 이전으로 신청할 수\n 없습니다.');
+						setModalTitle('신청일 이전으로 신청할 수\n 없습니다.\n');
+						setModalText('');
 						setModalVisible(true);
 						return;
 					} else if (String(dayjs(today)) === day.dateString) {
@@ -202,7 +211,10 @@ export default function Home() {
 								.add(28, 'd')
 								.isAfter(dayjs(maxDate).add(1, 'd'))
 						) {
-							setModalText('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							setModalTitle(
+								'최대 신청일 기준 이후로 \n 신청하실 수 없습니다.\n'
+							);
+							setModalText('');
 							setModalVisible(true);
 							return;
 						}
@@ -212,7 +224,10 @@ export default function Home() {
 								.add((weekKey - 1) * 7, 'd')
 								.isAfter(dayjs(maxDate).add(1, 'd'))
 						) {
-							setModalText('최대 신청일 기준 이후로 \n 신청하실 수 없습니다.');
+							setModalTitle(
+								'최대 신청일 기준 이후로 \n 신청하실 수 없습니다.\n'
+							);
+							setModalText('');
 							setModalVisible(true);
 							return;
 						}
@@ -271,7 +286,8 @@ export default function Home() {
 
 	const onSendDays = useCallback(() => {
 		if (!count) {
-			setModalText('선택된 날짜가 없습니다.');
+			setModalTitle('');
+			setModalText('선택된 날짜가 없습니다.\n');
 			setModalVisible(true);
 			return;
 		}
@@ -285,22 +301,35 @@ export default function Home() {
 		toggleReady(false);
 		dispatch(makeCountZero());
 	}, [outStayFrDtL, successList]);
+	useEffect(() => {
+		setModalTitle('[공지사항]');
+		setModalText(
+			'\n1. 설문조사 한 번씩 부탁 드립니다! \n (기존 설문에서 문항에서 내용이 변경 되었으며 10월까지 받고 3분께 추첨을 통해 커피 기프티콘을 보내 드리도록 하겠습니다. 😃)\n2. 업데이트 내역 추가 (메뉴 버튼에서 확인 가능) \n'
+		);
+		setModalVisible(true);
+	}, []);
 
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
+			style={{
+				backgroundColor: isDark ? Colors.black : '#EDF3F7',
+				margin: 0,
+				padding: 0,
+			}}
 		>
-			<ScrollEnabledProvider>
-				<View
-					style={[
-						styles.view,
-						,
-						{
-							backgroundColor: isDark ? Colors.black : '#EDF3F7',
-							alignContent: 'center',
-						},
-					]}
-				>
+			<View
+				style={[
+					styles.view,
+					,
+					{
+						backgroundColor: isDark ? Colors.black : '#EDF3F7',
+						alignContent: 'center',
+						margin: 0,
+						padding: 0,
+					},
+				]}
+			>
+				<ScrollView style={{ padding: 0, margin: 0 }}>
 					<NavigationHeader
 						title="Calendar"
 						Left={() => (
@@ -384,22 +413,15 @@ export default function Home() {
 							신청하기
 						</Text>
 					</TouchableView>
-
+					<ModalView text={modalText} title={modalTitle} />
 					<Buttons
 						onPressDay={onPressDay}
 						onPressDays={onPressDays}
 						isDark={isDark}
 						loadingLogin={loadingLogin}
 					/>
-					<ModalView text={modalText} />
-					<LeftRightNavigation
-						ref={leftRef}
-						distance={40}
-						flatListRef={flatListRef}
-						onRightToLeft={goRight}
-					/>
-				</View>
-			</ScrollEnabledProvider>
+				</ScrollView>
+			</View>
 		</SafeAreaView>
 	);
 }
