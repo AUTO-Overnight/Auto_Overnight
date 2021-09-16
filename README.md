@@ -4,7 +4,7 @@
 - Based in React Native with Expo
 - 학교 외박 신청 로직을 단순화 하고 달력 형식으로 간편하게 신청
 
-## **🛒Store**
+## **🛒 Store**
 
 - [PlayStore](https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight)
 - [AppStore] : 준비중...
@@ -46,7 +46,7 @@
 7. 상벌점 내역 확인 및 통합 점수 계산
 8. 화이트/다크 모드 추가 및 디자인 개선
 
-   <img src="https://user-images.githubusercontent.com/54137044/132565805-1c4c7deb-8d0d-4dba-8b0d-95eb6fe9f265.png" width="30%" height="400"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://user-images.githubusercontent.com/54137044/132566198-7fe561b0-c0ce-4af2-a0fb-303dd9eb635a.png" width="30%" height="400"/>
+   <img src="https://user-images.githubusercontent.com/54137044/132565805-1c4c7deb-8d0d-4dba-8b0d-95eb6fe9f265.png" height="400"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;&nbsp; <img src="https://user-images.githubusercontent.com/54137044/132566198-7fe561b0-c0ce-4af2-a0fb-303dd9eb635a.png" height="400"/>
 
 ### **✔ Commit message**
 
