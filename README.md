@@ -6,8 +6,8 @@
 
 ## **🛒Store**
 
-[PlayStore](https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight)
-[AppStore] : 준비중...
+- [PlayStore](https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight)
+- [AppStore] : 준비중...
 
 ## **🔧 Tech Stack**
 
