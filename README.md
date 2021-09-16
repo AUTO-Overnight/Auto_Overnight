@@ -4,6 +4,11 @@
 - Based in React Native with Expo
 - 학교 외박 신청 로직을 단순화 하고 달력 형식으로 간편하게 신청
 
+## **🛒Store**
+
+[PlayStore](https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight)
+[AppStore] : 준비중...
+
 ## **🔧 Tech Stack**
 
 | 분류     | 기술                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
