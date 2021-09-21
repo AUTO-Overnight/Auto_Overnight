@@ -304,7 +304,7 @@ export default function Home() {
 	useEffect(() => {
 		setModalTitle('[공지사항]');
 		setModalText(
-			'\n1. 설문조사 한 번씩 부탁 드립니다! \n (기존 설문 문항에서 내용이 변경 되었으며 3분께 추첨을 통해 커피 기프티콘을 보내 드리도록 하겠습니다. 기한 : [09.13 ~ 10.14])\n2. 업데이트 내역 추가 (메뉴 버튼에서 확인 가능) \n'
+			'\n1. 설문조사 한 번씩 부탁 드립니다! \n (기존 설문 문항에서 내용이 변경 되었으며 3분께 추첨을 통해 커피 기프티콘을 보내 드리도록 하겠습니다. \n기한 : [09.13 ~ 10.14])\n2. 업데이트 내역 추가 1.0.3 [09.22] \n(메뉴 버튼에서 확인 가능) \n'
 		);
 		setModalVisible(true);
 	}, []);
@@ -329,7 +329,7 @@ export default function Home() {
 					},
 				]}
 			>
-				<ScrollView style={{ padding: 0, margin: 0 }}>
+				<ScrollView>
 					<NavigationHeader
 						title="Calendar"
 						Left={() => (
@@ -427,7 +427,7 @@ export default function Home() {
 }
 const styles = StyleSheet.create({
 	view: { flex: 1 },
-	text: { marginRight: 10, fontSize: 20, color: Colors.white },
+	text: { marginRight: 10, fontSize: 15, color: Colors.white },
 	calendar: { height: 50 },
 
 	smallTouchableView: {
