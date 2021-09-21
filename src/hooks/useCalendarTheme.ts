@@ -14,50 +14,29 @@ export const useCalendarTheme = (): {
 		calendarBackground: isDark ? '#222831' : Colors.white, // 뒷배경
 		textSectionTitleColor: isDark ? Colors.white : Colors.grey800, // 요일 색상
 		dayTextColor: isDark ? Colors.white : Colors.grey800,
-		textDisabledColor: isDark ? Colors.grey500 : '#a6a6a6',
+		textDisabledColor: Colors.grey500,
 		monthTextColor: isDark ? Colors.white : Colors.grey800,
-		textDayFontSize: 18,
-		// textSectionTitleDisabledColor: '#a6a6a6',
+		textSectionTitleDisabledColor: isDark ? '#a6a6a6' : '#ffff',
 		arrowColor: isDark ? Colors.yellow400 : '#4A4BFC',
-		textMonthFontSize: 18,
-		textDayHeaderFontSize: 18,
 		todayTextColor: isDark ? Colors.yellow400 : Colors.red500,
 	});
 
 	useEffect(() => {
-		if (isDark) {
-			setTheme((prevState) => ({
-				...prevState,
-				backgroundColor: Colors.white,
-				calendarBackground: Colors.white, // 뒷배경
-				dayTextColor: Colors.black,
-				monthTextColor: Colors.black,
-				textSectionTitleColor: Colors.black, // 요일 색상
-				textDisabledColor: Colors.grey500,
-				todayTextColor: Colors.red500,
-				arrowColor: '#4A4BFC',
-				textDayFontSize: 18,
-				textMonthFontSize: 18,
-				textDayHeaderFontSize: 18,
-			}));
-			console.log('다크 모드야');
-		} else {
-			setTheme((prevState) => ({
-				...prevState,
-				backgroundColor: '#222831',
-				calendarBackground: '#222831', // 뒷배경
-				dayTextColor: Colors.white,
-				monthTextColor: Colors.white,
-				textSectionTitleColor: Colors.white, // 요일 색상
-				textDisabledColor: Colors.grey500,
-				todayTextColor: Colors.yellow400,
-				arrowColor: Colors.yellow400,
-				textDayFontSize: 18,
-				textMonthFontSize: 18,
-				textDayHeaderFontSize: 18,
-			}));
-			console.log('다크 모드 아냐');
-		}
+		setTheme((prevState) => ({
+			...prevState,
+			backgroundColor: !isDark ? '#222831' : Colors.white, // 뒷배경
+			calendarBackground: !isDark ? '#222831' : Colors.white, // 뒷배경
+			textSectionTitleColor: !isDark ? Colors.white : Colors.grey800, // 요일 색상
+			dayTextColor: !isDark ? Colors.white : Colors.grey800,
+			textDisabledColor: Colors.grey500,
+			monthTextColor: !isDark ? Colors.white : Colors.grey800,
+			arrowColor: !isDark ? Colors.yellow400 : '#4A4BFC',
+			todayTextColor: !isDark ? Colors.yellow400 : Colors.red500,
+		}));
+		setTheme((prevState) => ({
+			...prevState,
+			dayTextColor: !isDark ? Colors.white : Colors.grey800,
+		}));
 	}, [isDark]);
 
 	return { theme, isDark };
