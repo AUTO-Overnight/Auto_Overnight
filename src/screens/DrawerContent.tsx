@@ -17,7 +17,7 @@ import { getLogin } from '../store/login';
 import { logoutInitial } from '../store/calendar';
 import { blue200 } from 'react-native-paper/lib/typescript/styles/colors';
 import { useModal } from '../components';
-
+import Icons from 'react-native-vector-icons/AntDesign';
 const backWhiteColor = '#FFFF';
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
@@ -51,15 +51,13 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 		dispatch(getLogin(user));
 	}, [id, pw]);
 	const [text, setModalText] = useState('');
-	const title = '[업데이트 내역]\n 1.0.2';
+	const title = '[업데이트 내역]\n 1.0.3';
 	const { modalVisible, ModalView, setModalVisible } = useModal({
 		text,
 		title,
 	});
 	const onPressUpdate = useCallback(() => {
-		setModalText(
-			' 1. 비밀번호 특수문자 포함 로그인 에러 수정\n 2. 화면 잘림 → 스크롤 기능 추가\n 3. 학번이 숫자가 아닌 경우를 위해 키패드 수정'
-		);
+		setModalText(' 1. Android 메뉴 겹침 오류 수정\n 2. 디자인 수정');
 		setModalVisible(true);
 	}, []);
 	return (
@@ -92,7 +90,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								{ color: isDark ? Colors.white : Colors.grey800 },
 							]}
 						>
-							Default / Dark
+							White / Dark
 						</Text>
 						<Switch style={[styles.row, { marginLeft: 10 }]} />
 					</View>
@@ -143,11 +141,12 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							styles.rowCircle,
 							{
 								alignSelf: 'center',
-								backgroundColor: isDark ? '#3b6a7a' : Colors.blue100,
+								backgroundColor: isDark ? Colors.black : Colors.white,
 								width: '90%',
 								height: 50,
 								borderRadius: 10,
-								marginTop: 50,
+								marginTop: 30,
+								marginBottom: 10,
 							},
 						]}
 					>
@@ -180,77 +179,145 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							미승인
 						</Text>
 					</View>
-					{/* <View
+					<View
 						style={[
-							styles.line,
-							{ borderBottomColor: isDark ? 'white' : Colors.black },
-						]}
-					/> */}
-					<TouchableView
-						onPress={onPressReload}
-						style={[
-							styles.touchableView,
-							{ backgroundColor: isDark ? '#295868' : Colors.blue200 },
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
 						]}
 					>
-						<Text
+						<TouchableView
+							onPress={onPressReload}
 							style={[
-								styles.buttonText,
-								{ color: isDark ? Colors.white : Colors.grey800 },
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#295868' : Colors.blue200 },
 							]}
 						>
-							새로고침
-						</Text>
-					</TouchableView>
-					<TouchableView
-						onPress={onClickOpenChat}
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}
+								새로고침
+							</Text>
+						</TouchableView>
+						<Icons
+							name="right"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
+					<View
 						style={[
-							styles.touchableView,
-							{ backgroundColor: isDark ? '#214653' : Colors.blue300 },
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
 						]}
 					>
-						<Text
+						<TouchableView
+							onPress={onClickOpenChat}
 							style={[
-								styles.buttonText,
-								{ color: isDark ? Colors.white : Colors.grey800 },
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#214653' : Colors.blue300 },
 							]}
 						>
-							문의사항
-						</Text>
-					</TouchableView>
-					<TouchableView
-						onPress={onClickForm}
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}
+								문의사항
+							</Text>
+						</TouchableView>
+						<Icons
+							name="right"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
+					<View
 						style={[
-							styles.touchableView,
-							{ backgroundColor: isDark ? '#152D35' : Colors.blue400 },
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
 						]}
 					>
-						<Text
+						<TouchableView
+							onPress={onClickForm}
 							style={[
-								styles.buttonText,
-								{ color: isDark ? Colors.white : Colors.grey800 },
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#152D35' : Colors.blue400 },
 							]}
 						>
-							설문조사
-						</Text>
-					</TouchableView>
-					<TouchableView
-						onPress={onPressUpdate}
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}
+								설문조사
+							</Text>
+						</TouchableView>
+						<Icons
+							name="right"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
+					<View
 						style={[
-							styles.touchableView,
-							{ backgroundColor: isDark ? '#142328' : Colors.blue500 },
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
 						]}
 					>
-						<Text
+						<TouchableView
+							activeOpacity={0.8}
+							onPress={onPressUpdate}
 							style={[
-								styles.buttonText,
-								{ color: isDark ? Colors.white : Colors.grey800 },
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#142328' : Colors.blue500 },
 							]}
 						>
-							업데이트 내역
-						</Text>
-						<ModalView />
-					</TouchableView>
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}
+								업데이트 내역
+							</Text>
+
+							<ModalView />
+						</TouchableView>
+						<Icons
+							name="right"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
 				</View>
 			</View>
 		</DrawerContentScrollView>
@@ -259,6 +326,12 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 export default DrawerContent;
 const styles = StyleSheet.create({
 	view: { flex: 1, padding: 5 },
+	rowButton: {
+		flexDirection: 'row',
+		padding: 0,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	row: {
 		flexDirection: 'row',
 		padding: 10,
@@ -272,22 +345,28 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	col: { flexDirection: 'column', padding: 10, alignItems: 'center' },
-	m: { marginLeft: 5, marginTop: 10 },
+	m: { marginLeft: 17, marginTop: 10 },
 	text: { fontSize: 19 },
 	touchText: { fontSize: 17 },
 	buttonText: {
 		fontSize: 17,
 		color: Colors.white,
+		right: 10,
+	},
+	iconStyle: {
+		paddingRight: 20,
 	},
 	touchableView: {
-		marginTop: 40,
-		flexDirection: 'column',
-		height: 50,
+		marginTop: 0,
+		flexDirection: 'row',
+		height: 90,
 		borderRadius: 10,
-		width: '90%',
-		justifyContent: 'center',
+		width: '100%',
+		paddingLeft: 30,
+
+		justifyContent: 'flex-start',
 		alignItems: 'center',
-		alignSelf: 'center',
+		// flex: 1,
 	},
 	content: { padding: 5 },
 	line: {
@@ -295,7 +374,7 @@ const styles = StyleSheet.create({
 	},
 	switchText: {
 		fontSize: 20,
-		marginLeft: 5,
+		marginLeft: 17,
 	},
 	circle: {
 		width: 12 * 2,
