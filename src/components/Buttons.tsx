@@ -51,6 +51,7 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 			>
 				<Text
 					style={[
+						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
 							fontWeight: '500',
@@ -75,6 +76,7 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 			>
 				<Text
 					style={[
+						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
 							fontWeight: '500',
@@ -99,6 +101,7 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 			>
 				<Text
 					style={[
+						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
 							fontWeight: '500',
@@ -123,6 +126,7 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 			>
 				<Text
 					style={[
+						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
 							fontWeight: '500',
@@ -145,5 +149,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		marginTop: '0%',
+	},
+	buttonText: {
+		fontSize: 12,
 	},
 });
