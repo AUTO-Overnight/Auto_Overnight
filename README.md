@@ -9,6 +9,20 @@
 - [PlayStore](https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight)
 - [AppStore] : 준비중...
 
+## **➕ Version**
+
+- 1.0.1
+- ┣ 1. 설문조사 링크 변경
+- ┗ 2. 토큰 인증 시간 변경
+
+- 1.0.2
+- ┣ 1. 특수문자 로그인 오류 수정
+- ┗ 2. 기기화면 높이에 따른 스크롤 추가
+
+- 1.0.3
+- ┣ 1. Android 메뉴 겹침 오류 수정
+- ┗ 2. 메뉴 디자인 수정
+
 ## **🔧 Tech Stack**
 
 | 분류     | 기술                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
