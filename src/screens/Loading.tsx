@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initialLogin } from '../store/login';
 import { getLogin } from '../store/login';
 import type { RootState } from '../store';
+import { getAirPollution } from '../store/weather';
 export default function Loading() {
 	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
 		name: login.name,
@@ -23,6 +24,7 @@ export default function Loading() {
 				userPw: pw,
 			};
 			dispatch(getLogin(user));
+			dispatch(getAirPollution());
 		} else {
 			dispatch(initialLogin());
 		}
