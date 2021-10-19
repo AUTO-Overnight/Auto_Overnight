@@ -9,3 +9,4 @@ export * from './useSendButtons';
 export * from './useBreakPoint';
 export * from './useScreenDimensions';
 export * from './useMakeBonusArray';
+export * from './useWeatherOptions';
