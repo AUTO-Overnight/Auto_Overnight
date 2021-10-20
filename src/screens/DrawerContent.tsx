@@ -18,10 +18,10 @@ import { logoutInitial } from '../store/calendar';
 import { blue200 } from 'react-native-paper/lib/typescript/styles/colors';
 import { useModal } from '../components';
 import Icons from 'react-native-vector-icons/AntDesign';
-import { useWeatherOptions } from '../hooks';
+import { Weather } from '../components';
 
 const backWhiteColor = '#FFFF';
-const fontSize = 17;
+const fontSize = 15;
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const { name, id, pw, rememberID, current, daily, hourly } = useSelector(
 		({ login, weather }: RootState) => ({
@@ -69,7 +69,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 		setModalVisible(true);
 	}, []);
 	// weather icon
-	const icons = useWeatherOptions();
+
 	return (
 		<DrawerContentScrollView
 			{...props}
@@ -106,24 +106,6 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							안녕하세요 {name}님
 						</Text>
 					</View>
-					<View
-						style={[
-							styles.row,
-							{ backgroundColor: isDark ? Colors.black : backWhiteColor },
-						]}
-					>
-						<Text
-							numberOfLines={1}
-							ellipsizeMode="tail"
-							style={[
-								styles.text,
-								styles.m,
-								{ color: isDark ? Colors.white : Colors.grey800 },
-							]}
-						>
-							ID : {id}
-						</Text>
-					</View>
 					{/* 승인 / 미승인 */}
 					<View
 						style={[
@@ -134,8 +116,8 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								width: '90%',
 								height: 50,
 								borderRadius: 10,
-								marginTop: 10,
-								marginBottom: 10,
+								marginTop: 3,
+								marginBottom: 3,
 							},
 						]}
 					>
@@ -168,156 +150,12 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							미승인
 						</Text>
 					</View>
-					{/* Weather */}
-					<View
-						style={[
-							styles.rowCircle,
-							{
-								alignSelf: 'center',
-								backgroundColor: isDark ? Colors.black : Colors.white,
-								width: '90%',
-								height: 70,
-								borderRadius: 10,
-								marginTop: 5,
-								marginBottom: 5,
-							},
-						]}
-					>
-						<View style={styles.columnView}>
-							<Text
-								style={[
-									styles.touchText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
-								]}
-							>
-								03 : 00
-							</Text>
-							<View style={styles.rowView}>
-								<FontistoIcon name={icons.icons.AirPollution} size={18} />
-								<Text style={styles.tempText}>18°C</Text>
-							</View>
-						</View>
-						<View style={styles.columnView}>
-							<Text
-								style={[
-									styles.touchText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
-								]}
-							>
-								03 : 00
-							</Text>
-							<View style={styles.rowView}>
-								<FontistoIcon name={icons.icons.AirPollution} size={18} />
-								<Text style={styles.tempText}>18°C</Text>
-							</View>
-						</View>
-						<View style={styles.columnView}>
-							<Text
-								style={[
-									styles.touchText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
-								]}
-							>
-								03 : 00
-							</Text>
-							<View style={styles.rowView}>
-								<FontistoIcon name={icons.icons.AirPollution} size={18} />
-								<Text style={styles.tempText}>18°C</Text>
-							</View>
-						</View>
-					</View>
-					<View
-						style={[
-							styles.rowCircle,
-							{
-								alignSelf: 'center',
-								backgroundColor: isDark ? Colors.black : Colors.white,
-								width: '90%',
-								height: 70,
-								borderRadius: 10,
-								// marginTop: 5,
-								// marginBottom: 5,
-							},
-						]}
-					>
-						<View style={styles.columnView}>
-							<Text
-								style={[
-									styles.touchText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
-								]}
-							>
-								03 : 00
-							</Text>
-							<View style={styles.rowView}>
-								<FontistoIcon name={icons.icons.AirPollution} size={18} />
-								<Text style={styles.tempText}>18°C</Text>
-							</View>
-						</View>
-						<View style={styles.columnView}>
-							<Text
-								style={[
-									styles.touchText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
-								]}
-							>
-								03 : 00
-							</Text>
-							<View style={styles.rowView}>
-								<FontistoIcon name={icons.icons.AirPollution} size={18} />
-								<Text style={styles.touchText}>18°C</Text>
-							</View>
-						</View>
-						<View style={styles.columnView}>
-							<Text
-								style={[
-									styles.touchText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
-								]}
-							>
-								03 : 00
-							</Text>
-							<View style={styles.rowView}>
-								<FontistoIcon name={icons.icons.AirPollution} size={18} />
-								<Text style={styles.tempText}>18°C</Text>
-							</View>
-						</View>
-					</View>
-					<View
-						style={[
-							styles.rowCircle,
-							{
-								alignSelf: 'center',
-								backgroundColor: isDark ? Colors.black : Colors.white,
-								width: '90%',
-								height: 50,
-								borderRadius: 10,
-								marginTop: 5,
-								marginBottom: 5,
-							},
-						]}
-					>
-						<Text
-							style={[
-								styles.touchText,
-								{ color: isDark ? Colors.white : Colors.grey800 },
-							]}
-						>
-							미세먼지 :
-						</Text>
-						<FontistoIcon
-							name={icons.icons.AirPollution}
-							size={20}
-						></FontistoIcon>
-						<Text
-							style={[
-								styles.touchText,
-								{ color: isDark ? Colors.white : Colors.grey800 },
-							]}
-						>
-							30Pm
-						</Text>
-					</View>
+					<Weather
+						isDark={isDark}
+						hourly={hourly}
+						daily={daily}
+						current={current}
+					/>
 					<View
 						style={[
 							styles.rowButton,
@@ -464,7 +302,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 };
 export default DrawerContent;
 const styles = StyleSheet.create({
-	view: { flex: 1, padding: 5 },
+	view: { flex: 1, padding: 0 },
 	columnView: {
 		flexDirection: 'column',
 		justifyContent: 'center',
@@ -478,7 +316,7 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flexDirection: 'row',
-		padding: 8,
+		padding: 0,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 	},
@@ -494,8 +332,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
-	col: { flexDirection: 'column', padding: 10, alignItems: 'center' },
-	m: { marginLeft: 17, marginTop: 10 },
+	col: { flexDirection: 'column', padding: 0, alignItems: 'center' },
+	m: { marginLeft: 17, marginTop: 5 },
 	text: { fontSize: fontSize },
 	touchText: { fontSize: fontSize },
 	buttonText: {
@@ -518,7 +356,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		// flex: 1,
 	},
-	content: { padding: 5 },
+	content: { padding: 0 },
 	line: {
 		borderBottomWidth: 3,
 	},
@@ -527,9 +365,9 @@ const styles = StyleSheet.create({
 		marginLeft: 17,
 	},
 	circle: {
-		width: 10 * 2,
-		height: 10 * 2,
-		borderRadius: 10,
+		width: 7 * 2,
+		height: 7 * 2,
+		borderRadius: 7,
 	},
 	tempText: {
 		fontSize: 15,
