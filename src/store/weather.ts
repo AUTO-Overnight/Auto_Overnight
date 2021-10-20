@@ -5,6 +5,10 @@ import { createAction } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import type { weather, AirPollutionAPI, weatherAPI } from '../interface';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+
+dayjs.locale('ko');
+
 // import type { weather, weatherAPI, weatherSuccess } from '../interface';
 import * as api from '../lib/api';
 const initialState: weather = {
@@ -55,22 +59,24 @@ export const weatherSlice = createSlice({
 			state.daily = action.payload.daily;
 			state.hourly = action.payload.hourly;
 			let dayUnix = Number(state.current.dt);
-			state.current.dt = dayjs.unix(dayUnix).format('MM-DD');
+			state.current.dt = dayjs.unix(dayUnix).format('MM-DD-HH');
 			state.current.temp = Math.floor(state.current.temp - 273.15);
+			state.daily = state.daily.slice(0, 6);
+			state.hourly = state.hourly.slice(0, 12);
 			state.daily.map(
 				(day) => (
 					(dayUnix = Number(day.dt)),
 					(day.temp.day = Math.floor(day.temp.day - 273.15)),
 					(day.temp.max = Math.floor(day.temp.max - 273.15)),
 					(day.temp.min = Math.floor(day.temp.min - 273.15)),
-					(day.dt = dayjs.unix(dayUnix).format('MM-DD'))
+					(day.dt = dayjs.unix(dayUnix).format('DD - dd'))
 				)
 			);
 			state.hourly.map(
 				(hour) => (
 					(dayUnix = Number(hour.dt)),
 					(hour.temp = Math.floor(hour.temp - 273.15)),
-					(hour.dt = dayjs.unix(dayUnix).format('DD-HH'))
+					(hour.dt = dayjs.unix(dayUnix).format('HH'))
 				)
 			);
 		},
