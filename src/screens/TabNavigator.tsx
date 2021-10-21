@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Point from './Point';
 import type { RouteProp, ParamListBase } from '@react-navigation/native';
 import Home from './Home';
+import Weather from './Weather';
 import { useNavigationHorizontalInterpolator } from '../hooks';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { useTheme } from '@react-navigation/native';
@@ -16,7 +17,8 @@ type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 const icons: Record<string, string[]> = {
 	Point: ['trophy-variant', 'trophy-variant-outline'],
-	Calendar: ['brightness-2', 'brightness-3'],
+	Calendar: ['calendar-month', 'calendar-blank'],
+	Weather: ['weather-night-partly-cloudy', 'weather-cloudy'],
 };
 
 const screenOptions = ({
@@ -75,6 +77,14 @@ export default function TabNavigator() {
 			<Tab.Screen
 				name="Point"
 				component={Point}
+				options={{
+					tabBarIconStyle: { marginTop: 2 },
+					tabBarActiveTintColor: isDark ? 'white' : 'black',
+				}}
+			/>
+			<Tab.Screen
+				name="Weather"
+				component={Weather}
 				options={{
 					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',

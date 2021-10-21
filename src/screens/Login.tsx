@@ -122,6 +122,7 @@ export default function MainNavigator() {
 								]}
 								value={userId}
 								onChangeText={(useId) => setId((text) => useId)}
+								autoCapitalize="none"
 								placeholder="Enter your ID"
 								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>

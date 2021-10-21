@@ -7,4 +7,5 @@ export * from './LeftRightNavigation';
 export * from './BonusTable';
 export * from './dataViewToScreenSize';
 export * from './Buttons';
-export * from './Weather';
+export * from './WeatherInfo';
+export * from './BusModal';

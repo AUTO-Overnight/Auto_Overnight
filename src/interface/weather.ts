@@ -1,10 +1,19 @@
 export interface weather {
 	pm10Value: number; // 미세먼지 pm10 농도
-	khaiValue: number; //통합대기환경수치
 	pm10Grade: number; //
+	pm25Value: number; // 초 미세먼지 농도
+	pm25Grade: number;
 	current: weatherHourly;
 	hourly: weatherHourly[];
 	daily: weatherForecast[];
+	pm10: {
+		backgroundColor: string;
+		text: string;
+	};
+	pm25: {
+		backgroundColor: string;
+		text: string;
+	};
 }
 
 export interface AirPollutionAPI {
@@ -23,8 +32,9 @@ export interface weatherAPI {
 
 export interface AirPollution {
 	pm10Value: number; // 미세먼지 pm10 농도
-	khaiValue: number; //통합대기환경수치
 	pm10Grade: number; //
+	pm25Value: number; // 초 미세먼지 농도
+	pm25Grade: number;
 }
 
 export interface weatherHourly {
