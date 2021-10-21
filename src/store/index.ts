@@ -11,7 +11,7 @@ import weather, { weatherSaga } from './weather';
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['calendar', 'bonus'],
+	blacklist: ['calendar', 'bonus', 'weather'],
 };
 const rootReducer = combineReducers({
 	login,
