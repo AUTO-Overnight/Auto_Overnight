@@ -11,10 +11,12 @@ dayjs.locale('ko');
 
 // import type { weather, weatherAPI, weatherSuccess } from '../interface';
 import * as api from '../lib/api';
+import { Colors } from 'react-native-paper';
 const initialState: weather = {
 	pm10Value: 0, // 미세먼지 pm10 농도
-	khaiValue: 0, //통합대기환경수치
-	pm10Grade: 1,
+	pm10Grade: 0,
+	pm25Value: 0,
+	pm25Grade: 0,
 	current: {
 		dt: '',
 		temp: 0,
@@ -22,6 +24,14 @@ const initialState: weather = {
 	},
 	daily: [],
 	hourly: [],
+	pm10: {
+		backgroundColor: '',
+		text: '',
+	},
+	pm25: {
+		backgroundColor: '',
+		text: '',
+	},
 };
 
 const GET_AIRPOLLUTION = 'weather/GET_AIRPOLLUTION';
@@ -49,17 +59,43 @@ export const weatherSlice = createSlice({
 			state,
 			action: PayloadAction<AirPollutionAPI>
 		) => {
-			state.khaiValue = action.payload.response.body.items[0].khaiValue;
-			state.pm10Grade = action.payload.response.body.items[0].pm10Grade;
+			state.pm25Grade = Number(action.payload.response.body.items[0].pm25Grade);
+			state.pm25Value = action.payload.response.body.items[0].pm25Value;
+			state.pm10Grade = Number(action.payload.response.body.items[0].pm10Grade);
 			state.pm10Value = action.payload.response.body.items[0].pm10Value;
-			console.log(action.payload);
+			if (state.pm10Grade === 1) {
+				state.pm10.text = '좋음';
+				state.pm10.backgroundColor = Colors.blue400;
+			} else if (state.pm10Grade === 2) {
+				state.pm10.text = '보통';
+				state.pm10.backgroundColor = Colors.green400;
+			} else if (state.pm10Grade === 3) {
+				state.pm10.text = '나쁨';
+				state.pm10.backgroundColor = Colors.yellow400;
+			} else if (state.pm10Grade === 4) {
+				state.pm10.text = '나쁨';
+				state.pm10.backgroundColor = Colors.red400;
+			}
+			if (state.pm25Grade === 1) {
+				state.pm25.text = '좋음';
+				state.pm25.backgroundColor = Colors.blue400;
+			} else if (state.pm25Grade === 2) {
+				state.pm25.text = '보통';
+				state.pm25.backgroundColor = Colors.green400;
+			} else if (state.pm25Grade === 3) {
+				state.pm25.text = '나쁨';
+				state.pm25.backgroundColor = Colors.yellow400;
+			} else if (state.pm25Grade === 4) {
+				state.pm25.text = '나쁨';
+				state.pm25.backgroundColor = Colors.red400;
+			}
 		},
 		GET_WEATHER_SUCCESS: (state, action: PayloadAction<weatherAPI>) => {
 			state.current = action.payload.current;
 			state.daily = action.payload.daily;
 			state.hourly = action.payload.hourly;
 			let dayUnix = Number(state.current.dt);
-			state.current.dt = dayjs.unix(dayUnix).format('MM-DD-HH');
+			state.current.dt = dayjs.unix(dayUnix).format('HH');
 			state.current.temp = Math.floor(state.current.temp - 273.15);
 			state.daily = state.daily.slice(0, 6);
 			state.hourly = state.hourly.slice(0, 12);
