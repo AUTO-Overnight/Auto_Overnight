@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, Linking } from 'react-native';
 // prettier-ignore
 import {View, Text, NavigationHeader,
-MaterialCommunityIcon as Icon, Switch, FontistoIcon} from '../theme';
+MaterialCommunityIcon as Icon, Switch} from '../theme';
 import type { FC } from 'react';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
@@ -18,22 +18,16 @@ import { logoutInitial } from '../store/calendar';
 import { blue200 } from 'react-native-paper/lib/typescript/styles/colors';
 import { useModal } from '../components';
 import Icons from 'react-native-vector-icons/AntDesign';
-import { Weather } from '../components';
-
+import { BusModal } from '../components';
 const backWhiteColor = '#FFFF';
 const fontSize = 15;
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
-	const { name, id, pw, rememberID, current, daily, hourly } = useSelector(
-		({ login, weather }: RootState) => ({
-			name: login.name,
-			rememberID: login.rememberID,
-			id: login.id,
-			pw: login.pw,
-			current: weather.current,
-			daily: weather.daily,
-			hourly: weather.hourly,
-		})
-	);
+	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
+		name: login.name,
+		rememberID: login.rememberID,
+		id: login.id,
+		pw: login.pw,
+	}));
 	const { navigation } = props;
 	const close = useCallback(
 		() => navigation.dispatch(DrawerActions.closeDrawer()),
@@ -49,6 +43,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 			'https://the-form.io/forms/survey/response/10ea54f7-8e79-4efa-8593-d150ffdce4ec'
 		);
 	}, []);
+	const onClickCallOne = useCallback(() => {
+		Linking.openURL(`tel:03180411030`);
+	}, []);
+	const onClickCallTwo = useCallback(() => {
+		Linking.openURL(`tel:03180411020`);
+	}, []);
+	const onClickBusPDF = useCallback(() => {
+		Linking.openURL('https://ibook.kpu.ac.kr/Viewer/bus01');
+	}, []);
+
 	const onPressReload = useCallback(() => {
 		dispatch(initialLogin());
 		dispatch(logoutInitial());
@@ -59,17 +63,18 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 		dispatch(getLogin(user));
 	}, [id, pw]);
 	const [text, setModalText] = useState('');
-	const title = '[업데이트 내역]\n 1.0.4';
+
+	const title = '[업데이트 내역]\n 1.0.3';
 	const { modalVisible, ModalView, setModalVisible } = useModal({
 		text,
 		title,
 	});
+	const [busModalVisible, setBusModalVisible] = useState(false);
+	const [mode, setMode] = useState('2');
 	const onPressUpdate = useCallback(() => {
 		setModalText(' 1. Android 메뉴 겹침 오류 수정\n 2. 디자인 수정');
 		setModalVisible(true);
 	}, []);
-	// weather icon
-
 	return (
 		<DrawerContentScrollView
 			{...props}
@@ -79,8 +84,8 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 			]}
 		>
 			<NavigationHeader
+				Left={() => <Switch style={[styles.row, { marginLeft: 23 }]} />}
 				Right={() => <Icon name="close" size={32} onPress={close} />}
-				Left={() => <Switch style={[styles.row, { marginLeft: 25 }]} />}
 			/>
 			<View style={{ backgroundColor: isDark ? Colors.black : backWhiteColor }}>
 				<View
@@ -106,7 +111,24 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							안녕하세요 {name}님
 						</Text>
 					</View>
-					{/* 승인 / 미승인 */}
+					<View
+						style={[
+							styles.row,
+							{ backgroundColor: isDark ? Colors.black : backWhiteColor },
+						]}
+					>
+						<Text
+							numberOfLines={1}
+							ellipsizeMode="tail"
+							style={[
+								styles.text,
+								styles.m,
+								{ color: isDark ? Colors.white : Colors.grey800 },
+							]}
+						>
+							ID : {id}
+						</Text>
+					</View>
 					<View
 						style={[
 							styles.rowCircle,
@@ -116,8 +138,8 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								width: '90%',
 								height: 50,
 								borderRadius: 10,
-								marginTop: 3,
-								marginBottom: 3,
+								// marginTop: 30,
+								// marginBottom: 10,
 							},
 						]}
 					>
@@ -150,12 +172,146 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							미승인
 						</Text>
 					</View>
-					<Weather
-						isDark={isDark}
-						hourly={hourly}
-						daily={daily}
-						current={current}
-					/>
+					<View
+						style={[
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
+						]}
+					>
+						<TouchableView
+							onPress={onClickCallOne}
+							style={[
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#295868' : Colors.blue200 },
+							]}
+						>
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}1 기숙사 사감실 전화 연결
+							</Text>
+						</TouchableView>
+						<Icons
+							name="phone"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
+					<View
+						style={[
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
+						]}
+					>
+						<TouchableView
+							onPress={onClickCallTwo}
+							style={[
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#295868' : Colors.blue200 },
+							]}
+						>
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}2 기숙사 사감실 전화 연결
+							</Text>
+						</TouchableView>
+						<Icons
+							name="phone"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
+					<View
+						style={[
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
+						]}
+					>
+						<TouchableView
+							activeOpacity={0.8}
+							onPress={() => setBusModalVisible(!busModalVisible)}
+							style={[
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#142328' : Colors.blue500 },
+							]}
+						>
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}
+								최단 셔틀 시간표 보기
+							</Text>
+
+							<ModalView />
+						</TouchableView>
+						<Icons
+							name="aliwangwang"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
+					<View
+						style={[
+							styles.rowButton,
+							{ backgroundColor: isDark ? Colors.black : Colors.white },
+						]}
+					>
+						<TouchableView
+							activeOpacity={0.8}
+							onPress={onClickBusPDF}
+							style={[
+								styles.touchableView,
+								// { backgroundColor: isDark ? '#142328' : Colors.blue500 },
+							]}
+						>
+							<Text
+								style={[
+									styles.buttonText,
+									{ color: isDark ? Colors.white : Colors.grey800 },
+								]}
+							>
+								{'      '}
+								셔틀 시간표 보기
+							</Text>
+
+							<ModalView />
+						</TouchableView>
+						<Icons
+							name="right"
+							style={[
+								styles.buttonText,
+								styles.iconStyle,
+								{
+									color: isDark ? Colors.white : Colors.grey800,
+								},
+							]}
+						/>
+					</View>
 					<View
 						style={[
 							styles.rowButton,
@@ -295,6 +451,12 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 							]}
 						/>
 					</View>
+					<BusModal
+						modalVisible={busModalVisible}
+						setModalVisible={setBusModalVisible}
+						mode={mode}
+						setMode={setMode}
+					/>
 				</View>
 			</View>
 		</DrawerContentScrollView>
@@ -302,12 +464,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 };
 export default DrawerContent;
 const styles = StyleSheet.create({
-	view: { flex: 1, padding: 0 },
-	columnView: {
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
+	view: { flex: 1, padding: 5 },
 	rowButton: {
 		flexDirection: 'row',
 		padding: 0,
@@ -316,15 +473,9 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flexDirection: 'row',
-		padding: 0,
+		padding: 15,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-	},
-	rowView: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		paddingTop: 3,
 	},
 	rowCircle: {
 		flexDirection: 'row',
@@ -332,8 +483,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
-	col: { flexDirection: 'column', padding: 0, alignItems: 'center' },
-	m: { marginLeft: 17, marginTop: 5 },
+	col: { flexDirection: 'column', padding: 10, alignItems: 'center' },
+	m: { marginLeft: 10, marginTop: 10 },
 	text: { fontSize: fontSize },
 	touchText: { fontSize: fontSize },
 	buttonText: {
@@ -347,7 +498,7 @@ const styles = StyleSheet.create({
 	touchableView: {
 		marginTop: 0,
 		flexDirection: 'row',
-		height: 60,
+		height: 55,
 		borderRadius: 10,
 		width: '100%',
 		paddingLeft: 30,
@@ -356,21 +507,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		// flex: 1,
 	},
-	content: { padding: 0 },
+	content: { padding: 5 },
 	line: {
 		borderBottomWidth: 3,
 	},
 	switchText: {
-		fontSize: fontSize,
+		fontSize: 20,
 		marginLeft: 17,
 	},
 	circle: {
-		width: 7 * 2,
-		height: 7 * 2,
-		borderRadius: 7,
-	},
-	tempText: {
-		fontSize: 15,
-		paddingLeft: 5,
+		width: 9 * 2,
+		height: 9 * 2,
+		borderRadius: 9,
 	},
 });
