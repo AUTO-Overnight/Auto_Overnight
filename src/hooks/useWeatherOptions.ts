@@ -4,13 +4,13 @@ import { RootState } from '../store';
 
 const AirPollutionOptions = {
 	1: {
-		iconName: 'smiling',
+		iconName: 'smiley',
 	},
 	2: {
-		iconName: 'neutral',
+		iconName: 'slightly-smile',
 	},
 	3: {
-		iconName: 'expressionless',
+		iconName: 'confused',
 	},
 	4: {
 		iconName: 'frowning',
@@ -66,12 +66,12 @@ const weatherOptions = {
 		iconColor: Colors.white,
 		gradient: ['#4DA0B0', '#D39D38'],
 		title: '안개 낌',
-		subtitle: '운전 시 유의하세요',
+		subtitle: '우중충한 날이에요',
 	},
 	Clear: {
 		iconName: 'weather-sunny',
 		nightName: 'weather-night',
-		iconColor: Colors.white,
+		iconColor: [Colors.yellow400, Colors.white],
 		//gradient: ['#FF7300', Colors.grey100],
 		gradient: [Colors.yellow400, Colors.orange900],
 		blackGradient: [Colors.black, Colors.grey500],
@@ -83,28 +83,31 @@ const weatherOptions = {
 		iconColor: Colors.white,
 		gradient: ['#4DA0B0', '#D39D38'],
 		title: '먼지 낌',
-		subtitle: '운전 시 유의하세요!',
+		subtitle: '우중충한 날이에요',
 	},
 	Mist: {
 		iconName: 'weather-hail',
 		iconColor: Colors.white,
 		gradient: ['#4DA0B0', '#D39D38'],
 		title: '안개 낌',
-		subtitle: '운전 시 유의하세요!',
+		subtitle: '우중충한 날이에요',
 	},
 };
 
 export function useWeatherOptions(): {
 	icons: {
-		AirPollution: string;
+		pm10Icon: string;
+		pm25Icon: string;
 	};
 	weatherOptions: any;
 } {
-	const { pm10Grade } = useSelector(({ weather }: RootState) => ({
+	const { pm10Grade, pm25Grade } = useSelector(({ weather }: RootState) => ({
 		pm10Grade: weather.pm10Grade,
+		pm25Grade: weather.pm25Grade,
 	}));
 	const icons = {
-		AirPollution: AirPollutionOptions[pm10Grade].iconName,
+		pm10Icon: AirPollutionOptions[pm10Grade].iconName,
+		pm25Icon: AirPollutionOptions[pm25Grade].iconName,
 	};
 	return { icons, weatherOptions };
 }
