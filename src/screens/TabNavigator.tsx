@@ -12,6 +12,7 @@ import { useTheme } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useNavigation } from '@react-navigation/core';
+import { getTabBarHeight } from '@react-navigation/bottom-tabs/lib/typescript/src/views/BottomTabBar';
 
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
@@ -40,11 +41,13 @@ const screenOptions = ({
 				: Colors.black;
 			const [icon, iconOutline] = icons[name];
 			const iconName = focused ? icon : iconOutline;
+
 			return <Icon name={iconName} size={focusedSize} color={focusedColor} />;
 		},
 
 		headerShown: false,
 		color: 'black',
+		innerHeight: 300,
 	};
 };
 const Tab = createBottomTabNavigator();
@@ -63,7 +66,7 @@ export default function TabNavigator() {
 	}, [name]);
 	return (
 		<Tab.Navigator
-			sceneContainerStyle={{ backgroundColor: 'black ' }}
+			sceneContainerStyle={{ backgroundColor: 'black', height: 500 }}
 			screenOptions={screenOptions}
 		>
 			<Tab.Screen
