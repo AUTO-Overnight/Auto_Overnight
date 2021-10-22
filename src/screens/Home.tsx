@@ -4,11 +4,6 @@ import { StyleSheet, FlatList, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
-import {
-	AutoFocusProvider,
-	ScrollEnabledProvider,
-	useScrollEnabled,
-} from '../contexts';
 import { Buttons, LeftRightNavigation } from '../components';
 import type { LeftRightNavigationMethods } from '../components';
 import { Calendar } from 'react-native-calendars';
@@ -304,7 +299,7 @@ export default function Home() {
 	useEffect(() => {
 		setModalTitle('[공지사항]');
 		setModalText(
-			'\n1. 설문조사 한 번씩 부탁 드립니다! \n (기존 설문 문항에서 내용이 변경 되었으며 3분께 추첨을 통해 커피 기프티콘을 보내 드리도록 하겠습니다. \n기한 : [09.13 ~ 10.14])\n2. 업데이트 내역 추가 1.0.3 [09.22] \n(메뉴 버튼에서 확인 가능) \n'
+			'\n1. 주요 업데이트\n  1) 날씨/미세먼지 추가\n  2) 셔틀 시간표/최단 시간 계산 추가\n  3) 생활관 전화 연결 추가\n  4) 폰트/디자인 변경\n  (셔틀 최단 시간의 경우 오류가 존재 할 수 \n  있습니다. 문제 생기면 바로 말씀 부탁드려요!!!)\n\n                   모두들 시험 잘 보세요 😃'
 		);
 		setModalVisible(true);
 	}, []);

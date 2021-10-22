@@ -10,9 +10,10 @@ import {
 import { ScrollView, StyleSheet } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
 import { WeatherInfo } from '../components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../store';
-import { useLayout } from '../hooks';
+import { useGetHeight, useLayout } from '../hooks';
+import { setWindowHeight } from '../store/weather';
 export default function Weather() {
 	const {
 		current,
@@ -46,7 +47,12 @@ export default function Weather() {
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
 	const isDark = useTheme().dark;
 	const [layout, setLayout] = useLayout();
-
+	const dispatch = useDispatch();
+	useEffect(() => {
+		const height = useGetHeight();
+		dispatch(setWindowHeight(height));
+	}, []);
+	console.log(layout.height);
 	return (
 		<SafeAreaView
 			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}

@@ -59,7 +59,7 @@ const weatherOptions = {
 		//gradient: ['#D7D2CC', '#304352'],
 		gradient: ['#304352', '#D7D2CC'],
 		title: '대체로 흐림',
-		subtitle: '선선한 날씨 입니다.',
+		subtitle: '선선한 날 이에요',
 	},
 	atmosphere: {
 		iconName: 'weather-hail',
@@ -76,7 +76,7 @@ const weatherOptions = {
 		gradient: [Colors.yellow400, Colors.orange900],
 		blackGradient: [Colors.black, Colors.grey500],
 		title: '아주 맑음',
-		subtitle: '소풍 가기 좋은 날이에요',
+		subtitle: '여행 가기 좋은 날이에요',
 	},
 	Dust: {
 		iconName: 'weather-hail',

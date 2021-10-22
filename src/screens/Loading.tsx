@@ -24,8 +24,8 @@ export default function Loading() {
 				userPw: pw,
 			};
 			dispatch(getLogin(user));
-			// dispatch(getAirPollution());
-			// dispatch(getWeather());
+			dispatch(getAirPollution());
+			dispatch(getWeather());
 		} else {
 			dispatch(initialLogin());
 		}

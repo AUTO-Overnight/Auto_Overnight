@@ -14,6 +14,7 @@ export interface weather {
 		backgroundColor: string;
 		text: string;
 	};
+	windowHeight: number;
 }
 
 export interface AirPollutionAPI {

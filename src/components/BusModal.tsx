@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
 	Alert,
 	Modal,
@@ -8,36 +8,63 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { Colors } from 'react-native-paper';
+import { Colors, useTheme } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 
 import { useAutoFocus } from '../contexts';
 //import { MaterialCommunityIcon as Icon } from '../theme';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { min } from 'react-native-reanimated';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+
+dayjs.locale('ko');
 import { useIsDarkMode } from '../hooks/useIsDarkMode';
+import { useClock } from '../hooks';
+import makeBusTime from '../lib/help/makeBusTime';
+import { FontistoIcon, MaterialCommunityIcon as Icon } from '../theme';
 interface props {
 	modalVisible: boolean;
 	setModalVisible: any;
-	start: number;
-	end: number;
-	mode: string;
-	setMode: React.Dispatch<React.SetStateAction<string>>;
+	isDark: boolean;
+	// start: number;
+	// end: number;
+	// mode: string;
+	// setMode: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function BusModal({
-	modalVisible,
-	setModalVisible,
-	start,
-	end,
-	mode,
-	setMode,
-}: props) {
+export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
 	const dispatch = useDispatch();
+	const [hour, setHour] = useState('');
 	const [minute, setMinute] = useState('');
-	const focus = useAutoFocus();
-	const onPressConfirm = useCallback(() => {}, [minute, mode]);
+	const [mode, setMode] = useState(1);
+	// const [time, setTime] = useState({
+	// 	h: 0,
+	// 	m: 0,
+	// });
+	const [goSchool, setGoSchool] = useState(true);
+	// Time
+	const time = useClock();
+	const [busText, setBusText] = useState('');
+	const [busArray, setBusArray] = useState([]);
+	const [busHour, setBusHour] = useState(0);
+	useEffect(() => {
+		const timeParse = time.split(':');
+		setHour(timeParse[0]);
+		setMinute(timeParse[1]);
+	}, [modalVisible]);
+	// console.log(time);
+	const onPressConfirm = useCallback(() => {
+		const { returnText, h, busArray } = makeBusTime(
+			Number(hour),
+			Number(minute),
+			goSchool
+		);
+		setBusText(returnText);
+		setBusArray(busArray);
+		setBusHour(h);
+		console.log(returnText);
+		setMode(2);
+	}, [minute, hour, modalVisible, goSchool]);
 
 	return (
 		// <AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
@@ -50,24 +77,25 @@ export function BusModal({
 			}}
 		>
 			<View style={styles.centeredView}>
-				<View style={styles.modalView}>
+				<View
+					style={{
+						...styles.modalView,
+						backgroundColor: isDark ? '#222831' : Colors.white,
+					}}
+				>
 					<View
 						style={[
 							styles.textView,
-							{
-								// marginBottom: 10,
-							},
+							{ backgroundColor: isDark ? '#222831' : Colors.white },
 						]}
 					>
 						<TouchableHighlight
 							activeOpacity={1}
-							underlayColor={Colors.white}
+							underlayColor={isDark ? '#222831' : Colors.grey200}
 							style={{
-								// position: 'absolute',
 								marginLeft: '90%',
 								marginBottom: 10,
 								width: '9%',
-								// backgroundColor: 'blue',
 							}}
 							onPress={() => {
 								setModalVisible(false);
@@ -75,49 +103,250 @@ export function BusModal({
 						>
 							<Icon style={{ alignSelf: 'flex-end' }} name="close" size={28} />
 						</TouchableHighlight>
-						<Text style={styles.titleText}>시간을 입력해주세요</Text>
-						<View style={[styles.textInputView]}>
-							<TextInput
-								// onFocus={focus}
-								style={[styles.textInput, { color: Colors.black }]}
-								keyboardType={'number-pad'}
-								value={minute}
-								onChangeText={(min) => setMinute(min)}
-								placeholder="00"
-								placeholderTextColor={Colors.grey600}
-							/>
-							<Text style={styles.hourText}>{' : '}</Text>
-							<TextInput
-								// onFocus={focus}
-								style={[styles.textInput, { color: Colors.black }]}
-								keyboardType={'number-pad'}
-								value={minute}
-								onChangeText={(min) => setMinute(min)}
-								placeholder="00"
-								placeholderTextColor={Colors.grey600}
-							/>
-						</View>
+						{mode === 1 && (
+							<>
+								<Text
+									style={[
+										styles.titleText,
+										{ color: isDark ? Colors.white : Colors.grey800 },
+									]}
+								>
+									시간을 입력해주세요
+								</Text>
+								<View
+									style={[
+										styles.goBackView,
+										{ backgroundColor: isDark ? '#222831' : Colors.white },
+									]}
+								>
+									<TouchableHighlight
+										activeOpacity={1}
+										underlayColor={isDark ? '#222831' : Colors.grey200}
+										style={{
+											...styles.goBackTouchView,
+											backgroundColor: goSchool
+												? isDark
+													? '#41727c'
+													: '#c8e473'
+												: isDark
+												? '#222831'
+												: Colors.white,
+										}}
+										onPress={() => {
+											setGoSchool(true);
+										}}
+									>
+										<Text
+											style={[
+												styles.buttonText,
+												{ color: isDark ? Colors.white : Colors.grey800 },
+											]}
+										>
+											등교
+										</Text>
+									</TouchableHighlight>
+									<TouchableHighlight
+										activeOpacity={1}
+										underlayColor={isDark ? '#222831' : Colors.grey200}
+										style={{
+											...styles.goBackTouchView,
+											backgroundColor: goSchool
+												? isDark
+													? '#222831'
+													: Colors.white
+												: isDark
+												? '#41727c'
+												: '#c8e473',
+										}}
+										onPress={() => {
+											setGoSchool(false);
+										}}
+									>
+										<Text
+											style={[
+												styles.buttonText,
+												{ color: isDark ? Colors.white : Colors.grey800 },
+											]}
+										>
+											하교
+										</Text>
+									</TouchableHighlight>
+								</View>
+								<View style={[styles.textInputView]}>
+									<TextInput
+										// onFocus={focus}
+										style={[
+											styles.textInput,
+											{ color: isDark ? Colors.white : Colors.grey800 },
+										]}
+										keyboardType={'number-pad'}
+										value={hour}
+										onChangeText={(hour) => setHour(hour)}
+										placeholder="00"
+										placeholderTextColor={Colors.grey600}
+									/>
+									<Text
+										style={[
+											styles.hourText,
+											{ color: isDark ? Colors.white : Colors.grey800 },
+										]}
+									>
+										{' : '}
+									</Text>
+									<TextInput
+										// onFocus={focus}
+										style={[
+											styles.textInput,
+											{ color: isDark ? Colors.white : Colors.grey800 },
+										]}
+										keyboardType={'number-pad'}
+										value={minute}
+										onChangeText={(min) => setMinute(min)}
+										placeholder="00"
+										placeholderTextColor={Colors.grey600}
+									/>
+								</View>
+								<View style={styles.buttonRowView}>
+									<TouchableHighlight
+										activeOpacity={0.1}
+										underlayColor={isDark ? '#222831' : Colors.grey200}
+										style={{
+											...styles.closeButtonStyle,
+											backgroundColor: isDark ? '#518f9b' : Colors.blue200,
+										}}
+										onPress={() => {
+											Number(hour) > 24
+												? Alert.alert('지정할 수 없는 시간 입니다')
+												: onPressConfirm();
+											Number(minute) > 60
+												? Alert.alert('지정할 수 없는 시간 입니다')
+												: onPressConfirm();
+											console.log('h : m', hour, minute);
+										}}
+									>
+										<Text
+											style={[
+												styles.buttonText,
+												{ color: isDark ? Colors.white : Colors.grey800 },
+											]}
+										>
+											확인
+										</Text>
+									</TouchableHighlight>
+								</View>
+							</>
+						)}
+						{mode === 2 && (
+							<>
+								<View style={styles.timeColView}>
+									{busArray && (
+										<View style={{ flexDirection: 'column' }}>
+											<Text
+												style={[
+													styles.busTimeText,
+													{ color: isDark ? Colors.white : Colors.grey800 },
+												]}
+											>
+												{busHour}시 버스 운행표
+											</Text>
+											<View
+												style={{
+													flexDirection: 'row',
+													justifyContent: 'center',
+													marginBottom: 10,
+												}}
+											>
+												{busArray.map(
+													(b) =>
+														b !== 90 && (
+															<Text
+																key={b}
+																style={
+																	(styles.modalText,
+																	{
+																		textAlign: 'center',
+																		color: isDark
+																			? Colors.white
+																			: Colors.grey800,
+																	})
+																}
+															>
+																{' '}
+																[ {b}분 ]{' '}
+															</Text>
+														)
+												)}
+											</View>
+											<Text
+												style={[
+													styles.modalText,
+													{ color: isDark ? Colors.white : Colors.grey800 },
+												]}
+											>
+												설정 시간 : {hour}시 {minute}분
+											</Text>
+										</View>
+									)}
+
+									<Text
+										style={[
+											styles.modalText,
+											{ color: isDark ? Colors.white : Colors.grey800 },
+										]}
+									>
+										{busText}
+									</Text>
+								</View>
+								<View style={styles.iconTextRowView}>
+									<View style={styles.buttonRowView}>
+										<TouchableHighlight
+											activeOpacity={0.1}
+											underlayColor={isDark ? '#222831' : Colors.grey200}
+											style={{
+												...styles.closeButtonStyle,
+												backgroundColor: isDark ? '#345B63' : '#c8e473',
+											}}
+											onPress={() => {
+												setMode(1);
+											}}
+										>
+											<Text
+												style={[
+													styles.buttonText,
+													{ color: isDark ? Colors.white : Colors.grey800 },
+												]}
+											>
+												이전
+											</Text>
+										</TouchableHighlight>
+									</View>
+									<View style={styles.buttonRowView}>
+										<TouchableHighlight
+											activeOpacity={0.1}
+											underlayColor={isDark ? '#222831' : Colors.grey200}
+											style={{
+												...styles.closeButtonStyle,
+												backgroundColor: isDark ? '#518f9b' : Colors.blue200,
+											}}
+											onPress={() => {
+												setMode(1);
+												setModalVisible(false);
+											}}
+										>
+											<Text
+												style={[
+													styles.buttonText,
+													{ color: isDark ? Colors.white : Colors.grey800 },
+												]}
+											>
+												확인
+											</Text>
+										</TouchableHighlight>
+									</View>
+								</View>
+							</>
+						)}
 					</View>
-					<View style={styles.buttonRowView}>
-						<TouchableHighlight
-							activeOpacity={0.1}
-							underlayColor={Colors.grey200}
-							style={{
-								...styles.closeButtonStyle,
-								backgroundColor: useIsDarkMode
-									? Colors.blue200
-									: Colors.grey900,
-							}}
-							onPress={() => {
-								onPressConfirm();
-								setModalVisible(false);
-							}}
-						>
-							<Text style={styles.buttonText}>확인</Text>
-						</TouchableHighlight>
-						{/* <View style={styles.verticalLine} /> */}
-					</View>
-					{/* <ModalMinute /> */}
 				</View>
 			</View>
 		</Modal>
@@ -130,11 +359,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: -20,
+		// marginTop: -20,
 	},
 	modalView: {
 		margin: 20,
-		backgroundColor: Colors.white,
+
 		borderRadius: 12,
 		padding: 15,
 		paddingBottom: 40,
@@ -147,12 +376,24 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		elevation: 5,
-		width: '70%',
+		width: '75%',
 	},
 	titleText: {
 		textAlign: 'center',
 		fontFamily: 'NanumSquareR',
+		fontSize: 19,
+		marginBottom: 15,
+	},
+	busTimeText: {
+		textAlign: 'center',
+		fontFamily: 'NanumSquareBold',
 		fontSize: 17,
+		marginBottom: 10,
+	},
+	subText: {
+		textAlign: 'center',
+		fontFamily: 'NanumSquareR',
+		fontSize: 15,
 		marginBottom: 15,
 	},
 	textView: {
@@ -166,29 +407,22 @@ const styles = StyleSheet.create({
 	},
 	textInput: {
 		fontSize: 20,
-
 		fontFamily: 'NanumSquareR',
 		marginTop: -2,
-
-		borderWidth: 0.3,
+		borderWidth: 0.5,
 		padding: 5,
 		borderRadius: 8,
-
 		borderColor: Colors.blue300,
-
+		paddingLeft: 13,
+		paddingRight: 13,
 		marginRight: 10,
 		marginLeft: 10,
 	},
 	textInputView: {
 		flexDirection: 'row',
-		// paddingBottom: 0.7,
-		// borderBottomWidth: 0.3,
 		justifyContent: 'center',
-		// alignContent: 'center',
-		// alignItems: 'center',
 		alignSelf: 'center',
 		width: '52%',
-		// marginLeft: '30%',
 		padding: 10,
 	},
 	buttonText: {
@@ -201,9 +435,32 @@ const styles = StyleSheet.create({
 		alignContent: 'center',
 		alignSelf: 'center',
 		marginTop: 10,
-		// justifyContent: 'center',
-		// alignContent: 'center',
 		marginBottom: -13,
+	},
+	timeColView: {
+		flexDirection: 'column',
+	},
+	iconTextRowView: {
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		alignContent: 'center',
+		// alignSelf: 'center',
+	},
+	goBackView: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+
+		alignContent: 'center',
+		alignSelf: 'center',
+	},
+	goBackTouchView: {
+		borderRadius: 8,
+		padding: 7,
+		paddingLeft: 13,
+		paddingRight: 13,
+		marginRight: 16,
+		marginLeft: 16,
+		marginBottom: 5,
 	},
 	textStyle: {
 		color: 'white',
@@ -213,10 +470,10 @@ const styles = StyleSheet.create({
 	closeButtonStyle: {
 		borderRadius: 8,
 		padding: 10,
-		paddingLeft: 30,
-		paddingRight: 30,
+		paddingLeft: 25,
+		paddingRight: 25,
 		elevation: 2,
-		backgroundColor: Colors.blue300,
+		backgroundColor: Colors.blue200,
 	},
 	acceptButtonStyle: {
 		padding: 15,
@@ -228,6 +485,8 @@ const styles = StyleSheet.create({
 	modalText: {
 		// marginBottom: 15,
 		textAlign: 'center',
+		fontFamily: 'NanumSquareR',
+		marginBottom: 10,
 	},
 	verticalLine: {
 		height: '50%',

@@ -10,3 +10,5 @@ export * from './useBreakPoint';
 export * from './useScreenDimensions';
 export * from './useMakeBonusArray';
 export * from './useWeatherOptions';
+export * from './useGetHeight';
+export * from './useClock';
