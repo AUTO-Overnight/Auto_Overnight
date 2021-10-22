@@ -64,7 +64,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	}, [id, pw]);
 	const [text, setModalText] = useState('');
 
-	const title = '[업데이트 내역]\n 1.0.3';
+	const title = '[업데이트 내역]\n 1.0.4';
 	const { modalVisible, ModalView, setModalVisible } = useModal({
 		text,
 		title,
@@ -72,7 +72,9 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const [busModalVisible, setBusModalVisible] = useState(false);
 	const [mode, setMode] = useState('2');
 	const onPressUpdate = useCallback(() => {
-		setModalText(' 1. Android 메뉴 겹침 오류 수정\n 2. 디자인 수정');
+		setModalText(
+			'1. [날씨/미세먼지 페이지 추가]\n    API call 제한 있으니 안되면 \n    초과한 겁니다... \n2. [셔틀 시간표/최단 시간 계산 추가]\n    최단 시간의 경우 아직 베타 버전\n    이기 때문에 오류가 있을 수 있습니다\n3. [생활관 전화 연결 추가]\n4. [폰트/디자인 변경]'
+		);
 		setModalVisible(true);
 	}, []);
 	return (
@@ -259,7 +261,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								]}
 							>
 								{'      '}
-								최단 셔틀 시간표 보기
+								최단 셔틀 시간 계산
 							</Text>
 
 							<ModalView />
@@ -454,8 +456,9 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 					<BusModal
 						modalVisible={busModalVisible}
 						setModalVisible={setBusModalVisible}
-						mode={mode}
-						setMode={setMode}
+						isDark={isDark}
+						// mode={mode}
+						// setMode={setMode}
 					/>
 				</View>
 			</View>
