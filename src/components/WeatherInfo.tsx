@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Colors } from 'react-native-paper';
-import { useWeatherOptions } from '../hooks';
+import { useGetHeight, useWeatherOptions } from '../hooks';
 import { FontistoIcon, MaterialCommunityIcon } from '../theme';
 import { Text, View } from 'react-native';
 // import { View } from '../theme/paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import dayjs from 'dayjs';
-
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useLayout } from '../hooks';
 const fontSize = 15;
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height - 45 - 126;
+
+const windowHeight = useGetHeight();
+const windowHeight2 = Dimensions.get('window').height;
+const airPollutionHeight = 35;
+console.log(windowHeight2);
 const iconSize = 30;
-console.log(windowHeight);
+
 interface props {
 	current: any;
 	daily: any;
@@ -42,7 +46,9 @@ export function WeatherInfo({
 }: props) {
 	const icons = useWeatherOptions();
 	const [gradientColor, setGradientColor] = useState([]);
-
+	const tabBarHeight = useBottomTabBarHeight();
+	const [layout2, setLayout] = useLayout();
+	console.log('botoom tab bar : ', tabBarHeight);
 	useEffect(() => {
 		if (current.weather[0].main === 'Clear') {
 			if (Number(current.dt) > 5 && Number(current.dt) <= 8) {
@@ -65,7 +71,13 @@ export function WeatherInfo({
 
 	return (
 		<>
-			<LinearGradient colors={gradientColor} style={[styles.GradientView, {}]}>
+			<LinearGradient
+				colors={gradientColor}
+				style={[
+					styles.GradientView,
+					// { height: windowHeight - airPollutionHeight - tabBarHeight - 50 },
+				]}
+			>
 				<View style={{ flex: 0.1 }}></View>
 				<Text style={styles.subTitleText}>현재 날씨</Text>
 
@@ -261,7 +273,9 @@ export function WeatherInfo({
 						backgroundColor: pm10.backgroundColor,
 					},
 				]}
+				onLayout={setLayout}
 			>
+				{console.log('미세먼지 칸 크기', layout2.height)}
 				<View style={styles.flexAirView}>
 					<Text style={[styles.touchText, { justifyContent: 'center' }]}>
 						미세먼지{'    '} :
@@ -317,11 +331,11 @@ export function WeatherInfo({
 
 const styles = StyleSheet.create({
 	GradientView: {
-		height: windowHeight - 75,
+		height: windowHeight - 35 - 79 - 50 - 1,
 	},
 	view: { flex: 1, padding: 0 },
 	flexView: {
-		flex: 0.08,
+		flex: 0.07,
 	},
 	rowView: {
 		flexDirection: 'row',
@@ -332,7 +346,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: 'transparent',
-		height: 35,
+		height: airPollutionHeight,
 	},
 
 	rowCircle: {
