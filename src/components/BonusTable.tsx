@@ -9,20 +9,9 @@ import { getBonus } from '../store/bonus';
 import { RootState } from '../store';
 import type { BonusAPI } from '../interface';
 import { useMemo } from 'react';
-import { useTheme } from '@react-navigation/native';
-// import { dataViewToScreenSize } from './dataToScreenSize';
-// import { RotationHint } from './Rotation';
-// import { useBreakpoint } from '../Hooks/useBreakpoint';
 
-// Table header items
 const head = ['상/벌 구분', '점수', '일자'];
 const list = ['상/벌점', '내역이', '없습니다.'];
-// Table data rows
-// const data = [
-// 	['ADBE', '4', '$270.45', '$1,081.80', '$278.25', '$1,113.00'],
-// 	['AAPL', '9', '$180.18', '$1,621.62', '$178.35', '$1,605.15'],
-// 	['GOOGL', '3', '$1,023.58', '$3,070.74', '$1,119.94', '$3,359.82'],
-// ];
 
 export const smallScreenIndices = [0, 1, 2];
 
