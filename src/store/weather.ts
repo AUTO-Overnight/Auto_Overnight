@@ -32,6 +32,7 @@ const initialState: weather = {
 		backgroundColor: '',
 		text: '',
 	},
+	windowHeight: 0,
 };
 
 const GET_AIRPOLLUTION = 'weather/GET_AIRPOLLUTION';
@@ -116,9 +117,12 @@ export const weatherSlice = createSlice({
 				)
 			);
 		},
+		setWindowHeight: (state, action: PayloadAction<number>) => {
+			state.windowHeight = action.payload;
+		},
 	},
 });
 
-export const {} = weatherSlice.actions;
+export const { setWindowHeight } = weatherSlice.actions;
 
 export default weatherSlice.reducer;
