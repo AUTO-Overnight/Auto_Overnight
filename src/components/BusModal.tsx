@@ -91,7 +91,7 @@ export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
 					>
 						<TouchableHighlight
 							activeOpacity={1}
-							underlayColor={isDark ? '#222831' : Colors.grey200}
+							underlayColor={isDark ? '#222831' : Colors.white}
 							style={{
 								marginLeft: '90%',
 								marginBottom: 10,
