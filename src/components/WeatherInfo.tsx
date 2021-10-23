@@ -95,11 +95,11 @@ export function WeatherInfo({
 						<View style={styles.colHourView}>
 							<MaterialCommunityIcon
 								name={
-									current.weather[0].main === 'Clear' &&
-									current.dt > 8 &&
-									current.dt < 18
-										? icons.weatherOptions[current.weather[0].main].iconName
-										: icons.weatherOptions[current.weather[0].main].nightName
+									current.weather[0].main === 'Clear'
+										? current.dt > 8 && current.dt < 18
+											? icons.weatherOptions[current.weather[0].main].iconName
+											: icons.weatherOptions[current.weather[0].main].nightName
+										: icons.weatherOptions[current.weather[0].main].iconName
 								}
 								color={
 									current.weather[0].main === 'Clear' &&
@@ -141,9 +141,12 @@ export function WeatherInfo({
 										<View style={styles.colHourView}>
 											<MaterialCommunityIcon
 												name={
-													d.weather[0].main === 'Clear' && d.dt > 6 && d.dt < 18
-														? icons.weatherOptions[d.weather[0].main].iconName
-														: icons.weatherOptions[d.weather[0].main].nightName
+													d.weather[0].main === 'Clear'
+														? d.dt > 6 && d.dt < 18
+															? icons.weatherOptions[d.weather[0].main].iconName
+															: icons.weatherOptions[d.weather[0].main]
+																	.nightName
+														: icons.weatherOptions[d.weather[0].main].iconName
 												}
 												color={
 													d.weather[0].main === 'Clear' && d.dt > 6 && d.dt < 18
@@ -169,9 +172,12 @@ export function WeatherInfo({
 										<View style={styles.colHourView}>
 											<MaterialCommunityIcon
 												name={
-													d.weather[0].main === 'Clear' && d.dt > 6 && d.dt < 18
-														? icons.weatherOptions[d.weather[0].main].iconName
-														: icons.weatherOptions[d.weather[0].main].nightName
+													d.weather[0].main === 'Clear'
+														? d.dt > 6 && d.dt < 18
+															? icons.weatherOptions[d.weather[0].main].iconName
+															: icons.weatherOptions[d.weather[0].main]
+																	.nightName
+														: icons.weatherOptions[d.weather[0].main].iconName
 												}
 												color={
 													d.weather[0].main === 'Clear' && d.dt > 6 && d.dt < 18
