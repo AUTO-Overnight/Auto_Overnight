@@ -14,6 +14,8 @@ export interface Login {
 	isConfirmArray: Array<confirm>;
 	rememberID: string;
 	cookieTime: any;
+	version: number;
+	versionOK: boolean;
 }
 
 export interface confirm {
