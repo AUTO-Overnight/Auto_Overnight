@@ -31,16 +31,22 @@ const initialState: Login = {
 	isConfirmArray: [],
 	rememberID: '',
 	cookieTime: '',
+	version: 104,
+	versionOK: false,
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
+const GET_VERSION = 'login/GET_VERSION';
 
 export const getLogin = createAction(GET_LOGIN, (user: User) => user);
+export const getVersion = createAction(GET_VERSION);
 
 const getLoginSaga = createRequestSaga(GET_LOGIN, api.getLogin);
+const getVersionSaga = createRequestSaga(GET_VERSION, api.getVersion);
 
 export function* loginSaga() {
 	yield takeLatest(GET_LOGIN, getLoginSaga);
+	yield takeLatest(GET_VERSION, getVersionSaga);
 }
 
 export const loginSlice = createSlice({
@@ -91,6 +97,11 @@ export const loginSlice = createSlice({
 		},
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginError = action.payload;
+		},
+		GET_VERSION_SUCCESS: (state, action: PayloadAction<any>) => {
+			if (state.version == action.payload) {
+				state.versionOK = true;
+			}
 		},
 		makeSuccessList: (state, action: PayloadAction<updateStay>) => {
 			if (action.payload.outStayFrDtLCal.length) {
