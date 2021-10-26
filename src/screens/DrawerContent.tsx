@@ -73,7 +73,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const [mode, setMode] = useState('2');
 	const onPressUpdate = useCallback(() => {
 		setModalText(
-			'1. [날씨/미세먼지 페이지 추가]\n    API call 제한 있으니 안되면 \n    초과한 겁니다... \n2. [셔틀 시간표/최단 시간 계산 추가]\n    최단 시간의 경우 아직 베타 버전\n    이기 때문에 오류가 있을 수 있습니다\n3. [생활관 전화 연결 추가]\n4. [폰트/디자인 변경]'
+			'\n1. [날씨/미세먼지 페이지 추가]\n    최대 요청 횟수가 존재 합니다 \n2. [셔틀 시간표/최단 시간 계산 추가]\n    최단 시간의 경우 아직 베타 버전\n    이기 때문에 오류가 있을 수 있습니다\n3. [생활관 전화 연결 추가]\n4. [폰트/디자인 변경]\n5. [요일 추가시 삭제 버튼 활성화]\n'
 		);
 		setModalVisible(true);
 	}, []);
