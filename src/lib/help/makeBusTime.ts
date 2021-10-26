@@ -17,7 +17,7 @@ export default function makeBusTime(
 		17: [100],
 		18: [90, 45, 55],
 		19: [10, 20, 30, 45],
-		20: [10, 30, 50],
+		20: [10, 30, 45],
 		21: [10, 30, 50],
 		22: [5, 40],
 	};
@@ -47,8 +47,8 @@ export default function makeBusTime(
 			if (school[hour][0] === 100) {
 				returnText = '수시 운행 중';
 			} else if (school[hour][0] === 90) {
-				if (school[hour][1] < minute + 10) {
-					for (let i = school[hour].length; i > 0; i--) {
+				if (school[hour][1] < minute) {
+					for (let i = school[hour].length - 1; i > 0; i--) {
 						if (school[hour][i] - minute <= 0) break;
 						else {
 							min = school[hour][i] - minute;
@@ -67,30 +67,36 @@ export default function makeBusTime(
 				}
 			} else if (school[hour][0] === 200) {
 				// 17시 이후 운행 법
-				for (let i = station[hour].length; i > 0; i--) {
+				for (let i = station[hour].length - 1; i > 0; i--) {
 					if (station[hour][i] - minute <= 0) break;
 					else {
 						min = i;
+						console.log('왜있지?');
 					}
 				}
 				if (station[hour][min - 1] === 90) {
-					returnText = `17시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 수시 운행중`;
+					returnText = `오후 5시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 수시 운행중`;
 				} else if (station[hour][min - 1] === 100) {
-					returnText = `17시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 수시 운행중`;
+					returnText = `오후 5시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 수시 운행중`;
 				} else {
 					busArray = station[hour];
-					returnText = `17시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 ${
+					returnText = `오후 5시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 ${
 						station[hour][min - 1]
 					}분 출발`;
-					if (!min) {
-						min = school[hour + 1][0] + (60 - minute);
-						busArray = school[hour + 1];
-						h = hour + 1;
+					console.log(min + 'hihi');
+					if (min === 0) {
+						console.log('hihi');
+						min = station[hour][0] + (60 - minute);
+						returnText = `오후 5시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 ${
+							station[hour][station[hour].length - 1]
+						}분 출발`;
+						busArray = station[hour];
+						h = hour;
 					}
 				}
 			} else {
-				for (let i = school[hour].length; i > 0; i--) {
-					if (school[hour][i] - minute <= 0) break;
+				for (let i = school[hour].length - 1; i > 0; i--) {
+					if (school[hour][i] - minute < 0) break;
 					else {
 						min = school[hour][i] - minute;
 					}
@@ -112,7 +118,7 @@ export default function makeBusTime(
 				returnText = '수시 운행 중';
 			} else if (station[hour][0] === 90) {
 				if (station[hour][1] < minute + 10) {
-					for (let i = station[hour].length; i > 0; i--) {
+					for (let i = station[hour].length - 1; i > 0; i--) {
 						if (station[hour][i] - minute <= 0) break;
 						else {
 							min = station[hour][i] - minute;
@@ -128,7 +134,7 @@ export default function makeBusTime(
 					returnText = '수시 운행 중';
 				}
 			} else {
-				for (let i = station[hour].length; i > 0; i--) {
+				for (let i = station[hour].length - 1; i > 0; i--) {
 					if (station[hour][i] - minute <= 0) break;
 					else {
 						min = station[hour][i] - minute;
@@ -147,7 +153,7 @@ export default function makeBusTime(
 		}
 	}
 	if (busArray.length) {
-		if (!h) h = hour;
+		if (h == 0) h = hour;
 		return { returnText, busArray, h };
 	} else {
 		return { returnText };
