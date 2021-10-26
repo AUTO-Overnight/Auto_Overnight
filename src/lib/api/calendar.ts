@@ -11,7 +11,6 @@ export const sendDates = ({
 		date_list: dateList,
 		is_weekend: isWeekend,
 		outStayAplyDt: sendingToday,
-		schregNo: id,
 		cookies: cookies,
 	});
 	return client.post('/sendstayout', dates);
