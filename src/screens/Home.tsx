@@ -4,7 +4,7 @@ import { StyleSheet, FlatList, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
-import { Buttons, LeftRightNavigation } from '../components';
+import { Buttons } from '../components';
 import type { LeftRightNavigationMethods } from '../components';
 import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
@@ -162,7 +162,7 @@ export default function Home() {
 
 	const [ready, toggleReady] = useState<boolean>(false);
 	const [weekKey, setWeekKey] = useState<number>(0);
-
+	const [isSelect, setIsSelect] = useState(false);
 	const onDayPress = useCallback(
 		// 이전 날짜 분리 로직
 		(day: DateObject) => {
@@ -184,9 +184,11 @@ export default function Home() {
 					} else if (String(dayjs(today)) === day.dateString) {
 						date = day.dateString;
 						dispatch(addDay(date));
+						setIsSelect(true);
 					}
 					date = day.dateString;
 					dispatch(addDay(date));
+					setIsSelect(true);
 					break;
 				}
 				case 'month': {
@@ -288,6 +290,7 @@ export default function Home() {
 		}
 		dispatch(sendPrepare());
 		toggleReady(false);
+		setIsSelect(false);
 	}, [sendDays, count]);
 	const onRemoveAllDays = useCallback(() => {
 		if (day) dispatch(initial());
@@ -295,11 +298,12 @@ export default function Home() {
 		dispatch(setExistDays({ successList, isConfirmArray }));
 		toggleReady(false);
 		dispatch(makeCountZero());
+		setIsSelect(false);
 	}, [outStayFrDtL, successList]);
 	useEffect(() => {
 		setModalTitle('[공지사항]');
 		setModalText(
-			'\n1. 주요 업데이트\n  1) 날씨/미세먼지 추가\n  2) 셔틀 시간표/최단 시간 계산 추가\n  3) 생활관 전화 연결 추가\n  4) 폰트/디자인 변경\n  (셔틀 최단 시간의 경우 오류가 존재 할 수 \n  있습니다. 문제 생기면 바로 말씀 부탁드려요!!!)\n\n                   모두들 시험 잘 보세요 😃'
+			'\n1. 주요 업데이트\n  1) 날씨/미세먼지 추가\n  2) 셔틀 시간표/최단 시간 계산 추가\n  3) 생활관 전화 연결 추가\n  4) 폰트/디자인 변경\n  (셔틀 최단 시간의 경우 오류가 존재 할 수 \n  있습니다. 문제 생기면 바로 말씀 부탁드려요!!!)\n  5. 날짜 선택시 삭제 버튼 색 변경\n'
 		);
 		setModalVisible(true);
 	}, []);
@@ -371,7 +375,13 @@ export default function Home() {
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#345B63' : '#E4E6EB',
+								backgroundColor: isDark
+									? isSelect
+										? '#6D9C97'
+										: '#345B63'
+									: isSelect
+									? '#959BAB'
+									: '#E4E6EB',
 							},
 						]}
 					>
@@ -393,6 +403,7 @@ export default function Home() {
 							styles.touchableView,
 							{
 								backgroundColor: isDark ? '#152D35' : Colors.blue200,
+								// borderWidth: isSelect ? 0.5 : 0,
 							},
 						]}
 					>
