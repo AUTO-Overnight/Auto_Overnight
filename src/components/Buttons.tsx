@@ -18,7 +18,6 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 	const bottomColor = '#c8e473';
 	const isRealDark = useTheme().dark;
 	const dispatch = useDispatch();
-	// const bottomColor = Colors.blue300;
 	useEffect(() => {
 		setSelect(1);
 		dispatch(toggleDark(isRealDark));
@@ -31,9 +30,7 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 				width: '90%',
 				marginTop: '7%',
 				marginLeft: '4.5%',
-				// padding: '-20%',
 				justifyContent: 'space-between',
-				// backgroundColor: 'white',
 			}}
 		>
 			<TouchableView
@@ -141,7 +138,6 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 }
 const styles = StyleSheet.create({
 	smallTouchableView: {
-		// marginTop: '30%',
 		flexDirection: 'row',
 		height: 60,
 		borderRadius: 12,
