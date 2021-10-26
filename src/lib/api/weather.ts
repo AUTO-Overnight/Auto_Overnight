@@ -8,6 +8,6 @@ export const getAirPollution = () => {
 
 export const getWeather = () => {
 	return axios.get(
-		`https://api.openweathermap.org/data/2.5/onecall?lat=37.340170&lon=126.733540&exclude=minutely&appid=${WEATHER_KEY}&lang=en`
+		`https://api.openweathermap.org/data/2.5/onecall?lat=37.339496586083&lon=126.73287520461&exclude=minutely&appid=${WEATHER_KEY}&lang=en`
 	);
 };
