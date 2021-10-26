@@ -95,19 +95,15 @@ const weatherOptions = {
 };
 
 export function useWeatherOptions(): {
-	icons: {
-		pm10Icon: string;
-		pm25Icon: string;
-	};
 	weatherOptions: any;
 } {
-	const { pm10Grade, pm25Grade } = useSelector(({ weather }: RootState) => ({
-		pm10Grade: weather.pm10Grade,
-		pm25Grade: weather.pm25Grade,
-	}));
-	const icons = {
-		pm10Icon: AirPollutionOptions[pm10Grade].iconName,
-		pm25Icon: AirPollutionOptions[pm25Grade].iconName,
-	};
-	return { icons, weatherOptions };
+	// const { pm10Grade, pm25Grade } = useSelector(({ weather }: RootState) => ({
+	// 	pm10Grade: weather.pm10Grade,
+	// 	pm25Grade: weather.pm25Grade,
+	// }));
+	// const icons = {
+	// 	pm10Icon: AirPollutionOptions[pm10Grade].iconName,
+	// 	pm25Icon: AirPollutionOptions[pm25Grade].iconName,
+	// };
+	return { weatherOptions };
 }
