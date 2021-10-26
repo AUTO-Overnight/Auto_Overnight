@@ -8,66 +8,88 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { Colors, useTheme } from 'react-native-paper';
+import { Colors } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-
-import { useAutoFocus } from '../contexts';
-//import { MaterialCommunityIcon as Icon } from '../theme';
-
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-
 dayjs.locale('ko');
-import { useIsDarkMode } from '../hooks/useIsDarkMode';
 import { useClock } from '../hooks';
 import makeBusTime from '../lib/help/makeBusTime';
-import { FontistoIcon, MaterialCommunityIcon as Icon } from '../theme';
+import { MaterialCommunityIcon as Icon } from '../theme';
+import DropDownPicker from 'react-native-dropdown-picker';
+
+const inputHeight = 35;
+
 interface props {
 	modalVisible: boolean;
 	setModalVisible: any;
 	isDark: boolean;
-	// start: number;
-	// end: number;
-	// mode: string;
-	// setMode: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
-	const dispatch = useDispatch();
+	const [realTime, setTime] = useState(dayjs().format('A hh : mm : ss')); // -1-
+	useEffect(() => {
+		const id = setTimeout(() => {
+			setTime(dayjs().format('A hh : mm : ss'));
+		}, 1000);
+		return () => clearTimeout(id);
+	}, [realTime]);
 	const [hour, setHour] = useState('');
 	const [minute, setMinute] = useState('');
 	const [mode, setMode] = useState(1);
-	// const [time, setTime] = useState({
-	// 	h: 0,
-	// 	m: 0,
-	// });
 	const [goSchool, setGoSchool] = useState(true);
-	// Time
 	const time = useClock();
 	const [busText, setBusText] = useState('');
 	const [busArray, setBusArray] = useState([]);
 	const [busHour, setBusHour] = useState(0);
-	useEffect(() => {
-		const timeParse = time.split(':');
-		setHour(timeParse[0]);
-		setMinute(timeParse[1]);
-	}, [modalVisible]);
+	//DropdownPicker
+	const [open, setOpen] = useState(false);
+	const [value, setValue] = useState('');
+	const [items, setItems] = useState([
+		{ label: '오후', value: '오후' },
+		{ label: '오전', value: '오전' },
+	]);
 	// console.log(time);
 	const onPressConfirm = useCallback(() => {
-		const { returnText, h, busArray } = makeBusTime(
-			Number(hour),
-			Number(minute),
-			goSchool
-		);
-		setBusText(returnText);
-		setBusArray(busArray);
-		setBusHour(h);
-		console.log(returnText);
-		setMode(2);
-	}, [minute, hour, modalVisible, goSchool]);
+		if (value === '오전') {
+			if (Number(hour) > 12 || Number(minute) > 60) {
+				Alert.alert('설정할 수 없는 시간 입니다');
+				return;
+			}
+			const { returnText, h, busArray } = makeBusTime(
+				Number(hour),
+				Number(minute),
+				goSchool
+			);
+			setBusText(returnText);
+			setBusArray(busArray);
+			setBusHour(h);
+			setMode(2);
+		} else {
+			if (Number(hour) > 12 || Number(minute) > 60) {
+				Alert.alert('설정할 수 없는 시간 입니다');
+				return;
+			}
+			const { returnText, h, busArray } = makeBusTime(
+				Number(hour) + 12,
+				Number(minute),
+				goSchool
+			);
+			setBusText(returnText);
+			setBusArray(busArray);
+			setBusHour(h);
+			setMode(2);
+		}
+	}, [minute, hour, modalVisible, goSchool, value]);
+
+	useEffect(() => {
+		const timeParse = time.split(' ');
+		setValue(timeParse[0]);
+		setHour(timeParse[1]);
+		setMinute(timeParse[2]);
+	}, [modalVisible]);
 
 	return (
-		// <AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
 		<Modal
 			animationType="fade"
 			transparent={true}
@@ -172,9 +194,68 @@ export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
 										</Text>
 									</TouchableHighlight>
 								</View>
+								<Text
+									style={[
+										styles.buttonText,
+										{
+											color: isDark ? Colors.white : Colors.grey800,
+											marginTop: 8,
+											marginBottom: 8,
+										},
+									]}
+								>
+									현재시간 [ {realTime} ]
+								</Text>
 								<View style={[styles.textInputView]}>
+									<View
+										style={{
+											flex: 0.8,
+											flexShrink: 0.7,
+											flexGrow: 0.7,
+										}}
+									>
+										<DropDownPicker
+											style={{
+												height: inputHeight,
+												alignSelf: 'center',
+												justifyContent: 'center',
+												alignItems: 'center',
+												backgroundColor: isDark ? '#222831' : Colors.white,
+												borderWidth: 0.5,
+
+												borderRadius: 8,
+												borderColor: Colors.blue300,
+											}}
+											containerStyle={{
+												backgroundColor: isDark ? '#222831' : Colors.white,
+												borderRadius: 8,
+												borderColor: Colors.blue300,
+											}}
+											textStyle={{
+												fontFamily: 'NanumSquareR',
+												color: isDark ? Colors.white : Colors.grey800,
+												borderColor: Colors.blue300,
+												fontSize: 12,
+											}}
+											labelStyle={{
+												backgroundColor: isDark ? '#222831' : Colors.white,
+												color: isDark ? Colors.white : Colors.grey800,
+											}}
+											dropDownContainerStyle={{
+												backgroundColor: isDark ? '#222831' : Colors.white,
+												borderRadius: 8,
+												borderColor: Colors.blue300,
+											}}
+											open={open}
+											value={value}
+											items={items}
+											placeholder={items[0].value}
+											setOpen={setOpen}
+											setValue={setValue}
+											setItems={setItems}
+										/>
+									</View>
 									<TextInput
-										// onFocus={focus}
 										style={[
 											styles.textInput,
 											{ color: isDark ? Colors.white : Colors.grey800 },
@@ -194,7 +275,6 @@ export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
 										{' : '}
 									</Text>
 									<TextInput
-										// onFocus={focus}
 										style={[
 											styles.textInput,
 											{ color: isDark ? Colors.white : Colors.grey800 },
@@ -221,7 +301,6 @@ export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
 											Number(minute) > 60
 												? Alert.alert('지정할 수 없는 시간 입니다')
 												: onPressConfirm();
-											console.log('h : m', hour, minute);
 										}}
 									>
 										<Text
@@ -247,7 +326,7 @@ export function BusModal({ modalVisible, setModalVisible, isDark }: props) {
 													{ color: isDark ? Colors.white : Colors.grey800 },
 												]}
 											>
-												{busHour}시 버스 운행표
+												{busHour >= 12 ? busHour - 12 : busHour}시 버스 운행표
 											</Text>
 											<View
 												style={{
@@ -408,9 +487,7 @@ const styles = StyleSheet.create({
 	textInput: {
 		fontSize: 20,
 		fontFamily: 'NanumSquareR',
-		marginTop: -2,
 		borderWidth: 0.5,
-		padding: 5,
 		borderRadius: 8,
 		borderColor: Colors.blue300,
 		paddingLeft: 13,
@@ -422,8 +499,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignSelf: 'center',
-		width: '52%',
-		padding: 10,
+		height: inputHeight,
+		marginTop: 8,
+		marginBottom: 8,
 	},
 	buttonText: {
 		textAlign: 'center',
@@ -444,7 +522,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		alignContent: 'center',
-		// alignSelf: 'center',
 	},
 	goBackView: {
 		flexDirection: 'row',
@@ -480,10 +557,8 @@ const styles = StyleSheet.create({
 		width: '50%',
 		height: '100%',
 		borderRadius: 10,
-		// backgroundColor: Colors.blue400,
 	},
 	modalText: {
-		// marginBottom: 15,
 		textAlign: 'center',
 		fontFamily: 'NanumSquareR',
 		marginBottom: 10,
