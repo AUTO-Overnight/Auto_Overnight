@@ -94,8 +94,6 @@ export default function Weather() {
 						pm10Value={pm10Value}
 						pm25Grade={pm25Grade}
 						pm25Value={pm25Value}
-						pm10={pm10}
-						pm25={pm25}
 					/>
 					<LeftRightNavigation
 						ref={leftRef}
