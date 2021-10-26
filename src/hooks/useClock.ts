@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 export function useClock() {
-	const [time, setTime] = useState(dayjs().format('HH:mm')); // -1-
+	const [time, setTime] = useState(dayjs().format('A hh mm ss')); // -1-
 	useEffect(() => {
 		const id = setTimeout(() => {
-			setTime(dayjs().format('HH:mm'));
+			setTime(dayjs().format('A hh mm ss'));
 		}, 1000);
 		return () => clearTimeout(id);
 	}, []);
