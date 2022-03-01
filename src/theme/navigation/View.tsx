@@ -22,14 +22,8 @@ export const View: FC<ViewProps> = ({
 	...props
 }) => {
 	const { colors } = useTheme();
-
-	const backgroundColor = card
-		? colors.card
-		: primary
-		? colors.primary
-		: notification
-		? colors.notification
-		: colors.background;
+	const isDark = useTheme().dark;
+	const backgroundColor = isDark ? 'black' : '#fff';
 	const borderColor = border ? colors.border : undefined;
 	const borderWidth = border ? 1 : undefined;
 	return (
