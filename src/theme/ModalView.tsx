@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import React, { useCallback, ReactNode } from 'react';
 import { Modal, StyleSheet, View, Dimensions } from 'react-native';
 import { Colors } from 'react-native-paper';
@@ -11,10 +12,23 @@ interface props {
 }
 
 export function ModalView({ modalVisible, ModalViewRender }: props) {
+	const isDark = useTheme().dark;
 	return (
-		<Modal animationType="fade" transparent={true} visible={modalVisible}>
-			<View style={styles.centeredView}>
-				<View style={styles.modalView}>{ModalViewRender()}</View>
+		<Modal
+			animationType="fade"
+			transparent={true}
+			visible={modalVisible}
+			style={{ backgroundColor: isDark ? '#222831' : Colors.white }}
+		>
+			<View style={[styles.centeredView]}>
+				<View
+					style={[
+						styles.modalView,
+						{ backgroundColor: isDark ? '#222831' : Colors.white }
+					]}
+				>
+					{ModalViewRender()}
+				</View>
 			</View>
 		</Modal>
 	);
