@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../store';
 import { useGetHeight, useLayout } from '../hooks';
 import { setWindowHeight } from '../store/weather';
-import { TouchHeaderIconView } from '../theme/navigation/TochHeaderIconView';
+import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 import { StatusBar } from 'expo-status-bar';
 export default function Weather() {
 	const {
