@@ -21,6 +21,11 @@ export interface Day {
 	mode: string;
 	isDarkMode: boolean;
 	count: number;
+	lastSubmitDay: string;
+	sendSortDays: Array<any>;
+	calendarModalVisible: boolean;
+	lastDayText: string;
+	calendarModalMode: string;
 }
 
 export interface DaySuccess {
