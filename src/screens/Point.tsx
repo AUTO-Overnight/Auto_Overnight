@@ -5,11 +5,13 @@ import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, Tex
 import {
 	DrawerActions,
 	useNavigation,
-	useTheme,
+	useTheme
 } from '@react-navigation/native';
 import { ScrollView, StyleSheet } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
 import { BonusTable } from '../components';
+import { TouchHeaderIconView } from '../theme/navigation/TochHeaderIconView';
+import { StatusBar } from 'expo-status-bar';
 export default function Point() {
 	const navigation = useNavigation();
 	const open = useCallback(() => {
@@ -28,28 +30,29 @@ export default function Point() {
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
+					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
 				]}
 			>
 				<ScrollView>
+					<StatusBar style={isDark ? 'light' : 'dark'} />
 					<NavigationHeader
-						title="Point"
+						title="상/벌점"
 						Left={() => (
-							<Icon
-								name="menu"
-								size={40}
+							<TouchHeaderIconView
+								underlayColor={isDark ? 'black' : '#EDF3F7'}
 								onPress={open}
-								style={{ marginLeft: '3%' }}
-							/>
+							>
+								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
+							</TouchHeaderIconView>
 						)}
-						Right={() => (
-							<Icon
-								name="logout"
-								size={35}
-								onPress={logout}
-								style={{ marginRight: '3%' }}
-							/>
-						)}
+						// Right={() => (
+						// 	<Icon
+						// 		name="logout"
+						// 		size={35}
+						// 		onPress={logout}
+						// 		style={{ marginRight: '3%' }}
+						// 	/>
+						// )}
 					/>
 					<BonusTable isDark={isDark} />
 					<LeftRightNavigation
@@ -72,6 +75,6 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: '90%',
 		justifyContent: 'space-evenly',
-		alignItems: 'center',
-	},
+		alignItems: 'center'
+	}
 });
