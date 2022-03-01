@@ -7,7 +7,7 @@ import type {
 	Login,
 	User,
 	LoginResponse,
-	updateStay,
+	updateStay
 } from '../interface/login';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
@@ -15,24 +15,33 @@ import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-const initialState: Login = {
+export const initialState: Login = {
 	id: '',
 	pw: '',
-	cookies: '',
-	loginError: '',
-	outStayFrDtL: [],
-	outStayStGbn: [],
-	outStayToDt: [],
-	tmGbn: '',
-	thisYear: '',
-	data: {},
-	name: '',
-	successList: [],
-	isConfirmArray: [],
+	loginState: {
+		cookies: '',
+		loginError: '',
+		outStayFrDtL: [],
+		outStayStGbn: [],
+		outStayToDt: [],
+		tmGbn: '',
+		thisYear: '',
+		data: {},
+		name: '',
+		successList: [],
+		isConfirmArray: []
+	},
 	rememberID: '',
 	cookieTime: '',
 	version: 104,
 	versionOK: false,
+	color: {
+		themeColor: '#fff',
+		backgroundColor: '#FFF',
+		submitButtonColor: '#FFF',
+		removeButtonColor: '#fff',
+		smallButtonColor: '#fff'
+	}
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -54,49 +63,44 @@ export const loginSlice = createSlice({
 	initialState,
 	reducers: {
 		initialLogin: (state) => {
-			state.cookies = '';
-			state.loginError = '';
-			state.outStayFrDtL = [];
-			state.outStayStGbn = [];
-			state.outStayToDt = [];
-			state.tmGbn = '';
-			state.thisYear = '';
-			state.data = {};
-			state.name = '';
-			state.successList = [];
-			state.isConfirmArray = [];
-			state.loginError = '';
-		},
-		logoutHome: (state) => {
-			state.cookies = '';
-			state.loginError = '';
-			state.outStayFrDtL = [];
-			state.outStayStGbn = [];
-			state.outStayToDt = [];
-			state.tmGbn = '';
-			state.thisYear = '';
-			state.data = {};
-			state.name = '';
-			state.successList = [];
-			state.isConfirmArray = [];
-			state.loginError = '';
+			state.loginState.cookies = '';
+			state.loginState.loginError = '';
+			state.loginState.outStayFrDtL = [];
+			state.loginState.outStayStGbn = [];
+			state.loginState.outStayToDt = [];
+			state.loginState.tmGbn = '';
+			state.loginState.thisYear = '';
+			state.loginState.data = {};
+			state.loginState.name = '';
+			state.loginState.successList = [];
+			state.loginState.isConfirmArray = [];
+			state.loginState.loginError = '';
 		},
 		toggleRemember: (state, action: PayloadAction<string>) => {
 			state.rememberID = action.payload;
 		},
 		GET_LOGIN_SUCCESS: (state, action: PayloadAction<LoginResponse>) => {
-			state.cookies = action.payload.cookies;
-			state.name = action.payload.name;
-			state.outStayStGbn = action.payload.outStayStGbn;
-			state.outStayToDt = action.payload.outStayToDt;
-			state.outStayFrDtL = action.payload.outStayFrDt;
-			state.thisYear = action.payload.yy;
-			state.tmGbn = action.payload.tmGbn;
+			const {
+				cookies,
+				name,
+				outStayFrDt,
+				outStayStGbn,
+				outStayToDt,
+				tmGbn,
+				yy
+			} = action.payload;
+			state.loginState.cookies = cookies;
+			state.loginState.name = name;
+			state.loginState.outStayStGbn = outStayStGbn;
+			state.loginState.outStayToDt = outStayToDt;
+			state.loginState.outStayFrDtL = outStayFrDt;
+			state.loginState.thisYear = yy;
+			state.loginState.tmGbn = tmGbn;
 			state.cookieTime = dayjs().tz('Asia/Seoul').locale('ko');
-			state.loginError = '';
+			state.loginState.loginError = '';
 		},
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
-			state.loginError = action.payload;
+			state.loginState.loginError = action.payload;
 		},
 		GET_VERSION_SUCCESS: (state, action: PayloadAction<any>) => {
 			if (state.version == action.payload) {
@@ -105,28 +109,31 @@ export const loginSlice = createSlice({
 		},
 		makeSuccessList: (state, action: PayloadAction<updateStay>) => {
 			if (action.payload.outStayFrDtLCal.length) {
-				state.outStayToDt = action.payload.outStayToDtCal;
-				state.outStayFrDtL = action.payload.outStayFrDtLCal;
-				state.outStayStGbn = action.payload.outStayStGbnCal;
+				state.loginState.outStayToDt = action.payload.outStayToDtCal;
+				state.loginState.outStayFrDtL = action.payload.outStayFrDtLCal;
+				state.loginState.outStayStGbn = action.payload.outStayStGbnCal;
 			}
 			let len: number;
-			if (state.outStayFrDtL) len = state.outStayFrDtL.length;
+			if (state.loginState.outStayFrDtL)
+				len = state.loginState.outStayFrDtL.length;
 			// let day: any;
-			state.successList = [];
-			state.isConfirmArray = [];
+			state.loginState.successList = [];
+			state.loginState.isConfirmArray = [];
 			for (let i = 0; i < len; i++) {
-				if (state.outStayToDt[i] === state.outStayFrDtL[i]) {
+				if (
+					state.loginState.outStayToDt[i] === state.loginState.outStayFrDtL[i]
+				) {
 					// 시작 일 끝 일 같은 경우
-					state.successList.push(state.outStayToDt[i]);
-					if (state.outStayStGbn[i] === '2') {
-						state.isConfirmArray.push({
-							day: state.outStayToDt[i],
-							isConfirm: true,
+					state.loginState.successList.push(state.loginState.outStayToDt[i]);
+					if (state.loginState.outStayStGbn[i] === '2') {
+						state.loginState.isConfirmArray.push({
+							day: state.loginState.outStayToDt[i],
+							isConfirm: true
 						});
 					} else {
-						state.isConfirmArray.push({
-							day: state.outStayToDt[i],
-							isConfirm: false,
+						state.loginState.isConfirmArray.push({
+							day: state.loginState.outStayToDt[i],
+							isConfirm: false
 						});
 					}
 					// if()
@@ -134,22 +141,25 @@ export const loginSlice = createSlice({
 				// state.isConfirmArray.push({})
 				else {
 					const diff = Number(
-						dayjs(state.outStayToDt[i]).diff(state.outStayFrDtL[i], 'd')
+						dayjs(state.loginState.outStayToDt[i]).diff(
+							state.loginState.outStayFrDtL[i],
+							'd'
+						)
 					);
 					for (let j = 0; j <= diff; j++) {
-						let day = dayjs(state.outStayFrDtL[i])
+						let day = dayjs(state.loginState.outStayFrDtL[i])
 							.add(j, 'd')
 							.format('YYYYMMDD');
-						state.successList.push(day);
-						if (state.outStayStGbn[i] === '2') {
-							state.isConfirmArray.push({
+						state.loginState.successList.push(day);
+						if (state.loginState.outStayStGbn[i] === '2') {
+							state.loginState.isConfirmArray.push({
 								day: day,
-								isConfirm: true,
+								isConfirm: true
 							});
 						} else {
-							state.isConfirmArray.push({
+							state.loginState.isConfirmArray.push({
 								day: day,
-								isConfirm: false,
+								isConfirm: false
 							});
 						}
 					}
@@ -162,20 +172,17 @@ export const loginSlice = createSlice({
 		},
 		setCookieTime: (state, action: PayloadAction<any>) => {
 			state.cookieTime = action.payload;
-		},
+		}
 	},
-	extraReducers: {},
+	extraReducers: {}
 });
 
 export const {
-	GET_LOGIN_SUCCESS,
-	GET_LOGIN_FAILURE,
 	initialLogin,
-	setIdPw,
-	logoutHome,
 	makeSuccessList,
-	toggleRemember,
 	setCookieTime,
+	setIdPw,
+	toggleRemember
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
