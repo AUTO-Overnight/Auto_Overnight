@@ -19,17 +19,17 @@ const iconSize = 30;
 
 const AirPollutionOptions = {
 	1: {
-		iconName: 'smiley',
+		iconName: 'smiley'
 	},
 	2: {
-		iconName: 'slightly-smile',
+		iconName: 'slightly-smile'
 	},
 	3: {
-		iconName: 'confused',
+		iconName: 'confused'
 	},
 	4: {
-		iconName: 'frowning',
-	},
+		iconName: 'frowning'
+	}
 };
 
 interface props {
@@ -55,7 +55,7 @@ export function WeatherInfo({
 	pm10Grade,
 	pm10Value,
 	pm25Grade,
-	pm25Value,
+	pm25Value
 }: // pm10,
 // pm25,
 props) {
@@ -66,11 +66,11 @@ props) {
 	console.log('botoom tab bar : ', tabBarHeight);
 	const [pm10, setPM10] = useState({
 		backgroundColor: '',
-		text: '',
+		text: ''
 	});
 	const [pm25, setPM25] = useState({
 		backgroundColor: '',
-		text: '',
+		text: ''
 	});
 	useEffect(() => {
 		if (pm10Grade === '1') {
@@ -119,7 +119,7 @@ props) {
 			<LinearGradient
 				colors={gradientColor}
 				style={[
-					styles.GradientView,
+					styles.GradientView
 					// { height: windowHeight - airPollutionHeight - tabBarHeight - 50 },
 				]}
 			>
@@ -131,8 +131,8 @@ props) {
 						styles.rowCircle,
 						{
 							alignSelf: 'center',
-							width: '100%',
-						},
+							width: '100%'
+						}
 					]}
 				>
 					<View style={styles.columnView}>
@@ -140,16 +140,16 @@ props) {
 						<View style={styles.colHourView}>
 							<MaterialCommunityIcon
 								name={
-									current.weather[0].main === 'Clear'
-										? current.dt > 8 && current.dt < 18
-											? weatherOptions[current.weather[0].main].iconName
-											: weatherOptions[current.weather[0].main].nightName
-										: weatherOptions[current.weather[0].main].iconName
+									current?.weather[0]?.main === 'Clear'
+										? current?.dt > 8 && current?.dt < 18
+											? weatherOptions[current?.weather[0]?.main].iconName
+											: weatherOptions[current?.weather[0]?.main].nightName
+										: weatherOptions[current?.weather[0]?.main].iconName
 								}
 								color={
-									current.weather[0].main === 'Clear' &&
-									current.dt > 8 &&
-									current.dt < 18
+									current?.weather[0]?.main === 'Clear' &&
+									current?.dt > 8 &&
+									current?.dt < 18
 										? Colors.yellow300
 										: Colors.white
 								}
@@ -158,7 +158,7 @@ props) {
 
 							<Text style={styles.currentText}>{current.temp}°C</Text>
 							<Text style={styles.currentSubTitle}>
-								{weatherOptions[current.weather[0].main].subtitle}
+								{weatherOptions[current?.weather[0]?.main].subtitle}
 							</Text>
 						</View>
 					</View>
@@ -173,8 +173,8 @@ props) {
 						{
 							alignSelf: 'center',
 
-							width: '100%',
-						},
+							width: '100%'
+						}
 					]}
 				>
 					<View style={styles.rowView}>
@@ -188,12 +188,14 @@ props) {
 												name={
 													d.weather[0].main === 'Clear'
 														? d.dt > 6 && d.dt < 18
-															? weatherOptions[d.weather[0].main].iconName
-															: weatherOptions[d.weather[0].main].nightName
-														: weatherOptions[d.weather[0].main].iconName
+															? weatherOptions[d.weather[0].main]?.iconName
+															: weatherOptions[d.weather[0].main]?.nightName
+														: weatherOptions[d.weather[0].main]?.iconName
 												}
 												color={
-													d.weather[0].main === 'Clear' && d.dt > 6 && d.dt < 18
+													d.weather[0]?.main === 'Clear' &&
+													d.dt > 6 &&
+													d.dt < 18
 														? Colors.yellow300
 														: Colors.white
 												}
@@ -218,9 +220,9 @@ props) {
 												name={
 													d.weather[0].main === 'Clear'
 														? d.dt > 6 && d.dt < 18
-															? weatherOptions[d.weather[0].main].iconName
-															: weatherOptions[d.weather[0].main].nightName
-														: weatherOptions[d.weather[0].main].iconName
+															? weatherOptions[d.weather[0].main]?.iconName
+															: weatherOptions[d.weather[0].main]?.nightName
+														: weatherOptions[d.weather[0].main]?.iconName
 												}
 												color={
 													d.weather[0].main === 'Clear' && d.dt > 6 && d.dt < 18
@@ -245,8 +247,8 @@ props) {
 						styles.rowCircle,
 						{
 							alignSelf: 'center',
-							width: '100%',
-						},
+							width: '100%'
+						}
 					]}
 				>
 					<View style={styles.rowView}>
@@ -257,7 +259,7 @@ props) {
 										<Text style={[styles.touchText]}>{d.dt}</Text>
 										<View style={styles.colView}>
 											<MaterialCommunityIcon
-												name={weatherOptions[d.weather[0].main].iconName}
+												name={weatherOptions[d.weather[0].main]?.iconName}
 												color={
 													d.weather[0].main === 'Clear'
 														? Colors.yellow300
@@ -285,7 +287,7 @@ props) {
 										<Text style={[styles.touchText]}>{d.dt}</Text>
 										<View style={styles.colView}>
 											<MaterialCommunityIcon
-												name={weatherOptions[d.weather[0].main].iconName}
+												name={weatherOptions[d.weather[0].main]?.iconName}
 												color={
 													d.weather[0].main === 'Clear'
 														? Colors.yellow300
@@ -319,8 +321,8 @@ props) {
 					{
 						width: '100%',
 						flexDirection: 'row',
-						backgroundColor: pm10.backgroundColor,
-					},
+						backgroundColor: pm10.backgroundColor
+					}
 				]}
 				onLayout={setLayout}
 			>
@@ -351,8 +353,8 @@ props) {
 					{
 						width: '100%',
 						flexDirection: 'row',
-						backgroundColor: pm25.backgroundColor,
-					},
+						backgroundColor: pm25.backgroundColor
+					}
 				]}
 			>
 				<View style={styles.flexAirView}>
@@ -380,22 +382,22 @@ props) {
 
 const styles = StyleSheet.create({
 	GradientView: {
-		height: windowHeight - 35 - 79 - 50 - 1,
+		height: windowHeight - 35 - 79 - 50 - 1
 	},
 	view: { flex: 1, padding: 0 },
 	flexView: {
-		flex: 0.07,
+		flex: 0.07
 	},
 	rowView: {
 		flexDirection: 'row',
-		flex: 1,
+		flex: 1
 	},
 	airPollutionView: {
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: 'transparent',
-		height: airPollutionHeight,
+		height: airPollutionHeight
 	},
 
 	rowCircle: {
@@ -403,62 +405,62 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
 		backgroundColor: 'transparent',
-		flex: 2,
+		flex: 2
 	},
 	columnView: {
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: 'transparent',
-		flex: 1,
+		flex: 1
 	},
 	touchText: {
 		fontSize: fontSize - 2,
 		color: Colors.white,
 		textAlign: 'center',
-		fontFamily: 'NanumSquareR',
+		fontFamily: 'NanumSquareR'
 	},
 	colView: {
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: 'transparent',
+		backgroundColor: 'transparent'
 	},
 	colHourView: {
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: 'transparent',
+		backgroundColor: 'transparent'
 	},
 	currentText: {
 		fontSize: 18,
 		color: Colors.white,
-		fontFamily: 'NanumSquareR',
+		fontFamily: 'NanumSquareR'
 	},
 	currentSubTitle: {
 		fontSize: 15,
 		color: Colors.white,
-		fontFamily: 'NanumSquareR',
+		fontFamily: 'NanumSquareR'
 	},
 	tempText: {
 		fontSize: 13,
 		paddingTop: 2,
 		paddingLeft: 0,
 		color: Colors.white,
-		fontFamily: 'NanumSquareR',
+		fontFamily: 'NanumSquareR'
 	},
 	dayTempText: {
 		fontSize: 11,
 		paddingTop: 2,
 		paddingLeft: 0,
 		color: Colors.white,
-		fontFamily: 'NanumSquareR',
+		fontFamily: 'NanumSquareR'
 	},
 	subTitleText: {
 		fontSize: 18,
 		paddingLeft: 20,
 		color: Colors.white,
-		fontFamily: 'NanumSquareR',
+		fontFamily: 'NanumSquareR'
 		// marginBottom: 10,
 		// paddingTop: 30,
 	},
@@ -466,16 +468,16 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		paddingLeft: 20,
 		color: Colors.white,
-		marginBottom: 15,
+		marginBottom: 15
 	},
 	flexAirView: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	flexAir2View: {
 		flex: 0.5,
 		justifyContent: 'center',
-		alignItems: 'center',
-	},
+		alignItems: 'center'
+	}
 });
