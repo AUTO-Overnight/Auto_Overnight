@@ -11,14 +11,14 @@ import weather, { weatherSaga } from './weather';
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['calendar', 'bonus', 'weather'],
+	blacklist: ['calendar', 'bonus']
 };
 const rootReducer = combineReducers({
 	login,
 	loading,
 	calendar,
 	bonus,
-	weather,
+	weather
 });
 export default persistReducer(persistConfig, rootReducer);
 export type RootState = ReturnType<typeof rootReducer>;
