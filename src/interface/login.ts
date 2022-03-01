@@ -1,21 +1,32 @@
 export interface Login {
 	id: string;
 	pw: string;
-	cookies: string;
-	loginError: string;
-	thisYear: string;
-	tmGbn: string;
-	data: any;
-	name: string;
-	outStayFrDtL: Array<any>;
-	outStayToDt: Array<any>;
-	outStayStGbn: Array<any>;
-	successList: Array<any>;
-	isConfirmArray: Array<confirm>;
+	loginState: loginState;
 	rememberID: string;
 	cookieTime: any;
 	version: number;
 	versionOK: boolean;
+	color: {
+		themeColor: string;
+		backgroundColor: string;
+		submitButtonColor: string;
+		removeButtonColor: string;
+		smallButtonColor: string;
+	};
+}
+
+export interface loginState {
+	cookies: string;
+	loginError: string;
+	outStayFrDtL: Array<any>;
+	outStayStGbn: Array<any>;
+	outStayToDt: Array<any>;
+	tmGbn: string;
+	thisYear: string;
+	data: {};
+	name: string;
+	successList: Array<any>;
+	isConfirmArray: Array<any>;
 }
 
 export interface confirm {
