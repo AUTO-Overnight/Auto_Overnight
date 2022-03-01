@@ -7,3 +7,6 @@ export * from './MaterialCommunityIcon';
 export * from './TextInput';
 export * from './TopBar';
 export * from './FontistoIcon';
+export * from './MaterialIcon';
+export * from './CloseButton';
+export * from './Button';
