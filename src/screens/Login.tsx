@@ -7,7 +7,7 @@ import {
 	TextInput,
 	TouchableView,
 	MaterialCommunityIcon as Icon,
-	Switch,
+	Switch
 } from '../theme';
 
 import { Switch as RNSwitch } from 'react-native';
@@ -24,7 +24,7 @@ import {
 	initialLogin,
 	setCookieTime,
 	setIdPw,
-	toggleRemember,
+	toggleRemember
 } from '../store/login';
 import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
@@ -32,23 +32,27 @@ import dayjs from 'dayjs';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 const marginBottom = 35;
+const fontSize = 17;
+
 export default function MainNavigator() {
-	// text
+	const dispatch = useDispatch();
 	const { loginError, loadingLogin, name, id, pw, rememberID } = useSelector(
 		({ login, loading }: RootState) => ({
-			cookies: login.cookies,
-			name: login.name,
-			loginError: login.loginError,
-			outStayStGbn: login.outStayStGbn,
+			cookies: login.loginState.cookies,
+			name: login.loginState.name,
+			loginError: login.loginState.loginError,
+			outStayStGbn: login.loginState.outStayStGbn,
 			loadingLogin: loading['login/GET_LOGIN'],
 			id: login.id,
 			pw: login.pw,
-			rememberID: login.rememberID,
+			rememberID: login.rememberID
 		})
 	);
 	const focus = useAutoFocus();
-	const [userId, setId] = useState<string>(id);
-	const [userPw, setPW] = useState<string>(pw);
+	// const [userId, setId] = useState<string>(id);
+	// const [userPw, setPW] = useState<string>(pw);
+	const [userId, setId] = useState<string>('2018150030');
+	const [userPw, setPW] = useState<string>('toddlf0829_');
 	const [isEnabled, setIsEnabled] = useState(false);
 	useEffect(() => {
 		if (rememberID === 'auto') setIsEnabled(true);
@@ -63,7 +67,7 @@ export default function MainNavigator() {
 			dispatch(toggleRemember('auto'));
 		}
 	}, [isEnabled]);
-	const dispatch = useDispatch();
+
 	const onSubmit = useCallback(() => {
 		dispatch(initialLogin());
 		dispatch(setIdPw({ userId, userPw }));
@@ -86,7 +90,7 @@ export default function MainNavigator() {
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
+					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
 				]}
 			>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
@@ -95,14 +99,14 @@ export default function MainNavigator() {
 							styles.textView,
 							{
 								backgroundColor: isDark ? Colors.black : Colors.white,
-								marginBottom: 10,
-							},
+								marginBottom: 10
+							}
 						]}
 					>
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : Colors.blue100 },
+								{ backgroundColor: isDark ? '#222831' : Colors.blue100 }
 							]}
 						>
 							<Icon
@@ -111,19 +115,19 @@ export default function MainNavigator() {
 								style={{
 									color: isDark ? Colors.white : Colors.grey900,
 									marginTop: 5,
-									paddingRight: 10,
+									paddingRight: 10
 								}}
 							/>
 							<TextInput
 								onFocus={focus}
 								style={[
 									styles.textInput,
-									{ color: isDark ? Colors.white : Colors.grey900 },
+									{ color: isDark ? Colors.white : Colors.grey900 }
 								]}
 								value={userId}
 								onChangeText={(useId) => setId((text) => useId)}
 								autoCapitalize="none"
-								placeholder="Enter your ID"
+								placeholder="201xxxxxxx"
 								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>
 						</View>
@@ -132,13 +136,13 @@ export default function MainNavigator() {
 					<View
 						style={[
 							styles.textView,
-							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
+							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
 						]}
 					>
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : Colors.blue100 },
+								{ backgroundColor: isDark ? '#222831' : Colors.blue100 }
 							]}
 						>
 							<Icon
@@ -147,7 +151,7 @@ export default function MainNavigator() {
 								style={{
 									color: isDark ? Colors.white : Colors.grey900,
 									marginTop: 5,
-									paddingRight: 10,
+									paddingRight: 10
 								}}
 							/>
 							<TextInput
@@ -157,11 +161,11 @@ export default function MainNavigator() {
 								secureTextEntry={true}
 								style={[
 									styles.textInput,
-									{ color: isDark ? Colors.white : Colors.grey900 },
+									{ color: isDark ? Colors.white : Colors.grey900 }
 								]}
 								value={userPw}
 								onChangeText={(userPw) => setPW((text) => userPw)}
-								placeholder="Enter your PW"
+								placeholder="PW를 입력해 주세요"
 								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>
 						</View>
@@ -170,22 +174,22 @@ export default function MainNavigator() {
 					<View
 						style={[
 							styles.container,
-							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
+							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
 						]}
 					>
 						<Switch></Switch>
 						<Text
 							style={{
-								fontSize: 20,
-								color: isDark ? Colors.white : Colors.grey800,
+								fontSize: 17,
+								color: isDark ? Colors.white : Colors.grey800
 							}}
 						>
-							White/Dark
+							다크 모드
 						</Text>
 						<RNSwitch
 							trackColor={{
 								false: '#767577',
-								true: isDark ? '#222831' : '#3b5998',
+								true: isDark ? '#222831' : '#3b5998'
 							}}
 							thumbColor={isEnabled ? Colors.yellow400 : '#f4f3f4'}
 							ios_backgroundColor="#3e3e3e"
@@ -194,11 +198,11 @@ export default function MainNavigator() {
 						/>
 						<Text
 							style={{
-								fontSize: 20,
-								color: isDark ? Colors.white : Colors.grey800,
+								fontSize: fontSize,
+								color: isDark ? Colors.white : Colors.grey800
 							}}
 						>
-							Auto Login
+							자동 로그인
 						</Text>
 					</View>
 					<View style={{ marginBottom: 50 }} />
@@ -206,7 +210,7 @@ export default function MainNavigator() {
 						notification
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? '#152D35' : '#3b5998' },
+							{ backgroundColor: isDark ? '#152D35' : '#3b5998' }
 						]}
 						onPress={onSubmit}
 					>
@@ -220,11 +224,11 @@ export default function MainNavigator() {
 										styles.text,
 										{
 											marginRight: 5,
-											color: isDark ? Colors.white : Colors.white,
-										},
+											color: isDark ? Colors.white : Colors.white
+										}
 									]}
 								>
-									Login
+									로그인
 								</Text>
 								<Icon
 									name="login"
@@ -247,19 +251,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 5,
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'center'
 	},
 	textView: {
 		width: '90%',
 		padding: 0,
-		marginBottom: marginBottom,
+		marginBottom: marginBottom
 	},
-	textInput: { fontSize: 24, flex: 1 },
+	textInput: { fontSize: fontSize, flex: 1 },
 	textInputView: {
 		flexDirection: 'row',
 		borderRadius: 10,
 		padding: 10,
-		color: Colors.white,
+		color: Colors.white
 	},
 	touchableView: {
 		flexDirection: 'row',
@@ -267,13 +271,13 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: '90%',
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	container: {
 		width: '90%',
 		flexDirection: 'row',
 		marginRight: 10,
 		alignItems: 'center',
-		justifyContent: 'space-evenly',
-	},
+		justifyContent: 'space-evenly'
+	}
 });
