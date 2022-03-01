@@ -5,7 +5,7 @@ import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, Tex
 import {
 	DrawerActions,
 	useNavigation,
-	useTheme,
+	useTheme
 } from '@react-navigation/native';
 import { ScrollView, StyleSheet } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../store';
 import { useGetHeight, useLayout } from '../hooks';
 import { setWindowHeight } from '../store/weather';
+import { TouchHeaderIconView } from '../theme/navigation/TochHeaderIconView';
+import { StatusBar } from 'expo-status-bar';
 export default function Weather() {
 	const {
 		current,
@@ -24,7 +26,7 @@ export default function Weather() {
 		pm25Value,
 		pm25Grade,
 		pm10,
-		pm25,
+		pm25
 	} = useSelector(({ weather }: RootState) => ({
 		current: weather.current,
 		daily: weather.daily,
@@ -34,7 +36,7 @@ export default function Weather() {
 		pm25Value: weather.pm25Value,
 		pm25Grade: weather.pm25Grade,
 		pm10: weather.pm10,
-		pm25: weather.pm25,
+		pm25: weather.pm25
 	}));
 	const navigation = useNavigation();
 	const open = useCallback(() => {
@@ -60,29 +62,30 @@ export default function Weather() {
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' },
+					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
 				]}
 				onLayout={setLayout}
 			>
 				<ScrollView>
+					<StatusBar style={isDark ? 'light' : 'dark'} />
 					<NavigationHeader
-						title="Weather"
+						title="날씨"
 						Left={() => (
-							<Icon
-								name="menu"
-								size={40}
+							<TouchHeaderIconView
+								underlayColor={isDark ? 'black' : '#EDF3F7'}
 								onPress={open}
-								style={{ marginLeft: '3%' }}
-							/>
+							>
+								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
+							</TouchHeaderIconView>
 						)}
-						Right={() => (
-							<Icon
-								name="logout"
-								size={35}
-								onPress={logout}
-								style={{ marginRight: '3%' }}
-							/>
-						)}
+						// Right={() => (
+						// 	<Icon
+						// 		name="logout"
+						// 		size={35}
+						// 		onPress={logout}
+						// 		style={{ marginRight: '3%' }}
+						// 	/>
+						// )}
 					/>
 					<WeatherInfo
 						layout={layout}
@@ -107,5 +110,5 @@ export default function Weather() {
 }
 
 const styles = StyleSheet.create({
-	view: { flex: 1 },
+	view: { flex: 1 }
 });
