@@ -10,7 +10,7 @@ import {
 import { ScrollView, StyleSheet } from 'react-native';
 import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
 import { BonusTable } from '../components';
-import { TouchHeaderIconView } from '../theme/navigation/TochHeaderIconView';
+import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 import { StatusBar } from 'expo-status-bar';
 export default function Point() {
 	const navigation = useNavigation();
