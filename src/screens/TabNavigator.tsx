@@ -73,6 +73,7 @@ export default function TabNavigator() {
 				name="Calendar"
 				component={Home}
 				options={{
+					tabBarLabel: '외박 신청',
 					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
@@ -81,6 +82,7 @@ export default function TabNavigator() {
 				name="Point"
 				component={Point}
 				options={{
+					tabBarLabel: '상/벌점',
 					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
@@ -89,6 +91,7 @@ export default function TabNavigator() {
 				name="Weather"
 				component={Weather}
 				options={{
+					tabBarLabel: '날씨',
 					tabBarIconStyle: { marginTop: 2 },
 					tabBarActiveTintColor: isDark ? 'white' : 'black',
 				}}
