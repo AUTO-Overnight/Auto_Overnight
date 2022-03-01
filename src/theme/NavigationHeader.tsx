@@ -3,6 +3,8 @@ import type { FC, ReactNode } from 'react';
 import { LayoutChangeEvent, StyleSheet } from 'react-native';
 import { View, Text } from './navigation';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { useCalendarTheme } from '../hooks';
+import { useTheme } from '@react-navigation/native';
 
 export type NavigationHeaderProps = {
 	title?: string;
@@ -12,6 +14,7 @@ export type NavigationHeaderProps = {
 	titleStyle?: StyleProp<TextStyle>;
 	secondRight?: () => ReactNode;
 	onLayout?: (event: LayoutChangeEvent) => void;
+	backgroundColor?: string;
 };
 
 export const NavigationHeader: FC<NavigationHeaderProps> = ({
@@ -20,10 +23,25 @@ export const NavigationHeader: FC<NavigationHeaderProps> = ({
 	Right,
 	viewStyle,
 	secondRight,
-	titleStyle
+	titleStyle,
+	backgroundColor
 }) => {
+	const isDark = useTheme().dark;
+	console.log(isDark);
 	return (
-		<View style={[styles.view, viewStyle]}>
+		<View
+			style={[
+				styles.view,
+				viewStyle,
+				{
+					backgroundColor: backgroundColor
+						? backgroundColor
+						: isDark
+						? 'black'
+						: '#EDF3F7'
+				}
+			]}
+		>
 			<View style={styles.halfFlex}>{Left && Left()}</View>
 
 			<View style={styles.flex}>
@@ -46,11 +64,12 @@ export const NavigationHeader: FC<NavigationHeaderProps> = ({
 const styles = StyleSheet.create({
 	view: {
 		width: '100%',
-		padding: 5,
+		padding: 10,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		height: 50
+		height: 50,
+		marginBottom: 5
 	},
 	title: {
 		fontSize: 20,
