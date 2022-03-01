@@ -10,6 +10,7 @@ import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
 import * as api from '../lib/api';
 import type { CalendarAPI, Day, DaySuccess, setExist } from '../interface';
+import { Alert } from 'react-native';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -18,7 +19,8 @@ function pushDayIsWeek({ state, day }) {
 	if (!state.day[formDay]) {
 		state.sendDays.push(dayjs(day).format('YYYYMMDD'));
 		state.count += 1;
-		const dayNumber = Number(dayjs(day).day);
+		const dayNumber = dayjs(formDay).get('d');
+		console.log(dayNumber);
 		if (dayNumber === 0 || dayNumber === 6) {
 			state.isWeekend.push(1);
 		} else {
@@ -30,7 +32,7 @@ function pushDayIsWeek({ state, day }) {
 			selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.blue400,
 			selectedTextColor: state.isDarkMode ? Colors.white : Colors.white,
 			textDayFontWeight: 900,
-			delete: true,
+			delete: true
 		};
 	}
 }
@@ -50,6 +52,11 @@ const initialState: Day = {
 	isDarkMode: null,
 	count: 0,
 	confirmList: [],
+	lastSubmitDay: '',
+	sendSortDays: [],
+	calendarModalVisible: false,
+	lastDayText: '',
+	calendarModalMode: 'initial'
 };
 
 const SEND_DATES = 'calendar/SEND_DATES';
@@ -93,6 +100,7 @@ export const calendarSlice = createSlice({
 			state.outStayFrDtLCal = action.payload.outStayFrDt;
 			state.outStayStGbnCal = action.payload.outStayStGbn;
 			state.outStayToDtCal = action.payload.outStayToDt;
+			// Alert.alert(`${state.lastSubmitDay}`);
 		},
 		addDay: (state, action: PayloadAction<any>) => {
 			if (state.day[action.payload]) {
@@ -106,7 +114,7 @@ export const calendarSlice = createSlice({
 					disableTouchEvent: false,
 					selectedColor: state.isDarkMode ? Colors.cyan900 : Colors.blue400,
 					selectedTextColor: state.isDarkMode ? Colors.white : Colors.white,
-					delete: true,
+					delete: true
 				};
 			}
 		},
@@ -148,8 +156,7 @@ export const calendarSlice = createSlice({
 			const data = state.data;
 			const day = state.day;
 			data.map((date) => {
-				const setDay = dayjs(date).format('YYYY-MM-DD');
-				delete day[setDay];
+				delete day[dayjs(date).format('YYYY-MM-DD')];
 			});
 			const pushDays = Object.keys(day);
 			state.sendDays = [];
@@ -165,25 +172,31 @@ export const calendarSlice = createSlice({
 					}
 				}
 			});
-			state.prepare = true;
+			const sortDay = state.sendDays.sort((a, b) => a - b);
+
+			state.lastSubmitDay = sortDay[sortDay.length - 1];
+
+			console.log(state.lastSubmitDay);
+			state.lastDayText = `마지막 신청일 ${state.lastSubmitDay.slice(
+				4,
+				6
+			)}월 ${state.lastSubmitDay.slice(6, 8)}일에 \n켈린더 알람을 설정 할까요?`;
+			state.calendarModalVisible = true;
+			// state.prepare = true;
 		},
 		togglePrepare: (state) => {
 			state.prepare = false;
 		},
 		setExistDays: (state, action: PayloadAction<setExist>) => {
-			if (action.payload.successList.length === 0) {
-				return;
-			}
-
 			state.data = action.payload.successList;
 			state.confirmList = action.payload.isConfirmArray;
-			state.data.map((date) => {
+			state.data?.map((date) => {
 				const setDay = dayjs(String(date)).format('YYYY-MM-DD');
 				state.day[setDay] = {
 					marked: true,
 					dotColor: state.isDarkMode ? Colors.red500 : '#005EFC',
 					activeOpacity: 0,
-					delete: false,
+					delete: false
 				};
 			});
 			if (!state.confirmList) return;
@@ -196,7 +209,7 @@ export const calendarSlice = createSlice({
 						marked: true,
 						dotColor: state.isDarkMode ? Colors.yellow500 : Colors.red500,
 						activeOpacity: 0,
-						delete: false,
+						delete: false
 					};
 				}
 			});
@@ -210,7 +223,13 @@ export const calendarSlice = createSlice({
 		toggleDark: (state, action: PayloadAction<boolean>) => {
 			state.isDarkMode = action.payload;
 		},
-	},
+		setCalendarModalVisible: (state, action: PayloadAction<boolean>) => {
+			state.calendarModalVisible = action.payload;
+		},
+		setCalendarModalMode: (state, action: PayloadAction<string>) => {
+			state.calendarModalMode = action.payload;
+		}
+	}
 });
 
 export const {
@@ -225,6 +244,8 @@ export const {
 	toggleDark,
 	makeCountZero,
 	logoutInitial,
+	setCalendarModalVisible,
+	setCalendarModalMode
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;
