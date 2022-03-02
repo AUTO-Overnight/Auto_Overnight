@@ -1,10 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { StyleSheet, FlatList, ScrollView } from 'react-native';
-import { useNavigation, DrawerActions } from '@react-navigation/native';
+import {
+	StyleSheet,
+	FlatList,
+	ScrollView,
+	Platform,
+	RefreshControl
+} from 'react-native';
+import {
+	useNavigation,
+	DrawerActions,
+	useTheme
+} from '@react-navigation/native';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 // prettier-ignore
-import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text} from '../theme';
-import { Buttons } from '../components';
+import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text, MaterialIcon} from '../theme';
+import {
+	Buttons,
+	ModalCalendar,
+	ModalSetting,
+	ModalUpdate,
+	Spinner
+} from '../components';
+
 import type { LeftRightNavigationMethods } from '../components';
 import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
@@ -24,20 +43,17 @@ import {
 	sendPrepare,
 	setExistDays,
 	setMode,
+	setUpdateModalVisible,
 	toggleDark,
-	togglePrepare,
+	togglePrepare
 } from '../store/calendar';
 import type { RootState } from '../store';
 import { useCalendarTheme } from '../hooks';
 import { useModal } from '../components';
 import { Colors } from 'react-native-paper';
-import {
-	getLogin,
-	initialLogin,
-	logoutHome,
-	makeSuccessList,
-} from '../store/login';
+import { getLogin, initialLogin, makeSuccessList } from '../store/login';
 import { CalendarAPI } from '../interface';
+import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -49,7 +65,17 @@ LocaleConfig.locales['ko'] = {
   today: 'today'
 };
 LocaleConfig.defaultLocale = 'ko';
+
 const borderRadius = 12;
+
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: true,
+		shouldSetBadge: false
+	})
+});
+
 export default function Home() {
 	const {
 		day,
@@ -74,46 +100,48 @@ export default function Home() {
 		rememberID,
 		loadingCalendar,
 		loadingLogin,
-		name,
+		name
 	} = useSelector(({ calendar, login, loading }: RootState) => ({
 		day: calendar.day,
 		sendDays: calendar.sendDays,
-		cookies: login.cookies,
+		cookies: login.loginState.cookies,
 		isWeekend: calendar.isWeekend,
 		id: login.id,
 		pw: login.pw,
-		name: login.name,
+		name: login.loginState.name,
 		prepare: calendar.prepare,
-		outStayToDt: login.outStayToDt,
-		outStayFrDtL: login.outStayFrDtL,
-		outStayStGbn: login.outStayStGbn,
+		outStayToDt: login.loginState.outStayToDt,
+		outStayFrDtL: login.loginState.outStayFrDtL,
+		outStayStGbn: login.loginState.outStayStGbn,
 		outStayToDtCal: calendar.outStayToDtCal,
 		outStayFrDtLCal: calendar.outStayFrDtLCal,
 		outStayStGbnCal: calendar.outStayStGbnCal,
-		successList: login.successList,
+		successList: login.loginState.successList,
 		mode: calendar.mode,
 		count: calendar.count,
 		cookieTime: login.cookieTime,
-		data: login.data,
-		isConfirmArray: login.isConfirmArray,
+		data: login.loginState.data,
+		isConfirmArray: login.loginState.isConfirmArray,
 		rememberID: login.rememberID,
 		loadingCalendar: loading['calendar/SEND_DATES'],
-		loadingLogin: loading['login/GET_LOGIN'],
+		loadingLogin: loading['login/GET_LOGIN']
 	}));
+
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const goRight = useCallback(() => navigation.navigate('Point'), []);
 	const [modalText, setModalText] = useState<string>('');
 	const [modalTitle, setModalTitle] = useState<string>('');
+	const [loading, setLoading] = useState('normal');
 	const { modalVisible, setModalVisible, ModalView } = useModal({
 		text: modalText,
-		title: modalTitle,
+		title: modalTitle
 	});
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
 	const logout = useCallback(() => {
-		dispatch(logoutHome());
+		// dispatch(logoutHome());
 		dispatch(logoutInitial());
 
 		navigation.navigate('Login');
@@ -130,9 +158,13 @@ export default function Home() {
 	const [maxDate] = useState(
 		dayjs().tz('Asia/Seoul').locale('ko').add(45, 'd').format('YYYY-MM-DD')
 	);
-
+	// 설정 모달 창
+	const [settingModalVisible, setSetting] = useState(false);
 	const { theme, isDark } = useCalendarTheme();
 	const backWhiteColor = isDark ? 'black' : '#F6F6F6';
+	useEffect(() => {
+		dispatch(setUpdateModalVisible(true));
+	}, []);
 	useEffect(() => {
 		dispatch(toggleDark(isDark));
 		onRemoveAllDays();
@@ -147,7 +179,7 @@ export default function Home() {
 						dispatch(initialLogin());
 						const user = {
 							userId: id,
-							userPw: pw,
+							userPw: pw
 						};
 						dispatch(getLogin(user));
 					}
@@ -233,6 +265,7 @@ export default function Home() {
 					date = day.dateString;
 					setWeekDay(date);
 					toggleReady(true);
+					setIsSelect(true);
 					break;
 				}
 			}
@@ -274,7 +307,7 @@ export default function Home() {
 				isWeekend: isWeekend,
 				sendingToday: sendingToday,
 				id: id,
-				cookies: cookies,
+				cookies: cookies
 			};
 			dispatch(sendDates(data));
 			dispatch(togglePrepare());
@@ -300,20 +333,33 @@ export default function Home() {
 		dispatch(makeCountZero());
 		setIsSelect(false);
 	}, [outStayFrDtL, successList]);
-	useEffect(() => {
-		setModalTitle('[공지사항]');
-		setModalText(
-			'\n1. 주요 업데이트\n  1) 날씨/미세먼지 추가\n  2) 셔틀 시간표/최단 시간 계산 추가\n  3) 생활관 전화 연결 추가\n  4) 폰트/디자인 변경\n  (셔틀 최단 시간의 경우 오류가 존재 할 수 \n  있습니다. 문제 생기면 바로 말씀 부탁드려요!!!)\n  5. 날짜 선택시 삭제 버튼 색 변경\n'
-		);
-		setModalVisible(true);
-	}, []);
-
+	// useEffect(() => {
+	// 	setModalTitle('[공지사항]');
+	// 	setModalText(
+	// 		'\n주요 업데이트\n 1. 서랍창 디자인 변경\n 2. 최종 신청일 기준 캘린더 알람 설정\n 3. 영문 → 한글'
+	// 	);
+	// 	setModalVisible(true);
+	// }, []);
+	const [refreshing, setRefreshing] = useState(false);
+	const onScrollForRefresh = useCallback(() => {
+		setRefreshing(true);
+		dispatch(initialLogin());
+		dispatch(logoutInitial());
+		const user = {
+			userId: id,
+			userPw: pw
+		};
+		dispatch(getLogin(user));
+		setLoading('loading');
+		setTimeout(() => setLoading('normal'), 3000);
+		setTimeout(() => setRefreshing(false), 3000);
+	}, [id, pw]);
 	return (
 		<SafeAreaView
 			style={{
 				backgroundColor: isDark ? Colors.black : '#EDF3F7',
 				margin: 0,
-				padding: 0,
+				padding: 0
 			}}
 		>
 			<View
@@ -324,28 +370,44 @@ export default function Home() {
 						backgroundColor: isDark ? Colors.black : '#EDF3F7',
 						alignContent: 'center',
 						margin: 0,
-						padding: 0,
-					},
+						padding: 0
+					}
 				]}
 			>
-				<ScrollView>
+				<ScrollView
+					refreshControl={
+						<RefreshControl
+							tintColor={isDark ? Colors.white : Colors.black}
+							refreshing={refreshing}
+							onRefresh={onScrollForRefresh}
+						/>
+					}
+				>
 					<NavigationHeader
-						title="Calendar"
+						title="외박 신청"
 						Left={() => (
-							<Icon
-								name="menu"
-								size={40}
+							<TouchHeaderIconView
+								underlayColor={isDark ? 'black' : '#EDF3F7'}
 								onPress={open}
-								style={{ marginLeft: '3%' }}
-							/>
+							>
+								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
+							</TouchHeaderIconView>
 						)}
 						Right={() => (
-							<Icon
-								name="logout"
-								size={35}
+							<TouchHeaderIconView
+								underlayColor={isDark ? 'black' : '#EDF3F7'}
 								onPress={logout}
-								style={{ marginRight: '3%' }}
-							/>
+							>
+								<Icon name="logout" size={30} />
+							</TouchHeaderIconView>
+						)}
+						secondRight={() => (
+							<TouchHeaderIconView
+								underlayColor={isDark ? 'black' : '#EDF3F7'}
+								onPress={() => setSetting(true)}
+							>
+								<MaterialIcon name="settings" size={30} />
+							</TouchHeaderIconView>
 						)}
 					/>
 					{/*달력*/}
@@ -381,8 +443,8 @@ export default function Home() {
 										: '#345B63'
 									: isSelect
 									? '#959BAB'
-									: '#E4E6EB',
-							},
+									: '#E4E6EB'
+							}
 						]}
 					>
 						<Text
@@ -390,8 +452,8 @@ export default function Home() {
 								styles.text,
 								{
 									fontWeight: '400',
-									color: isDark ? Colors.white : Colors.grey800,
-								},
+									color: isDark ? Colors.white : Colors.grey800
+								}
 							]}
 						>
 							모두삭제
@@ -402,9 +464,9 @@ export default function Home() {
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#152D35' : Colors.blue200,
+								backgroundColor: isDark ? '#152D35' : Colors.blue200
 								// borderWidth: isSelect ? 0.5 : 0,
-							},
+							}
 						]}
 					>
 						<Text
@@ -412,8 +474,8 @@ export default function Home() {
 								styles.text,
 								{
 									fontWeight: '400',
-									color: isDark ? Colors.white : Colors.grey800,
-								},
+									color: isDark ? Colors.white : Colors.grey800
+								}
 							]}
 						>
 							신청하기
@@ -427,6 +489,12 @@ export default function Home() {
 						loadingLogin={loadingLogin}
 					/>
 				</ScrollView>
+				<ModalSetting
+					modalVisible={settingModalVisible}
+					setModalVisible={setSetting}
+				/>
+				<ModalCalendar />
+				<ModalUpdate />
 			</View>
 		</SafeAreaView>
 	);
@@ -443,7 +511,7 @@ const styles = StyleSheet.create({
 		width: '70%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		marginTop: '29%',
+		marginTop: '29%'
 	},
 	touchableView: {
 		flexDirection: 'column',
@@ -453,13 +521,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		marginLeft: '-1%',
-		marginTop: '7%',
+		marginTop: '7%'
 	},
 	calendarStyle: {
 		borderRadius: borderRadius,
 		height: 370,
 		width: '90%',
 		alignContent: 'center',
-		alignSelf: 'center',
-	},
+		alignSelf: 'center'
+	}
 });
