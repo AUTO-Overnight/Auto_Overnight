@@ -13,13 +13,13 @@ import type { FC } from 'react';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { DrawerActions, useTheme } from '@react-navigation/native';
-import { Avatar, TouchableView } from '../components';
+import { Avatar, ModalUpdate, TouchableView } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Colors } from 'react-native-paper';
 import { initialLogin } from '../store/login';
 import { getLogin } from '../store/login';
-import { logoutInitial } from '../store/calendar';
+import { logoutInitial, setUpdateModalVisible } from '../store/calendar';
 import { blue200 } from 'react-native-paper/lib/typescript/styles/colors';
 import { useModal } from '../components';
 import Icons from 'react-native-vector-icons/AntDesign';
@@ -82,10 +82,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const [busModalVisible, setBusModalVisible] = useState(false);
 	const [mode, setMode] = useState('2');
 	const onPressUpdate = useCallback(() => {
-		setModalText(
-			'\n1. [날씨/미세먼지 페이지 추가]\n    최대 요청 횟수가 존재 합니다 \n2. [셔틀 시간표/최단 시간 계산 추가]\n    최단 시간의 경우 아직 베타 버전\n    이기 때문에 오류가 있을 수 있습니다\n3. [생활관 전화 연결 추가]\n4. [폰트/디자인 변경]\n5. [요일 추가시 삭제 버튼 활성화]\n'
-		);
-		setModalVisible(true);
+		dispatch(setUpdateModalVisible(true));
 	}, []);
 	const [buttons] = useState([
 		{
@@ -314,6 +311,7 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 						</Text>
 					</View>
 				</View>
+				<ModalUpdate />
 			</View>
 		</DrawerContentScrollView>
 	);
