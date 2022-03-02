@@ -26,6 +26,7 @@ export interface Day {
 	calendarModalVisible: boolean;
 	lastDayText: string;
 	calendarModalMode: string;
+	updateModalVisible: boolean;
 }
 
 export interface DaySuccess {
