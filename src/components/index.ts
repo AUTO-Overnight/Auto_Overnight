@@ -11,3 +11,4 @@ export * from './WeatherInfo';
 export * from './BusModal';
 export * from './ModalSetting';
 export * from './ModalCalendar';
+export * from './ModalUpdate';
