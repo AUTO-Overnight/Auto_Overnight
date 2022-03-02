@@ -37,6 +37,12 @@ export function ModalCalendar() {
 		dispatch(setCalendarModalVisible(false));
 		dispatch(setCalendarModalMode('initial'));
 	}, []);
+	const onMakeSuccess = useCallback(() => {
+		dispatch(setCalendarModalMode('loading'));
+		setTimeout(() => {
+			dispatch(setCalendarModalMode('success'));
+		}, 1000);
+	}, []);
 	const onPressOkay = useCallback(() => {
 		const date = dayjs(lastSubmitDay).set('h', 22).toDate();
 		console.log(date);
@@ -59,12 +65,12 @@ export function ModalCalendar() {
 								buttonNumber={2}
 								buttonText="아니요"
 								secondButtonText="네"
-								onPressFunction={onPressClose}
+								onPressFunction={onMakeSuccess}
 								secondOnPressFunction={onPressOkay}
 							/>
 						</>
 					)}
-					{calendarModalMode === 'loading' && <ActivityIndicator size={20} />}
+					{calendarModalMode === 'loading' && <ActivityIndicator size={30} />}
 					{calendarModalMode === 'success' && (
 						<>
 							<Text style={styles.titleText}>✅ 저장 되었습니다</Text>
