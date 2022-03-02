@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '../../theme';
+import { Text } from './Text';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import { Colors } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
