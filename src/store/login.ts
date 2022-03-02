@@ -33,7 +33,7 @@ export const initialState: Login = {
 	},
 	rememberID: '',
 	cookieTime: '',
-	version: 104,
+	version: 105,
 	versionOK: false,
 	color: {
 		themeColor: '#fff',
