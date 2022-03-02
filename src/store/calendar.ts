@@ -56,7 +56,8 @@ const initialState: Day = {
 	sendSortDays: [],
 	calendarModalVisible: false,
 	lastDayText: '',
-	calendarModalMode: 'initial'
+	calendarModalMode: 'initial',
+	updateModalVisible: false
 };
 
 const SEND_DATES = 'calendar/SEND_DATES';
@@ -182,7 +183,7 @@ export const calendarSlice = createSlice({
 				6
 			)}월 ${state.lastSubmitDay.slice(6, 8)}일에 \n켈린더 알람을 설정 할까요?`;
 			state.calendarModalVisible = true;
-			// state.prepare = true;
+			state.prepare = true;
 		},
 		togglePrepare: (state) => {
 			state.prepare = false;
@@ -228,6 +229,9 @@ export const calendarSlice = createSlice({
 		},
 		setCalendarModalMode: (state, action: PayloadAction<string>) => {
 			state.calendarModalMode = action.payload;
+		},
+		setUpdateModalVisible: (state, action: PayloadAction<boolean>) => {
+			state.updateModalVisible = action.payload;
 		}
 	}
 });
@@ -245,7 +249,8 @@ export const {
 	makeCountZero,
 	logoutInitial,
 	setCalendarModalVisible,
-	setCalendarModalMode
+	setCalendarModalMode,
+	setUpdateModalVisible
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;
