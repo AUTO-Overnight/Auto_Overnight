@@ -49,10 +49,9 @@ export default function MainNavigator() {
 		})
 	);
 	const focus = useAutoFocus();
-	// const [userId, setId] = useState<string>(id);
-	// const [userPw, setPW] = useState<string>(pw);
-	const [userId, setId] = useState<string>('2018150030');
-	const [userPw, setPW] = useState<string>('toddlf0829_');
+	const [userId, setId] = useState<string>(id);
+	const [userPw, setPW] = useState<string>(pw);
+
 	const [isEnabled, setIsEnabled] = useState(false);
 	useEffect(() => {
 		if (rememberID === 'auto') setIsEnabled(true);
