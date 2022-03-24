@@ -13,6 +13,7 @@ export interface Login {
 		removeButtonColor: string;
 		smallButtonColor: string;
 	};
+	loginSuccess: boolean;
 }
 
 export interface loginState {
