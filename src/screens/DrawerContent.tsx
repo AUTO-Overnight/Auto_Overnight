@@ -31,9 +31,7 @@ const backWhiteColor = '#FFFF';
 const fontSize = 15;
 const screen = Dimensions.get('screen');
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
-	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
-		name: login.loginState.name,
-		rememberID: login.rememberID,
+	const { id, pw } = useSelector(({ login }: RootState) => ({
 		id: login.id,
 		pw: login.pw
 	}));
@@ -62,15 +60,6 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 		Linking.openURL('https://ibook.kpu.ac.kr/Viewer/bus01');
 	}, []);
 
-	const onPressReload = useCallback(() => {
-		dispatch(initialLogin());
-		dispatch(logoutInitial());
-		const user = {
-			userId: id,
-			userPw: pw
-		};
-		dispatch(getLogin(user));
-	}, [id, pw]);
 	const [text, setModalText] = useState('');
 
 	const title = '[업데이트 내역]\n 1.0.4';
