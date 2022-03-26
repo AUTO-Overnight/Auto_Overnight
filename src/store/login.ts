@@ -41,7 +41,8 @@ export const initialState: Login = {
 		submitButtonColor: '#FFF',
 		removeButtonColor: '#fff',
 		smallButtonColor: '#fff'
-	}
+	},
+	loginSuccess: false
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -71,10 +72,12 @@ export const loginSlice = createSlice({
 			state.loginState.tmGbn = '';
 			state.loginState.thisYear = '';
 			state.loginState.data = {};
-			state.loginState.name = '';
 			state.loginState.successList = [];
 			state.loginState.isConfirmArray = [];
 			state.loginState.loginError = '';
+		},
+		setLogin: (state, action: PayloadAction<boolean>) => {
+			state.loginSuccess = action.payload;
 		},
 		toggleRemember: (state, action: PayloadAction<string>) => {
 			state.rememberID = action.payload;
@@ -90,7 +93,6 @@ export const loginSlice = createSlice({
 				yy
 			} = action.payload;
 			state.loginState.cookies = cookies;
-			state.loginState.name = name;
 			state.loginState.outStayStGbn = outStayStGbn;
 			state.loginState.outStayToDt = outStayToDt;
 			state.loginState.outStayFrDtL = outStayFrDt;
@@ -98,6 +100,7 @@ export const loginSlice = createSlice({
 			state.loginState.tmGbn = tmGbn;
 			state.cookieTime = dayjs().tz('Asia/Seoul').locale('ko');
 			state.loginState.loginError = '';
+			state.loginSuccess = true;
 		},
 		GET_LOGIN_FAILURE: (state, action: PayloadAction<any>) => {
 			state.loginState.loginError = action.payload;
@@ -182,7 +185,8 @@ export const {
 	makeSuccessList,
 	setCookieTime,
 	setIdPw,
-	toggleRemember
+	toggleRemember,
+	setLogin
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
