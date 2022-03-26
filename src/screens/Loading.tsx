@@ -12,24 +12,20 @@ import { View, Text } from '../theme';
 import { render } from 'react-dom';
 import { Colors } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVersion } from '../store/login';
+import { getVersion, setLogin } from '../store/login';
 import { getLogin, initialLogin } from '../store/login';
 import type { RootState } from '../store';
 import { getAirPollution, getWeather } from '../store/weather';
 export default function Loading() {
-	const { name, id, pw, rememberID, versionOK, loadingVersion } = useSelector(
-		({ login, loading }: RootState) => ({
-			name: login.loginState.name,
-			rememberID: login.rememberID,
-			id: login.id,
-			pw: login.pw,
-			versionOK: login.versionOK,
-			loadingVersion: loading['GET_VERSION']
-		})
-	);
+	const { id, pw, rememberID } = useSelector(({ login }: RootState) => ({
+		rememberID: login.rememberID,
+		id: login.id,
+		pw: login.pw
+	}));
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (rememberID === 'auto') {
+			dispatch(setLogin(false));
 			dispatch(initialLogin());
 			const user = {
 				userId: id,
