@@ -36,18 +36,16 @@ const fontSize = 17;
 
 export default function MainNavigator() {
 	const dispatch = useDispatch();
-	const { loginError, loadingLogin, name, id, pw, rememberID } = useSelector(
-		({ login, loading }: RootState) => ({
-			cookies: login.loginState.cookies,
-			name: login.loginState.name,
-			loginError: login.loginState.loginError,
-			outStayStGbn: login.loginState.outStayStGbn,
+	const { loginError, loadingLogin, loginSuccess, id, pw, rememberID } =
+		useSelector(({ login, loading }: RootState) => ({
+			loginSuccess: login.loginSuccess,
+			loginError: login.loginState?.loginError,
+			outStayStGbn: login.loginState?.outStayStGbn,
 			loadingLogin: loading['login/GET_LOGIN'],
 			id: login.id,
 			pw: login.pw,
 			rememberID: login.rememberID
-		})
-	);
+		}));
 	const focus = useAutoFocus();
 	const [userId, setId] = useState<string>(id);
 	const [userPw, setPW] = useState<string>(pw);
@@ -74,12 +72,12 @@ export default function MainNavigator() {
 	}, [userId, userPw]);
 	const navigation = useNavigation();
 	useEffect(() => {
-		if (name && !loadingLogin) {
+		if (loginSuccess && !loadingLogin) {
 			navigation.navigate('TabNavigator');
 		} else {
 			if (loginError && !loadingLogin) Alert.alert('로그인 에러');
 		}
-	}, [loginError, name, loadingLogin]);
+	}, [loginError, loginSuccess, loadingLogin]);
 
 	const isDark = useTheme().dark;
 	return (
