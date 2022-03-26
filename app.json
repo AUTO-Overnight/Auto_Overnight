@@ -12,6 +12,7 @@
 			"package": "com.ww8007.AutoOvernight",
 			"versionCode": 13,
 			"permissions": ["READ_CALENDAR", "WRITE_CALENDAR"]
-		}
+		},
+		"jsEngine": "hermes"
 	}
 }
