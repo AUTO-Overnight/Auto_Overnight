@@ -100,7 +100,6 @@ export default function Home() {
 		rememberID,
 		loadingCalendar,
 		loadingLogin,
-		name
 	} = useSelector(({ calendar, login, loading }: RootState) => ({
 		day: calendar.day,
 		sendDays: calendar.sendDays,
@@ -108,7 +107,6 @@ export default function Home() {
 		isWeekend: calendar.isWeekend,
 		id: login.id,
 		pw: login.pw,
-		name: login.loginState.name,
 		prepare: calendar.prepare,
 		outStayToDt: login.loginState.outStayToDt,
 		outStayFrDtL: login.loginState.outStayFrDtL,
