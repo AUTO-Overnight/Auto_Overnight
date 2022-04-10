@@ -12,9 +12,7 @@ import { useLayout } from '../hooks';
 const fontSize = 15;
 
 const windowHeight = useGetHeight();
-const windowHeight2 = Dimensions.get('window').height;
 const airPollutionHeight = 35;
-console.log(windowHeight2);
 const iconSize = 30;
 
 const AirPollutionOptions = {
@@ -61,9 +59,6 @@ export function WeatherInfo({
 props) {
 	const { weatherOptions } = useWeatherOptions();
 	const [gradientColor, setGradientColor] = useState([]);
-	const tabBarHeight = useBottomTabBarHeight();
-	const [layout2, setLayout] = useLayout();
-	console.log('botoom tab bar : ', tabBarHeight);
 	const [pm10, setPM10] = useState({
 		backgroundColor: '',
 		text: ''
@@ -75,22 +70,28 @@ props) {
 	useEffect(() => {
 		if (pm10Grade === '1') {
 			setPM10({ text: '좋음', backgroundColor: Colors.blue500 });
-		} else if (pm10Grade === '2') {
+		}
+		if (pm10Grade === '2') {
 			setPM10({ text: '보통', backgroundColor: Colors.green500 });
-		} else if (pm10Grade === '3') {
+		}
+		if (pm10Grade === '3') {
 			setPM10({ text: '나쁨', backgroundColor: Colors.yellow700 });
-		} else if (pm10Grade === '4') {
+		}
+		if (pm10Grade === '4') {
 			setPM10({ text: '매우나쁨', backgroundColor: Colors.red700 });
 		}
 	}, [pm10Grade]);
 	useEffect(() => {
 		if (pm25Grade === '1') {
 			setPM25({ text: '좋음', backgroundColor: Colors.blue500 });
-		} else if (pm25Grade === '2') {
+		}
+		if (pm25Grade === '2') {
 			setPM25({ text: '보통', backgroundColor: Colors.green500 });
-		} else if (pm25Grade === '3') {
+		}
+		if (pm25Grade === '3') {
 			setPM25({ text: '나쁨', backgroundColor: Colors.yellow700 });
-		} else if (pm25Grade === '4') {
+		}
+		if (pm25Grade === '4') {
 			setPM25({ text: '매우나쁨', backgroundColor: Colors.red700 });
 		}
 	}, [pm25Grade]);
@@ -324,9 +325,7 @@ props) {
 						backgroundColor: pm10.backgroundColor
 					}
 				]}
-				onLayout={setLayout}
 			>
-				{/* {console.log('미세먼지 칸 크기', layout2.height)} */}
 				<View style={styles.flexAirView}>
 					<Text style={[styles.touchText, { justifyContent: 'center' }]}>
 						미세먼지{'    '} :
