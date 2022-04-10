@@ -18,16 +18,17 @@ dayjs.extend(timezone);
 export const initialState: Login = {
 	id: '',
 	pw: '',
+	name: '',
+	tmGbn: '',
+	thisYear: '',
+	isDarkMode: false,
 	loginState: {
 		cookies: '',
 		loginError: '',
 		outStayFrDtL: [],
 		outStayStGbn: [],
 		outStayToDt: [],
-		tmGbn: '',
-		thisYear: '',
 		data: {},
-		name: '',
 		successList: [],
 		isConfirmArray: []
 	},
@@ -68,10 +69,10 @@ export const loginSlice = createSlice({
 			state.loginState.outStayFrDtL = [];
 			state.loginState.outStayStGbn = [];
 			state.loginState.outStayToDt = [];
-			state.loginState.tmGbn = '';
-			state.loginState.thisYear = '';
+			state.tmGbn = '';
+			state.thisYear = '';
 			state.loginState.data = {};
-			state.loginState.name = '';
+			state.name = '';
 			state.loginState.successList = [];
 			state.loginState.isConfirmArray = [];
 			state.loginState.loginError = '';
@@ -90,12 +91,12 @@ export const loginSlice = createSlice({
 				yy
 			} = action.payload;
 			state.loginState.cookies = cookies;
-			state.loginState.name = name;
+			state.name = name;
 			state.loginState.outStayStGbn = outStayStGbn;
 			state.loginState.outStayToDt = outStayToDt;
 			state.loginState.outStayFrDtL = outStayFrDt;
-			state.loginState.thisYear = yy;
-			state.loginState.tmGbn = tmGbn;
+			state.thisYear = yy;
+			state.tmGbn = tmGbn;
 			state.cookieTime = dayjs().tz('Asia/Seoul').locale('ko');
 			state.loginState.loginError = '';
 		},
@@ -172,6 +173,9 @@ export const loginSlice = createSlice({
 		},
 		setCookieTime: (state, action: PayloadAction<any>) => {
 			state.cookieTime = action.payload;
+		},
+		setDarkMode: (state, action: PayloadAction<boolean>) => {
+			state.isDarkMode = action.payload;
 		}
 	},
 	extraReducers: {}
@@ -182,7 +186,8 @@ export const {
 	makeSuccessList,
 	setCookieTime,
 	setIdPw,
-	toggleRemember
+	toggleRemember,
+	setDarkMode
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
