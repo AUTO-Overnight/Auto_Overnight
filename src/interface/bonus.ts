@@ -9,6 +9,8 @@ export interface BonusAPI {
 	id: string;
 	name: string;
 	cookies: string;
+	thisYear: string;
+	tmGbn: string;
 }
 
 export interface BonusSuccess {
