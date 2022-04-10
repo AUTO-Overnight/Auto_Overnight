@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Table, Row } from 'react-native-table-component';
 import { StyleSheet } from 'react-native';
 import { makeBonusArray, useBreakpoint } from '../hooks';
@@ -25,19 +25,23 @@ export const BonusTable = ({ isDark }) => {
 		name,
 		cookies,
 		loadingBonus,
+		tmGbn,
+		thisYear,
 		ardInptDt,
 		cmpScr,
 		lifSstArdCtnt,
-		lifSstArdGbn,
+		lifSstArdGbn
 	} = useSelector(({ login, bonus, loading }: RootState) => ({
 		id: login.id,
 		name: login.name,
-		cookies: login.cookies,
+		tmGbn: login.tmGbn,
+		thisYear: login.thisYear,
+		cookies: login.loginState.cookies,
 		loadingBonus: loading['bonus/GET_BONUS'],
 		ardInptDt: bonus.ardInptDt,
 		cmpScr: bonus.cmpScr,
 		lifSstArdCtnt: bonus.lifSstArdCtnt,
-		lifSstArdGbn: bonus.lifSstArdGbn,
+		lifSstArdGbn: bonus.lifSstArdGbn
 	}));
 	const dispatch = useDispatch();
 
@@ -52,26 +56,24 @@ export const BonusTable = ({ isDark }) => {
 	}, [ardInptDt]);
 	useEffect(() => {
 		const data: BonusAPI = {
-			cookies: cookies,
-			id: id,
-			name: name,
+			cookies,
+			id,
+			name,
+			thisYear,
+			tmGbn
 		};
 		dispatch(getBonus(data));
-	}, [cookies, id, name]);
+	}, [cookies, id, name, tmGbn, thisYear]);
 
 	return (
 		<Fragment>
 			<Table
 				borderStyle={{
 					borderColor: isDark ? '#171b22' : Colors.blue400,
-					// borderTopLeftRadius: 0,
-					// borderTopEndRadius: 0,
-					// borderTopRightRadius: 0,
 					borderRightWidth: 10,
 					borderLeftWidth: 10,
 					borderBottomWidth: 10,
-					borderTopWidth: 10,
-					// borderWidth: 1,
+					borderTopWidth: 10
 				}}
 				style={styles.table}
 			>
@@ -86,12 +88,12 @@ export const BonusTable = ({ isDark }) => {
 						height: 40,
 						backgroundColor: isDark ? '#2b323d' : Colors.blue300,
 						borderTopLeftRadius: 5,
-						borderTopRightRadius: 5,
+						borderTopRightRadius: 5
 					}}
 					textStyle={{
 						textAlign: 'center',
 						color: isDark ? Colors.white : Colors.grey900,
-						fontSize: 14,
+						fontSize: 14
 					}}
 				/>
 
@@ -106,17 +108,16 @@ export const BonusTable = ({ isDark }) => {
 						)}
 						style={[
 							styles.dataRow,
-							{ backgroundColor: isDark ? '#222831' : Colors.blue100 },
+							{ backgroundColor: isDark ? '#222831' : Colors.blue100 }
 						]}
 						textStyle={{
 							textAlign: 'center',
 							color: isDark ? Colors.white : Colors.grey900,
-							fontSize: 14,
+							fontSize: 14
 						}}
 					/>
 				))}
 			</Table>
-			{/* <RotationHint /> */}
 		</Fragment>
 	);
 };
@@ -125,26 +126,22 @@ const styles = StyleSheet.create({
 	text: {
 		textAlign: 'center',
 		color: Colors.white,
-		fontSize: 14,
+		fontSize: 14
 	},
 	head: {
 		height: 35,
-		backgroundColor: '#222831',
-		// borderBottomRightRadius: 5,
-		// borderBottomLeftRadius: 5,
+		backgroundColor: '#222831'
 	},
 	dataRow: {
 		height: 25,
 		borderBottomRightRadius: 5,
-		borderBottomLeftRadius: 5,
+		borderBottomLeftRadius: 5
 	},
 	border: {},
 	table: {
-		// marginTop: 20,
 		marginBottom: 10,
 		width: '90%',
 		justifyContent: 'center',
-		alignSelf: 'center',
-		// borderRadius: 5,
-	},
+		alignSelf: 'center'
+	}
 });
