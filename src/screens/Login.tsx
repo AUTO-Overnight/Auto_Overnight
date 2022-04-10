@@ -39,7 +39,7 @@ export default function MainNavigator() {
 	const { loginError, loadingLogin, name, id, pw, rememberID } = useSelector(
 		({ login, loading }: RootState) => ({
 			cookies: login.loginState.cookies,
-			name: login.loginState.name,
+			name: login.name,
 			loginError: login.loginState.loginError,
 			outStayStGbn: login.loginState.outStayStGbn,
 			loadingLogin: loading['login/GET_LOGIN'],
