@@ -20,7 +20,6 @@ function pushDayIsWeek({ state, day }) {
 		state.sendDays.push(dayjs(day).format('YYYYMMDD'));
 		state.count += 1;
 		const dayNumber = dayjs(formDay).get('d');
-		console.log(dayNumber);
 		if (dayNumber === 0 || dayNumber === 6) {
 			state.isWeekend.push(1);
 		} else {
@@ -177,7 +176,6 @@ export const calendarSlice = createSlice({
 
 			state.lastSubmitDay = sortDay[sortDay.length - 1];
 
-			console.log(state.lastSubmitDay);
 			state.lastDayText = `마지막 신청일 ${state.lastSubmitDay.slice(
 				4,
 				6
