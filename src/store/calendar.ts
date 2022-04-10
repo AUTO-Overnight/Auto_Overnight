@@ -10,7 +10,6 @@ import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
 import * as api from '../lib/api';
 import type { CalendarAPI, Day, DaySuccess, setExist } from '../interface';
-import { Alert } from 'react-native';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
