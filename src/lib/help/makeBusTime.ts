@@ -3,7 +3,6 @@ export default function makeBusTime(
 	minute: number,
 	goSchool: boolean
 ) {
-	console.log(hour, minute, goSchool);
 	const station = {
 		8: [100],
 		9: [100],
@@ -19,7 +18,7 @@ export default function makeBusTime(
 		19: [10, 20, 30, 45],
 		20: [10, 30, 45],
 		21: [10, 30, 50],
-		22: [5, 40],
+		22: [5, 40]
 	};
 	const school = {
 		8: [100],
@@ -36,7 +35,7 @@ export default function makeBusTime(
 		19: [200],
 		20: [200],
 		21: [200],
-		22: [200],
+		22: [200]
 	};
 	let returnText = '';
 	let min = 0;
@@ -71,7 +70,6 @@ export default function makeBusTime(
 					if (station[hour][i] - minute <= 0) break;
 					else {
 						min = i;
-						console.log('왜있지?');
 					}
 				}
 				if (station[hour][min - 1] === 90) {
@@ -83,9 +81,8 @@ export default function makeBusTime(
 					returnText = `오후 5시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 ${
 						station[hour][min - 1]
 					}분 출발`;
-					console.log(min + 'hihi');
+
 					if (min === 0) {
-						console.log('hihi');
 						min = station[hour][0] + (60 - minute);
 						returnText = `오후 5시 이후 시간 \n 파리바게트 건너편에서 탑승 \n 학교에서 ${
 							station[hour][station[hour].length - 1]
