@@ -95,7 +95,7 @@ props) {
 		}
 	}, [pm25Grade]);
 	useEffect(() => {
-		if (current.weather[0].main === 'Clear') {
+		if (current.weather[0]?.main === 'Clear') {
 			if (Number(current.dt) > 5 && Number(current.dt) <= 8) {
 				setGradientColor(['#224277', '#B88895']);
 			} else if (Number(current.dt) > 9 && Number(current.dt) < 17) {
@@ -142,9 +142,9 @@ props) {
 								name={
 									current?.weather[0]?.main === 'Clear'
 										? current?.dt > 8 && current?.dt < 18
-											? weatherOptions[current?.weather[0]?.main].iconName
-											: weatherOptions[current?.weather[0]?.main].nightName
-										: weatherOptions[current?.weather[0]?.main].iconName
+											? weatherOptions[current?.weather[0]?.main]?.iconName
+											: weatherOptions[current?.weather[0]?.main]?.nightName
+										: weatherOptions[current?.weather[0]?.main]?.iconName
 								}
 								color={
 									current?.weather[0]?.main === 'Clear' &&
@@ -158,7 +158,7 @@ props) {
 
 							<Text style={styles.currentText}>{current.temp}°C</Text>
 							<Text style={styles.currentSubTitle}>
-								{weatherOptions[current?.weather[0]?.main].subtitle}
+								{weatherOptions[current?.weather[0]?.main]?.subtitle}
 							</Text>
 						</View>
 					</View>
@@ -337,7 +337,7 @@ props) {
 				</View>
 				<View style={styles.flexAir2View}>
 					<FontistoIcon
-						name={AirPollutionOptions[pm10Grade].iconName}
+						name={AirPollutionOptions[pm10Grade]?.iconName}
 						color={Colors.white}
 						size={23}
 					/>
@@ -367,7 +367,7 @@ props) {
 				</View>
 				<View style={styles.flexAir2View}>
 					<FontistoIcon
-						name={AirPollutionOptions[pm25Grade].iconName}
+						name={AirPollutionOptions[pm25Grade]?.iconName}
 						color={Colors.white}
 						size={23}
 					/>
