@@ -19,7 +19,7 @@ import { getAirPollution, getWeather } from '../store/weather';
 export default function Loading() {
 	const { name, id, pw, rememberID, versionOK, loadingVersion } = useSelector(
 		({ login, loading }: RootState) => ({
-			name: login.loginState.name,
+			name: login.name,
 			rememberID: login.rememberID,
 			id: login.id,
 			pw: login.pw,
@@ -45,26 +45,6 @@ export default function Loading() {
 			dispatch(initialLogin());
 		}
 	}, []);
-	// useEffect(() => {
-	// 	if (!loadingVersion) {
-	// 		if (versionOK === false && Platform.OS === 'android') {
-	// 			Alert.alert('업데이트', '앱을 최신 버전으로 업데이트 해주세요', [
-	// 				{
-	// 					text: 'Cancel',
-	// 					onPress: () => BackHandler.exitApp(),
-	// 					style: 'cancel'
-	// 				},
-	// 				{
-	// 					text: 'OK',
-	// 					onPress: () =>
-	// 						Linking.openURL(
-	// 							'https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight'
-	// 						)
-	// 				}
-	// 			]);
-	// 		}
-	// 	}
-	// }, [loadingVersion]);
 
 	return (
 		<View style={[styles.flex]}>
