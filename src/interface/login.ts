@@ -6,6 +6,10 @@ export interface Login {
 	cookieTime: any;
 	version: number;
 	versionOK: boolean;
+	name: string;
+	tmGbn: string;
+	thisYear: string;
+	isDarkMode: boolean;
 	color: {
 		themeColor: string;
 		backgroundColor: string;
@@ -21,10 +25,8 @@ export interface loginState {
 	outStayFrDtL: Array<any>;
 	outStayStGbn: Array<any>;
 	outStayToDt: Array<any>;
-	tmGbn: string;
-	thisYear: string;
+
 	data: {};
-	name: string;
 	successList: Array<any>;
 	isConfirmArray: Array<any>;
 }
