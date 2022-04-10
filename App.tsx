@@ -16,7 +16,6 @@ const store = createStore(
 	composeWithDevTools(applyMiddleware(sagaMiddleware))
 ); // 스토어를 만듭니다.
 const persistor = persistStore(store);
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useState, useCallback } from 'react';
 
@@ -24,9 +23,8 @@ import MainNavigator from './src/screens/MainNavigator';
 import {
 	NavigationContainer,
 	DefaultTheme,
-	DarkTheme,
+	DarkTheme
 } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import 'react-native-gesture-handler';
 import { enableScreens } from 'react-native-screens';
@@ -53,13 +51,13 @@ export default function App() {
 	const loadAssetsAsync = async () => {
 		await Font.loadAsync({
 			NanumSquareBold: require('./assets/fonts/NanumSquareBold.ttf'),
-			NanumSquareR: require('./assets/fonts/NanumSquareR.ttf'),
+			NanumSquareR: require('./assets/fonts/NanumSquareR.ttf')
 		});
 		onChangeLoading(true);
 	};
 	Font.loadAsync({
 		NanumSquareBold: require('./assets/fonts/NanumSquareBold.ttf'),
-		NanumSquareR: require('./assets/fonts/NanumSquareR.ttf'),
+		NanumSquareR: require('./assets/fonts/NanumSquareR.ttf')
 	});
 	const lockOrientation = async () => {
 		await ScreenOrientation.lockAsync(
