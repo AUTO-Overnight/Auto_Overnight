@@ -40,6 +40,8 @@ export default function Loading() {
 			dispatch(getAirPollution());
 			dispatch(getWeather());
 		} else {
+			dispatch(getAirPollution());
+			dispatch(getWeather());
 			dispatch(initialLogin());
 		}
 	}, []);
