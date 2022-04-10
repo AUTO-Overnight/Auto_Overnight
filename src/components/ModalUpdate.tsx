@@ -1,13 +1,5 @@
-import dayjs from 'dayjs';
-import React, { useCallback, useEffect } from 'react';
-import {
-	Dimensions,
-	StyleSheet,
-	View,
-	ActivityIndicator,
-	Linking,
-	Platform
-} from 'react-native';
+import React, { useCallback } from 'react';
+import { Dimensions, StyleSheet, View, Linking, Platform } from 'react-native';
 import { Colors } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import MakeAlarm from '../lib/help/MakeAlarm';
@@ -28,7 +20,6 @@ export function ModalUpdate() {
 	const onPressClose = useCallback(() => {
 		dispatch(setUpdateModalVisible(false));
 	}, []);
-	const onMakeSuccess = useCallback(() => {}, []);
 
 	const onPressOkay = useCallback(() => {
 		Platform.OS === 'ios'
@@ -80,7 +71,6 @@ const styles = StyleSheet.create({
 		fontFamily: 'NanumSquareBold',
 		letterSpacing: -1,
 		marginBottom: 10
-		// marginLeft: '10%'
 	},
 	subText: {
 		fontSize: 15,

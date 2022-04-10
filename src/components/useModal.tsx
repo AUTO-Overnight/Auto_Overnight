@@ -6,9 +6,8 @@ import {
 	StyleSheet,
 	Text,
 	TouchableHighlight,
-	View,
+	View
 } from 'react-native';
-import type { ReactNode } from 'react';
 import { Colors } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 
@@ -39,13 +38,13 @@ export function useModal({ text, title }: modalText): {
 					<View
 						style={{
 							...styles.modalView,
-							backgroundColor: isDark ? '#222831' : Colors.white,
+							backgroundColor: isDark ? '#222831' : Colors.white
 						}}
 					>
 						<Text
 							style={[
 								styles.textStyle,
-								{ color: isDark ? Colors.white : Colors.grey800 },
+								{ color: isDark ? Colors.white : Colors.grey800 }
 							]}
 						>
 							{title}
@@ -54,7 +53,7 @@ export function useModal({ text, title }: modalText): {
 							<Text
 								style={[
 									styles.modalText,
-									{ color: isDark ? Colors.white : Colors.grey800 },
+									{ color: isDark ? Colors.white : Colors.grey800 }
 								]}
 							>
 								{text}
@@ -64,7 +63,7 @@ export function useModal({ text, title }: modalText): {
 						<TouchableHighlight
 							style={{
 								...styles.openButton,
-								backgroundColor: isDark ? '#518f9b' : Colors.blue200,
+								backgroundColor: isDark ? '#518f9b' : Colors.blue200
 							}}
 							onPress={() => {
 								setModalVisible(!modalVisible);
@@ -73,7 +72,7 @@ export function useModal({ text, title }: modalText): {
 							<Text
 								style={[
 									styles.textStyle,
-									{ color: isDark ? Colors.white : Colors.grey800 },
+									{ color: isDark ? Colors.white : Colors.grey800 }
 								]}
 							>
 								확인
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 22,
+		marginTop: 22
 	},
 	modalView: {
 		margin: 20,
@@ -103,28 +102,27 @@ const styles = StyleSheet.create({
 		shadowColor: Colors.black,
 		shadowOffset: {
 			width: 0,
-			height: 2,
+			height: 2
 		},
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
-		elevation: 5,
+		elevation: 5
 	},
 	openButton: {
 		borderRadius: 8,
 		padding: 10,
 		paddingLeft: 25,
 		paddingRight: 25,
-		elevation: 2,
+		elevation: 2
 	},
 	textStyle: {
 		color: Colors.white,
-		textAlign: 'center',
-		// textAlign: 'center',
+		textAlign: 'center'
 	},
 	modalText: {
 		marginBottom: 15,
 		fontSize: 14,
 		textAlign: 'left',
-		color: Colors.white,
-	},
+		color: Colors.white
+	}
 });

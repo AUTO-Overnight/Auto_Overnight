@@ -45,7 +45,6 @@ export function ModalCalendar() {
 	}, []);
 	const onPressOkay = useCallback(() => {
 		const date = dayjs(lastSubmitDay).set('h', 22).toDate();
-		console.log(date);
 		MakeAlarm({ endDate: date, color: '#fff', dispatch });
 		dispatch(setCalendarModalMode('loading'));
 	}, [lastSubmitDay]);
