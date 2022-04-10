@@ -3,7 +3,6 @@ import type { FC, ReactNode } from 'react';
 import { LayoutChangeEvent, StyleSheet } from 'react-native';
 import { View, Text } from './navigation';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
-import { useCalendarTheme } from '../hooks';
 import { useTheme } from '@react-navigation/native';
 
 export type NavigationHeaderProps = {
@@ -27,7 +26,7 @@ export const NavigationHeader: FC<NavigationHeaderProps> = ({
 	backgroundColor
 }) => {
 	const isDark = useTheme().dark;
-	console.log(isDark);
+
 	return (
 		<View
 			style={[

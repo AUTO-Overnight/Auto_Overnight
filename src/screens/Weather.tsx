@@ -54,7 +54,7 @@ export default function Weather() {
 		const height = useGetHeight();
 		dispatch(setWindowHeight(height));
 	}, []);
-	console.log(layout.height);
+
 	return (
 		<SafeAreaView
 			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
@@ -78,14 +78,6 @@ export default function Weather() {
 								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
 							</TouchHeaderIconView>
 						)}
-						// Right={() => (
-						// 	<Icon
-						// 		name="logout"
-						// 		size={35}
-						// 		onPress={logout}
-						// 		style={{ marginRight: '3%' }}
-						// 	/>
-						// )}
 					/>
 					<WeatherInfo
 						layout={layout}
