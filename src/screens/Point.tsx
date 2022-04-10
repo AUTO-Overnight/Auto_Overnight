@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { Colors } from 'react-native-paper';
 // prettier-ignore
-import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, Text, TouchableView} from '../theme';
+import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon} from '../theme';
 import {
 	DrawerActions,
 	useNavigation,
@@ -16,9 +16,6 @@ export default function Point() {
 	const navigation = useNavigation();
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
-	}, []);
-	const logout = useCallback(() => {
-		navigation.navigate('Login');
 	}, []);
 	const goLeft = useCallback(() => navigation.navigate('Calendar'), []);
 	const leftRef = useRef<LeftRightNavigationMethods | null>(null);
@@ -45,14 +42,6 @@ export default function Point() {
 								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
 							</TouchHeaderIconView>
 						)}
-						// Right={() => (
-						// 	<Icon
-						// 		name="logout"
-						// 		size={35}
-						// 		onPress={logout}
-						// 		style={{ marginRight: '3%' }}
-						// 	/>
-						// )}
 					/>
 					<BonusTable isDark={isDark} />
 					<LeftRightNavigation
