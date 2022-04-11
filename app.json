@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "한국공학대학교 외박신청",
 		"icon": "./src/assets/images/icon.png",
-		"version": "1.0.5",
+		"version": "1.0.7",
 		"slug": "ww8007",
 		"ios": {
 			"bundleIdentifier": "com.ww8007.AutoOvernight",
@@ -10,7 +10,7 @@
 		},
 		"android": {
 			"package": "com.ww8007.AutoOvernight",
-			"versionCode": 11,
+			"versionCode": 13,
 			"permissions": ["READ_CALENDAR", "WRITE_CALENDAR"]
 		}
 	}
