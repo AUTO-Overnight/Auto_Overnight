@@ -1,13 +1,13 @@
 import client from './client';
 import axios from 'axios';
 import type { User } from '../../interface';
-import { VERSION_URL } from '@env';
+const VERSION_URL = process.env.VERSION_URL;
 export const getLogin = ({ userId, userPw }: User) => {
 	userId = encodeURIComponent(userId);
 	userPw = encodeURIComponent(userPw);
 	const user = JSON.stringify({
 		id: userId,
-		password: userPw,
+		password: userPw
 	});
 	return client.post('/login', user);
 };
