@@ -32,7 +32,7 @@ const fontSize = 15;
 const screen = Dimensions.get('screen');
 const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 	const { name, id, pw, rememberID } = useSelector(({ login }: RootState) => ({
-		name: login.loginState.name,
+		name: login.name,
 		rememberID: login.rememberID,
 		id: login.id,
 		pw: login.pw

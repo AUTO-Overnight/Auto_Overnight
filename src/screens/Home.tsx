@@ -1,18 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import {
-	StyleSheet,
-	FlatList,
-	ScrollView,
-	Platform,
-	RefreshControl
-} from 'react-native';
-import {
-	useNavigation,
-	DrawerActions,
-	useTheme
-} from '@react-navigation/native';
-import Constants from 'expo-constants';
+import { StyleSheet, FlatList, ScrollView, RefreshControl } from 'react-native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
+
 import * as Notifications from 'expo-notifications';
 // prettier-ignore
 import {SafeAreaView, View, NavigationHeader, MaterialCommunityIcon as Icon, TouchableView, Text, MaterialIcon} from '../theme';
@@ -20,8 +10,7 @@ import {
 	Buttons,
 	ModalCalendar,
 	ModalSetting,
-	ModalUpdate,
-	Spinner
+	ModalUpdate
 } from '../components';
 
 import type { LeftRightNavigationMethods } from '../components';
