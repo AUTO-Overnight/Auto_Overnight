@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import {
+	Platform,
+	StyleSheet,
+	Alert,
+	ActivityIndicator,
+	Linking
+} from 'react-native';
 import {
 	SafeAreaView,
 	View,
@@ -7,11 +13,15 @@ import {
 	TextInput,
 	TouchableView,
 	MaterialCommunityIcon as Icon,
-	Switch
+	Switch,
+	NavigationHeader
 } from '../theme';
-
 import { Switch as RNSwitch } from 'react-native';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import {
+	useNavigation,
+	useTheme,
+	DrawerActions
+} from '@react-navigation/native';
 import { useAutoFocus, AutoFocusProvider } from '../contexts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -29,6 +39,7 @@ import {
 import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
 import dayjs from 'dayjs';
+import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 const marginBottom = 35;
@@ -81,11 +92,25 @@ export default function MainNavigator() {
 		}
 	}, [loginError, name, loadingLogin]);
 
+	const open = useCallback(() => {
+		navigation.dispatch(DrawerActions.openDrawer());
+	}, []);
 	const isDark = useTheme().dark;
 	return (
 		<SafeAreaView
 			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
 		>
+			<NavigationHeader
+				title="로그인"
+				Left={() => (
+					<TouchHeaderIconView
+						underlayColor={isDark ? 'black' : '#EDF3F7'}
+						onPress={open}
+					>
+						<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
+					</TouchHeaderIconView>
+				)}
+			/>
 			<View
 				style={[
 					styles.view,
