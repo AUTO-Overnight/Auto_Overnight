@@ -35,7 +35,7 @@
 		"@react-navigation/stack": "^6.0.7",
 		"@reduxjs/toolkit": "^1.6.1",
 		"@types/redux-actions": "^2.6.2",
-		"axios": "^0.21.1",
+		"axios": "^0.21.2",
 		"dayjs": "^1.10.7",
 		"expo": "^43.0.0",
 		"expo-ads-admob": "~11.0.3",
