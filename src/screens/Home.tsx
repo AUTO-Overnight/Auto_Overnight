@@ -43,6 +43,7 @@ import { Colors } from 'react-native-paper';
 import { getLogin, initialLogin, makeSuccessList } from '../store/login';
 import { CalendarAPI } from '../interface';
 import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
+import * as Analytics from 'expo-firebase-analytics';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -97,7 +98,7 @@ export default function Home() {
 		isWeekend: calendar.isWeekend,
 		id: login.id,
 		pw: login.pw,
-		name: login.loginState.name,
+		name: login.name,
 		prepare: calendar.prepare,
 		outStayToDt: login.loginState.outStayToDt,
 		outStayFrDtL: login.loginState.outStayFrDtL,
@@ -274,7 +275,7 @@ export default function Home() {
 	const onPressDay = useCallback(() => {
 		dispatch(setMode('day'));
 		onRemoveAllDays();
-	}, [successList, outStayFrDtL]);
+	}, [successList, outStayFrDtL, count]);
 	useEffect(() => {
 		ready && dispatch(addDayList({ weekKey, weekDay }));
 	}, [weekDay, weekKey, ready]);
@@ -308,8 +309,12 @@ export default function Home() {
 			setModalTitle('');
 			setModalText('선택된 날짜가 없습니다.\n');
 			setModalVisible(true);
+
 			return;
 		}
+		(async () => {
+			await Analytics.logEvent('count_day', { count });
+		})();
 		dispatch(sendPrepare());
 		toggleReady(false);
 		setIsSelect(false);
