@@ -23,9 +23,11 @@ export function ModalUpdate() {
 
 	const onPressOkay = useCallback(() => {
 		Platform.OS === 'ios'
-			? Linking.openURL(`https://apps.apple.com/kr/app/we-meet/id1610966012`)
+			? Linking.openURL(
+					`https://apps.apple.com/us/app/%ED%95%9C%EA%B5%AD%EA%B3%B5%ED%95%99%EB%8C%80%ED%95%99%EA%B5%90-%EC%99%B8%EB%B0%95-%EC%8B%A0%EC%B2%AD/id1618680471`
+			  )
 			: Linking.openURL(
-					`https://play.google.com/store/apps/details?id=com.ww8007.weMeet`
+					`https://apps.apple.com/us/app/%ED%95%9C%EA%B5%AD%EA%B3%B5%ED%95%99%EB%8C%80%ED%95%99%EA%B5%90-%EC%99%B8%EB%B0%95-%EC%8B%A0%EC%B2%AD/id1618680471`
 			  );
 	}, []);
 	return (
@@ -37,13 +39,12 @@ export function ModalUpdate() {
 
 					<>
 						<Text style={styles.titleText}>주요 업데이트</Text>
-						<Text style={styles.subText}>
-							{` 1. 서랍창 디자인 변경\n 2. 최종 신청일 기준 캘린더 알람 설정\n 3. 영문 → 한글`}
-						</Text>
+						<Text style={styles.subText}>{` 1. 앱스토어 출시`}</Text>
+						<Text style={styles.subText}>{` 2. 로그인 관련 오류 수정`}</Text>
 						<View style={{ height: 15 }} />
 						<Text style={styles.titleText}>새소식</Text>
 						<Text style={styles.subText}>
-							{` 저의 새로운 앱이 출시 되었습니다! 조별과제나\n 모임 약속 잡으실 때 사용해 보세요 [We Meet]\n\n 또한 외박 신청 앱 유지보수에 관심 있는 분은\n 개인 연락 주세요 😃`}
+							{` ⭐️드디어 앱 스토어에 정식 출시 되었습니다⭐️\n 앱스토어 개발자 등록 비용 때문에 부득이 하게\n 광고를 넣게 되었습니다... \n 양해 부탁 드리겠습니다 😂 \n 외박 신청 앱 유지보수에 관심 있는 분은\n 카카오톡 오픈채팅을 이용하여 연락 주세요 😃`}
 						</Text>
 						<View style={styles.blankView} />
 						<View style={styles.buttonOverLine} />
