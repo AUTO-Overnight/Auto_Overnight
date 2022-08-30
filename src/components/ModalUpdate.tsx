@@ -44,7 +44,7 @@ export function ModalUpdate() {
 						<View style={{ height: 15 }} />
 						<Text style={styles.titleText}>새소식</Text>
 						<Text style={styles.subText}>
-							{` ⭐️드디어 앱 스토어에 정식 출시 되었습니다⭐️\n 앱스토어 개발자 등록 비용 때문에 부득이 하게\n 광고를 넣게 되었습니다... \n 양해 부탁 드리겠습니다 😂 \n 외박 신청 앱 유지보수에 관심 있는 분은\n 카카오톡 오픈채팅을 이용하여 연락 주세요 😃`}
+							{` ⭐️드디어 앱 스토어에 정식 출시 되었습니다⭐️\n 앱스토어 개발자 등록 비용 때문에 부득이 하게\n 광고를 넣게 되었습니다... \n 양해 부탁 드리겠습니다 😂 `}
 						</Text>
 						<View style={styles.blankView} />
 						<View style={styles.buttonOverLine} />
