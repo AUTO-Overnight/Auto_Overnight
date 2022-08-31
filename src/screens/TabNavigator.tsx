@@ -13,17 +13,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useNavigation } from '@react-navigation/core';
 import { getTabBarHeight } from '@react-navigation/bottom-tabs/lib/typescript/src/views/BottomTabBar';
-
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 const icons: Record<string, string[]> = {
 	Point: ['trophy-variant', 'trophy-variant-outline'],
 	Calendar: ['calendar-month', 'calendar-blank'],
-	Weather: ['weather-night-partly-cloudy', 'weather-cloudy'],
+	Weather: ['weather-night-partly-cloudy', 'weather-cloudy']
 };
 
 const screenOptions = ({
-	route,
+	route
 }: {
 	route: RouteProp<ParamListBase, string>;
 }) => {
@@ -47,7 +46,7 @@ const screenOptions = ({
 
 		headerShown: false,
 		color: 'black',
-		innerHeight: 300,
+		innerHeight: 300
 	};
 };
 const Tab = createBottomTabNavigator();
@@ -56,7 +55,7 @@ export default function TabNavigator() {
 	const interpolator = useNavigationHorizontalInterpolator();
 	const isDark = useTheme().dark;
 	const { name } = useSelector(({ login }: RootState) => ({
-		name: login.name,
+		name: login.name
 	}));
 	const navigation = useNavigation();
 	useEffect(() => {
@@ -75,7 +74,7 @@ export default function TabNavigator() {
 				options={{
 					tabBarLabel: '외박 신청',
 					tabBarIconStyle: { marginTop: 2 },
-					tabBarActiveTintColor: isDark ? 'white' : 'black',
+					tabBarActiveTintColor: isDark ? 'white' : 'black'
 				}}
 			/>
 			<Tab.Screen
@@ -84,7 +83,7 @@ export default function TabNavigator() {
 				options={{
 					tabBarLabel: '상/벌점',
 					tabBarIconStyle: { marginTop: 2 },
-					tabBarActiveTintColor: isDark ? 'white' : 'black',
+					tabBarActiveTintColor: isDark ? 'white' : 'black'
 				}}
 			/>
 			<Tab.Screen
@@ -93,7 +92,7 @@ export default function TabNavigator() {
 				options={{
 					tabBarLabel: '날씨',
 					tabBarIconStyle: { marginTop: 2 },
-					tabBarActiveTintColor: isDark ? 'white' : 'black',
+					tabBarActiveTintColor: isDark ? 'white' : 'black'
 				}}
 			/>
 		</Tab.Navigator>
