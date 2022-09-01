@@ -2862,6 +2862,20 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-calendars@file:custom/react-native-calendars":
+  version "1.1288.2"
+  dependencies:
+    hoist-non-react-statics "^3.3.1"
+    immutable "^4.0.0-rc.12"
+    lodash "^4.17.15"
+    memoize-one "^5.2.1"
+    prop-types "^15.5.10"
+    react-native-swipe-gestures "^1.0.5"
+    recyclerlistview "^3.0.5"
+    xdate "^0.8.0"
+  optionalDependencies:
+    moment "^2.24.0"
+
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-5.0.1.tgz#6b1f3367b8e5211e899983065ea2e72c1901d75f"
@@ -3319,15 +3333,6 @@
   dependencies:
     "@types/react" "^17"
 
-"@types/react-native-calendars@^1.1264.2":
-  version "1.1264.2"
-  resolved "https://registry.npmjs.org/@types/react-native-calendars/-/react-native-calendars-1.1264.2.tgz"
-  integrity sha512-nsNwzqF7s4FzNtxSG4Rcr3FQ9qOdZUJcrXKo7aCEgvR9QmU5K09QhobR+PTe93opB4a1ldvLmsFGTiOAYeeaBg==
-  dependencies:
-    "@types/react" "*"
-    "@types/react-native" "*"
-    "@types/xdate" "*"
-
 "@types/react-native-table-component@^1.2.1":
   version "1.2.1"
   resolved "https://registry.npmjs.org/@types/react-native-table-component/-/react-native-table-component-1.2.1.tgz"
@@ -3408,11 +3413,6 @@
   integrity sha512-vehbtyHUShPxIa9SioxDwCvgxukDMH//icJG90sXQBUm5lJOHLT5kNeU9tnivhnA/TkOFMzGIXN2cTc4hY8/kg==
   dependencies:
     "@types/jest" "*"
-
-"@types/xdate@*":
-  version "0.8.32"
-  resolved "https://registry.npmjs.org/@types/xdate/-/xdate-0.8.32.tgz"
-  integrity sha512-giM6hmU4ZCCAQj8BVSMNMA8hQwvKuWewLIe7r+G5NtGvehqW9jXdF/V6CzzkQYgHsk+67/udxql3RdfR8zqSNA==
 
 "@types/yargs-parser@*":
   version "20.2.1"
@@ -8416,22 +8416,6 @@ react-native-appearance@~0.3.3:
     fbemitter "^2.1.1"
     invariant "^2.2.4"
     use-subscription "^1.0.0"
-
-react-native-calendars@^1.1288.2:
-  version "1.1288.2"
-  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.1288.2.tgz#42e41f7bfb25f1be0bbb01b12435fddfbae8e836"
-  integrity sha512-GzQ8+qeMfICms8LjMov+zH4Ne4fy/gHQbXjUfWiR/fqs0NqtIxYYGyujj9bObqXSH/ZRQafmJVKUc4Yv2F5tvA==
-  dependencies:
-    hoist-non-react-statics "^3.3.1"
-    immutable "^4.0.0-rc.12"
-    lodash "^4.17.15"
-    memoize-one "^5.2.1"
-    prop-types "^15.5.10"
-    react-native-swipe-gestures "^1.0.5"
-    recyclerlistview "^3.0.5"
-    xdate "^0.8.0"
-  optionalDependencies:
-    moment "^2.24.0"
 
 react-native-codegen@^0.0.6:
   version "0.0.6"
