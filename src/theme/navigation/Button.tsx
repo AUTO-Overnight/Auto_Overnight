@@ -65,7 +65,8 @@ export function Button({
 						<View
 							style={{
 								height: '100%',
-								borderLeftWidth: 0.4
+								borderLeftWidth: 0.4,
+								borderColor: isDark ? Colors.grey100 : Colors.grey700
 							}}
 						/>
 						<TouchableHighlight
