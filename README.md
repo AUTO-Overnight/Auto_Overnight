@@ -7,7 +7,7 @@
 ## **🛒 Store**
 
 - [PlayStore](https://play.google.com/store/apps/details?id=com.ww8007.AutoOvernight)
-- [AppStore] : 준비중...
+- [AppStore](https://apps.apple.com/kr/app/한국공학대학교-외박-신청/id1618680471)
 
 ## **➕ Version**
 
