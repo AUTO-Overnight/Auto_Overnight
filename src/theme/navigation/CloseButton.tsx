@@ -19,7 +19,7 @@ export function CloseButton({ closeBtn }: props) {
 		>
 			<TouchableHighlight
 				activeOpacity={1}
-				underlayColor={isDark ? '#222831' : Colors.white}
+				underlayColor={isDark ? '#132A52' : Colors.white}
 				style={{
 					marginLeft: '85%',
 					padding: 5
