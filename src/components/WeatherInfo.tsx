@@ -381,7 +381,7 @@ props) {
 
 const styles = StyleSheet.create({
 	GradientView: {
-		height: windowHeight - 35 - 79 - 50 - 1
+		height: windowHeight
 	},
 	view: { flex: 1, padding: 0 },
 	flexView: {
