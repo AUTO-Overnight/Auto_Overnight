@@ -14,13 +14,13 @@ import {
 } from '../components';
 
 import type { LeftRightNavigationMethods } from '../components';
-import { Calendar } from 'react-native-calendars';
+import { Calendar } from '@react-native-calendars';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
-import type { DateObject } from 'react-native-calendars';
-import { LocaleConfig } from 'react-native-calendars';
+
+import { LocaleConfig } from '@react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	addDay,
@@ -44,6 +44,7 @@ import { getLogin, initialLogin, makeSuccessList } from '../store/login';
 import { CalendarAPI } from '../interface';
 import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 import * as Analytics from 'expo-firebase-analytics';
+import constColors from '../constants/colors';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 //prettier-ignore
@@ -52,7 +53,7 @@ LocaleConfig.locales['ko'] = {
   monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
   dayNamesShort: ['일','월','화','수','목','금','토'],
-  today: 'today'
+  
 };
 LocaleConfig.defaultLocale = 'ko';
 
@@ -122,11 +123,13 @@ export default function Home() {
 	const goRight = useCallback(() => navigation.navigate('Point'), []);
 	const [modalText, setModalText] = useState<string>('');
 	const [modalTitle, setModalTitle] = useState<string>('');
+	const [selectDay, setSelectDay] = useState('');
 	const [loading, setLoading] = useState('normal');
 	const { modalVisible, setModalVisible, ModalView } = useModal({
 		text: modalText,
 		title: modalTitle
 	});
+	const [select, setSelect] = useState(1);
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
@@ -158,7 +161,9 @@ export default function Home() {
 	useEffect(() => {
 		dispatch(toggleDark(isDark));
 		onRemoveAllDays();
-		return () => dispatch(logoutInitial());
+		return () => {
+			dispatch(logoutInitial());
+		};
 	}, [isDark]);
 	useEffect(() => {
 		const timer = () => {
@@ -187,7 +192,7 @@ export default function Home() {
 	const [isSelect, setIsSelect] = useState(false);
 	const onDayPress = useCallback(
 		// 이전 날짜 분리 로직
-		(day: DateObject) => {
+		(day) => {
 			if (count >= 30) {
 				setModalTitle('30일 이상 신청할 수 없습니다.\n');
 				setModalText('');
@@ -195,6 +200,7 @@ export default function Home() {
 				return;
 			}
 			let date: string;
+			setSelectDay(day.dateString);
 
 			switch (mode) {
 				case 'day': {
@@ -210,6 +216,7 @@ export default function Home() {
 					}
 					date = day.dateString;
 					dispatch(addDay(date));
+					select !== 1 && setSelect(1);
 					setIsSelect(true);
 					break;
 				}
@@ -256,6 +263,9 @@ export default function Home() {
 					setWeekDay(date);
 					toggleReady(true);
 					setIsSelect(true);
+					setMode('day');
+					dispatch(setMode('day'));
+
 					break;
 				}
 			}
@@ -277,7 +287,9 @@ export default function Home() {
 		onRemoveAllDays();
 	}, [successList, outStayFrDtL, count]);
 	useEffect(() => {
-		ready && dispatch(addDayList({ weekKey, weekDay }));
+		if (ready) {
+			dispatch(addDayList({ weekKey, weekDay }));
+		}
 	}, [weekDay, weekKey, ready]);
 	useEffect(() => {
 		if (outStayFrDtLCal)
@@ -351,7 +363,7 @@ export default function Home() {
 	return (
 		<SafeAreaView
 			style={{
-				backgroundColor: isDark ? Colors.black : '#EDF3F7',
+				backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7',
 				margin: 0,
 				padding: 0
 			}}
@@ -361,7 +373,7 @@ export default function Home() {
 					styles.view,
 					,
 					{
-						backgroundColor: isDark ? Colors.black : '#EDF3F7',
+						backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7',
 						alignContent: 'center',
 						margin: 0,
 						padding: 0
@@ -371,7 +383,7 @@ export default function Home() {
 				<ScrollView
 					refreshControl={
 						<RefreshControl
-							tintColor={isDark ? Colors.white : Colors.black}
+							tintColor={isDark ? Colors.white : constColors.mainDarkColor}
 							refreshing={refreshing}
 							onRefresh={onScrollForRefresh}
 						/>
@@ -381,7 +393,7 @@ export default function Home() {
 						title="외박 신청"
 						Left={() => (
 							<TouchHeaderIconView
-								underlayColor={isDark ? 'black' : '#EDF3F7'}
+								underlayColor={isDark ? constColors.mainDarkColor : '#EDF3F7'}
 								onPress={open}
 							>
 								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
@@ -389,7 +401,7 @@ export default function Home() {
 						)}
 						Right={() => (
 							<TouchHeaderIconView
-								underlayColor={isDark ? 'black' : '#EDF3F7'}
+								underlayColor={isDark ? constColors.mainDarkColor : '#EDF3F7'}
 								onPress={logout}
 							>
 								<Icon name="logout" size={30} />
@@ -397,7 +409,7 @@ export default function Home() {
 						)}
 						secondRight={() => (
 							<TouchHeaderIconView
-								underlayColor={isDark ? 'black' : '#EDF3F7'}
+								underlayColor={isDark ? constColors.mainDarkColor : '#EDF3F7'}
 								onPress={() => setSetting(true)}
 							>
 								<MaterialIcon name="settings" size={30} />
@@ -407,23 +419,25 @@ export default function Home() {
 					{/*달력*/}
 					{isDark && (
 						<Calendar
+							markingType={'period'}
 							style={styles.calendarStyle}
 							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
 							theme={theme}
-							displayLoadingIndicator={true}
+							// displayLoadingIndicator={true}
 						/>
 					)}
 
 					{!isDark && (
 						<Calendar
+							markingType={'period'}
 							style={styles.calendarStyle}
 							maxDate={maxDate}
 							markedDates={day}
 							onDayPress={onDayPress}
 							theme={theme}
-							displayLoadingIndicator={true}
+							// displayLoadingIndicator={true}
 						/>
 					)}
 					<TouchableView
@@ -433,8 +447,8 @@ export default function Home() {
 							{
 								backgroundColor: isDark
 									? isSelect
-										? '#6D9C97'
-										: '#345B63'
+										? constColors.deleteDarkColor
+										: constColors.deleteDarkColor
 									: isSelect
 									? '#959BAB'
 									: '#E4E6EB'
@@ -446,7 +460,7 @@ export default function Home() {
 								styles.text,
 								{
 									fontWeight: '400',
-									color: isDark ? Colors.white : Colors.grey800
+									color: isDark ? Colors.white : Colors.black
 								}
 							]}
 						>
@@ -458,7 +472,9 @@ export default function Home() {
 						style={[
 							styles.touchableView,
 							{
-								backgroundColor: isDark ? '#152D35' : Colors.blue200
+								backgroundColor: isDark
+									? constColors.submitDarkColor
+									: Colors.blue200
 								// borderWidth: isSelect ? 0.5 : 0,
 							}
 						]}
@@ -468,7 +484,7 @@ export default function Home() {
 								styles.text,
 								{
 									fontWeight: '400',
-									color: isDark ? Colors.white : Colors.grey800
+									color: isDark ? Colors.black : Colors.black
 								}
 							]}
 						>
@@ -481,6 +497,8 @@ export default function Home() {
 						onPressDays={onPressDays}
 						isDark={isDark}
 						loadingLogin={loadingLogin}
+						select={select}
+						setSelect={setSelect}
 					/>
 				</ScrollView>
 				<ModalSetting
@@ -520,7 +538,7 @@ const styles = StyleSheet.create({
 	calendarStyle: {
 		borderRadius: borderRadius,
 		height: 370,
-		width: '90%',
+		width: '98%',
 		alignContent: 'center',
 		alignSelf: 'center'
 	}
