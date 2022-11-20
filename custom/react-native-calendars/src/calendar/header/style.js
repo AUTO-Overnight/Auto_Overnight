@@ -7,7 +7,7 @@ export default function (theme = {}) {
     const appStyle = { ...defaultStyle, ...theme };
     const rtlStyle = constants.isRTL ? { transform: [{ scaleX: -1 }] } : undefined;
     const isDark = useTheme().dark;
-    console.log(isDark, 'hihi');
+    
     return StyleSheet.create({
         header: {
             flexDirection: 'row',

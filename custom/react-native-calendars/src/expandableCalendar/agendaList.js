@@ -145,9 +145,7 @@ const AgendaList = (props) => {
         if (onScrollToIndexFailed) {
             onScrollToIndexFailed(info);
         }
-        else {
-            console.log('onScrollToIndexFailed info: ', info);
-        }
+        else {}
     }, [onScrollToIndexFailed]);
     const onHeaderLayout = useCallback((event) => {
         sectionHeight.current = event.nativeEvent.layout.height;

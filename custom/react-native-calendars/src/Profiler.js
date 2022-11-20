@@ -41,7 +41,6 @@ interactions // the Set of interactions belonging to this update
 export const logProfileData = ({ id, actualDuration, cumulativeDuration, phase }) => {
     console.group(phase);
     // table did not work for me so I used log instead
-    console.log(id, ':', actualDuration, cumulativeDuration);
     // console.table({
     //   actualDuration,
     //   baseDuration,
