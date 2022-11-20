@@ -27,6 +27,7 @@ import { BusModal } from '../components';
 import Font5Icon from 'react-native-vector-icons/FontAwesome5';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
+import constColors from '../constants/colors';
 const backWhiteColor = '#FFFF';
 const fontSize = 15;
 const screen = Dimensions.get('screen');
@@ -131,26 +132,43 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 			{...props}
 			contentContainerStyle={[
 				styles.view,
-				{ backgroundColor: isDark ? Colors.black : '#fff' }
+				{ backgroundColor: isDark ? constColors.mainDarkColor : '#fff' }
 			]}
 		>
 			<StatusBar style={isDark ? 'light' : 'dark'} />
 			<NavigationHeader
-				backgroundColor={isDark ? 'black' : '#fff'}
+				backgroundColor={isDark ? constColors.mainDarkColor : '#fff'}
 				// Left={() => <Switch style={[styles.row, { marginLeft: 23 }]} />}
 				Right={() => <Icon name="close" size={32} onPress={close} />}
 			/>
-			<View style={{ backgroundColor: isDark ? Colors.black : backWhiteColor }}>
+			<View
+				style={{
+					backgroundColor: isDark ? constColors.mainDarkColor : backWhiteColor
+				}}
+			>
 				<View
 					style={[
 						styles.content,
-						{ backgroundColor: isDark ? Colors.black : backWhiteColor }
+						{
+							backgroundColor: isDark
+								? constColors.mainDarkColor
+								: backWhiteColor
+						}
 					]}
 				>
 					<Text style={[styles.titleText, { marginTop: 0 }]}>
 						기숙사 전화 연결
 					</Text>
-					<View style={[styles.blankView]} />
+					<View
+						style={[
+							styles.blankView,
+							{
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: constColors.whiteBackgroundColor
+							}
+						]}
+					/>
 					<View style={styles.columnView}>
 						{buttons.map((button) => (
 							<TouchableHighlight
@@ -160,7 +178,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								style={{ backgroundColor: isDark ? 'black' : '#fff' }}
 								onPress={() => button.onPress()}
 							>
-								<View style={styles.rowView}>
+								<View
+									style={[
+										styles.rowView,
+										{
+											backgroundColor: isDark
+												? constColors.mainDarkColor
+												: '#fff'
+										}
+									]}
+								>
 									<Ionic
 										name={button.iconName}
 										size={21}
@@ -168,7 +195,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 										color={button.iconColor}
 									/>
 									<Text style={styles.touchText}>{button.text}</Text>
-									<View style={styles.iconView}>
+									<View
+										style={[
+											styles.iconView,
+											{
+												backgroundColor: isDark
+													? constColors.mainDarkColor
+													: Colors.white
+											}
+										]}
+									>
 										<Font5Icon
 											name="angle-right"
 											size={19}
@@ -183,21 +219,45 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 					<View
 						style={[
 							styles.blankGreyView,
-							{ backgroundColor: isDark ? Colors.grey800 : Colors.grey300 }
+							{
+								backgroundColor: isDark
+									? constColors.submitDarkColor
+									: Colors.grey300
+							}
 						]}
 					/>
 					<Text style={styles.titleText}>문의하기</Text>
-					<View style={styles.blankView} />
+					<View
+						style={[
+							styles.blankView,
+							{
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: constColors.whiteBackgroundColor
+							}
+						]}
+					/>
 					<View style={styles.columnView}>
 						{secondButtons.map((button) => (
 							<TouchableHighlight
 								activeOpacity={0.5}
 								underlayColor={isDark ? Colors.grey800 : Colors.grey200}
 								key={button.text}
-								style={{ backgroundColor: isDark ? 'black' : '#fff' }}
+								style={{
+									backgroundColor: isDark ? constColors.mainDarkColor : '#fff'
+								}}
 								onPress={() => button.onPress()}
 							>
-								<View style={styles.rowView}>
+								<View
+									style={[
+										styles.rowView,
+										{
+											backgroundColor: isDark
+												? constColors.mainDarkColor
+												: '#fff'
+										}
+									]}
+								>
 									<Ionic
 										name={button.iconName}
 										size={21}
@@ -205,7 +265,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 										color={button.iconColor}
 									/>
 									<Text style={styles.touchText}>{button.text}</Text>
-									<View style={styles.iconView}>
+									<View
+										style={[
+											styles.iconView,
+											{
+												backgroundColor: isDark
+													? constColors.mainDarkColor
+													: Colors.white
+											}
+										]}
+									>
 										<Font5Icon
 											name="angle-right"
 											size={19}
@@ -220,11 +289,24 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 					<View
 						style={[
 							styles.blankGreyView,
-							{ backgroundColor: isDark ? Colors.grey800 : Colors.grey300 }
+							{
+								backgroundColor: isDark
+									? constColors.submitDarkColor
+									: Colors.grey300
+							}
 						]}
 					/>
 					<Text style={styles.titleText}>Etc</Text>
-					<View style={styles.blankView} />
+					<View
+						style={[
+							styles.blankView,
+							{
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: constColors.whiteBackgroundColor
+							}
+						]}
+					/>
 					<View style={styles.columnView}>
 						{thirdButtons.map((button) => (
 							<TouchableHighlight
@@ -234,7 +316,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 								style={{ backgroundColor: isDark ? 'black' : '#fff' }}
 								onPress={() => button.onPress()}
 							>
-								<View style={styles.rowView}>
+								<View
+									style={[
+										styles.rowView,
+										{
+											backgroundColor: isDark
+												? constColors.mainDarkColor
+												: '#fff'
+										}
+									]}
+								>
 									<Ionic
 										name={button.iconName}
 										size={21}
@@ -242,7 +333,16 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 										color={button.iconColor}
 									/>
 									<Text style={styles.touchText}>{button.text}</Text>
-									<View style={styles.iconView}>
+									<View
+										style={[
+											styles.iconView,
+											{
+												backgroundColor: isDark
+													? constColors.mainDarkColor
+													: Colors.white
+											}
+										]}
+									>
 										<Font5Icon
 											name="angle-right"
 											size={19}
@@ -264,17 +364,32 @@ const DrawerContent: FC<DrawerContentComponentProps> = (props) => {
 					<View
 						style={[
 							styles.blankGreyView,
-							{ backgroundColor: isDark ? Colors.grey800 : Colors.grey300 }
+							{
+								backgroundColor: isDark
+									? constColors.submitDarkColor
+									: Colors.grey300
+							}
 						]}
 					/>
 					<Text style={styles.titleText}>달력 정보</Text>
-					<View style={styles.blankView} />
+					<View
+						style={[
+							styles.blankView,
+							{
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: constColors.whiteBackgroundColor
+							}
+						]}
+					/>
 					<View
 						style={[
 							styles.rowCircle,
 							{
 								alignSelf: 'center',
-								backgroundColor: isDark ? Colors.black : Colors.white,
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: Colors.white,
 								width: '90%',
 								height: 50,
 								borderRadius: 10
@@ -385,6 +500,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		width: '100%',
 		height: screen.height * 0.05,
+
 		// backgroundColor: backWhiteColor,
 		padding: 5
 	},
@@ -413,7 +529,8 @@ const styles = StyleSheet.create({
 		marginTop: 20
 	},
 	blankView: {
-		height: 15
+		height: 15,
+		backgroundColor: constColors.mainDarkColor
 	},
 	blankGreyView: {
 		height: 20,

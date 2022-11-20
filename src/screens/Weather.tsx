@@ -16,6 +16,7 @@ import { useGetHeight, useLayout } from '../hooks';
 import { setWindowHeight } from '../store/weather';
 import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 import { StatusBar } from 'expo-status-bar';
+import constColors from '../constants/colors';
 export default function Weather() {
 	const {
 		current,
@@ -57,18 +58,20 @@ export default function Weather() {
 
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
+			style={{
+				backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7'
+			}}
 		>
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+					{ backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7' }
 				]}
 				onLayout={setLayout}
 			>
 				<ScrollView>
 					<StatusBar style={isDark ? 'light' : 'dark'} />
-					<NavigationHeader
+					{/* <NavigationHeader
 						title="날씨"
 						Left={() => (
 							<TouchHeaderIconView
@@ -78,7 +81,7 @@ export default function Weather() {
 								<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
 							</TouchHeaderIconView>
 						)}
-					/>
+					/> */}
 					<WeatherInfo
 						layout={layout}
 						isDark={isDark}

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Colors } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
+import constColors from '../constants/colors';
 
 interface modalText {
 	text: string;
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		padding: 35,
 		alignItems: 'center',
-		shadowColor: Colors.black,
+		shadowColor: constColors.mainDarkColor,
 		shadowOffset: {
 			width: 0,
 			height: 2

@@ -4,6 +4,7 @@ import { LayoutChangeEvent, StyleSheet } from 'react-native';
 import { View, Text } from './navigation';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import constColors from '../constants/colors';
 
 export type NavigationHeaderProps = {
 	title?: string;
@@ -36,7 +37,7 @@ export const NavigationHeader: FC<NavigationHeaderProps> = ({
 					backgroundColor: backgroundColor
 						? backgroundColor
 						: isDark
-						? 'black'
+						? constColors.mainDarkColor
 						: '#EDF3F7'
 				}
 			]}

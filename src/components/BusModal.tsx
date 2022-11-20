@@ -17,6 +17,7 @@ import { useClock } from '../hooks';
 import makeBusTime from '../lib/help/makeBusTime';
 import { MaterialCommunityIcon as Icon } from '../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
+import constColors from '../constants/colors';
 
 const inputHeight = 35;
 
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
 		padding: 15,
 		paddingBottom: 40,
 		alignItems: 'center',
-		shadowColor: Colors.black,
+		shadowColor: constColors.mainDarkColor,
 		shadowOffset: {
 			width: 0,
 			height: 2

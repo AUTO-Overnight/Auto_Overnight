@@ -16,6 +16,7 @@ import { getVersion } from '../store/login';
 import { getLogin, initialLogin } from '../store/login';
 import type { RootState } from '../store';
 import { getAirPollution, getWeather } from '../store/weather';
+import constColors from '../constants/colors';
 export default function Loading() {
 	const { name, id, pw, rememberID, versionOK, loadingVersion } = useSelector(
 		({ login, loading }: RootState) => ({
@@ -56,7 +57,7 @@ export default function Loading() {
 				}}
 				source={require('../assets/images/small.png')}
 			></Image>
-			<Text style={[styles.text]}>Auto OverNight</Text>
+			<Text style={[styles.text]}>{'한국공학대학교\n외박 신청'}</Text>
 		</View>
 	);
 }
@@ -64,9 +65,9 @@ export default function Loading() {
 const styles = StyleSheet.create({
 	flex: {
 		flex: 1,
-		backgroundColor: Colors.black,
+		backgroundColor: constColors.mainDarkColor,
 		alignContent: 'center',
 		justifyContent: 'center'
 	},
-	text: { textAlign: 'center', fontSize: 25, color: Colors.white }
+	text: { textAlign: 'center', fontSize: 20, color: Colors.white }
 });
