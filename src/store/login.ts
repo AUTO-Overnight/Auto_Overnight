@@ -42,7 +42,8 @@ export const initialState: Login = {
 		submitButtonColor: '#FFF',
 		removeButtonColor: '#fff',
 		smallButtonColor: '#fff'
-	}
+	},
+	loginErrorModalVisible: false
 };
 
 const GET_LOGIN = 'login/GET_LOGIN';
@@ -176,6 +177,9 @@ export const loginSlice = createSlice({
 		},
 		setDarkMode: (state, action: PayloadAction<boolean>) => {
 			state.isDarkMode = action.payload;
+		},
+		setLoginErrorModalVisible: (state, action: PayloadAction<boolean>) => {
+			state.loginErrorModalVisible = action.payload;
 		}
 	},
 	extraReducers: {}
@@ -187,7 +191,8 @@ export const {
 	setCookieTime,
 	setIdPw,
 	toggleRemember,
-	setDarkMode
+	setDarkMode,
+	setLoginErrorModalVisible
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

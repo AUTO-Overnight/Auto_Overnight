@@ -34,12 +34,15 @@ import {
 	initialLogin,
 	setCookieTime,
 	setIdPw,
+	setLoginErrorModalVisible,
 	toggleRemember
 } from '../store/login';
 import { useEffect } from 'react';
 import { Colors } from 'react-native-paper';
 import dayjs from 'dayjs';
 import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
+import constColors from '../constants/colors';
+import ModalLoginError from '../components/login/ModalLoginError';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 const marginBottom = 35;
@@ -47,18 +50,25 @@ const fontSize = 17;
 
 export default function MainNavigator() {
 	const dispatch = useDispatch();
-	const { loginError, loadingLogin, name, id, pw, rememberID } = useSelector(
-		({ login, loading }: RootState) => ({
-			cookies: login.loginState.cookies,
-			name: login.name,
-			loginError: login.loginState.loginError,
-			outStayStGbn: login.loginState.outStayStGbn,
-			loadingLogin: loading['login/GET_LOGIN'],
-			id: login.id,
-			pw: login.pw,
-			rememberID: login.rememberID
-		})
-	);
+	const {
+		loginError,
+		loadingLogin,
+		name,
+		id,
+		pw,
+		rememberID,
+		loginErrorModalVisible
+	} = useSelector(({ login, loading }: RootState) => ({
+		cookies: login.loginState.cookies,
+		name: login.name,
+		loginError: login.loginState.loginError,
+		outStayStGbn: login.loginState.outStayStGbn,
+		loadingLogin: loading['login/GET_LOGIN'],
+		id: login.id,
+		pw: login.pw,
+		rememberID: login.rememberID,
+		loginErrorModalVisible: login.loginErrorModalVisible
+	}));
 	const focus = useAutoFocus();
 	const [userId, setId] = useState<string>(id);
 	const [userPw, setPW] = useState<string>(pw);
@@ -96,9 +106,16 @@ export default function MainNavigator() {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
 	const isDark = useTheme().dark;
+	// 로그인 에러 모달
+	const onPressLoginErrorText = useCallback(() => {
+		dispatch(setLoginErrorModalVisible(!loginErrorModalVisible));
+	}, [loginErrorModalVisible]);
+
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
+			style={{
+				backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7'
+			}}
 		>
 			<NavigationHeader
 				title="로그인"
@@ -114,15 +131,18 @@ export default function MainNavigator() {
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+					{ backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7' }
 				]}
 			>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
 					<View
 						style={[
 							styles.textView,
+
 							{
-								backgroundColor: isDark ? Colors.black : Colors.white,
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: Colors.white,
 								marginBottom: 10
 							}
 						]}
@@ -160,7 +180,9 @@ export default function MainNavigator() {
 					<View
 						style={[
 							styles.textView,
-							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+							{
+								backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7'
+							}
 						]}
 					>
 						<View
@@ -194,11 +216,27 @@ export default function MainNavigator() {
 							/>
 						</View>
 					</View>
+					{/* <View style={{ marginBottom: 15 }} /> */}
+					{/* 토글 영역 */}
+					<View
+						style={[
+							styles.textFlexEndView,
+							{
+								backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7'
+							}
+						]}
+					>
+						<Text style={styles.modalText} onPress={onPressLoginErrorText}>
+							로그인 에러가 나타나요 😞
+						</Text>
+					</View>
 					<View style={{ marginBottom: 15 }} />
 					<View
 						style={[
 							styles.container,
-							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+							{
+								backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7'
+							}
 						]}
 					>
 						<Switch></Switch>
@@ -264,6 +302,7 @@ export default function MainNavigator() {
 					</TouchableView>
 				</AutoFocusProvider>
 				<View style={[{ marginBottom: Platform.select({ ios: 50 }) }]} />
+				<ModalLoginError />
 			</View>
 		</SafeAreaView>
 	);
@@ -298,10 +337,26 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	container: {
+		display: 'flex',
 		width: '90%',
 		flexDirection: 'row',
 		marginRight: 10,
 		alignItems: 'center',
 		justifyContent: 'space-evenly'
+	},
+	textFlexEndView: {
+		display: 'flex',
+		width: '90%',
+		flexDirection: 'row',
+		marginRight: 10,
+		alignItems: 'center',
+		justifyContent: 'flex-end'
+	},
+	modalText: {
+		display: 'flex',
+		justifyContent: 'flex-end',
+		alignItems: 'flex-end',
+		alignContent: 'flex-end',
+		alignSelf: 'flex-end'
 	}
 });
