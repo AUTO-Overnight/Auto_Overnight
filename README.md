@@ -107,4 +107,4 @@ body
 | 이름   | 개발분야  | 담당             | 소개페이지                                             |
 | ------ | --------- | ---------------- | ------------------------------------------------------ |
 | 장동현 | Front-end | App development  | [개인 레포로 이동](https://github.com/ww8007)          |
-| 이서윤 | Back-end  | Data Engineering | [개인 레포로 이동](https://github.com/somewheregreeny) |
+| 이서윤 | Back-end  | Data Engineering | [개인 레포로 이동](https://github.com/sunaookamishiroko) |
