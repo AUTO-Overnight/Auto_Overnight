@@ -1,13 +1,12 @@
+import type { ComponentProps, FC, ReactNode } from 'react';
 import React from 'react';
-import type {ReactNode, FC, ComponentProps} from 'react';
-import {Platform, View, Animated, StyleSheet} from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 // prettier-ignore
-import type {GestureResponderEvent, PanResponderGestureState} from 'react-native';
-import type {LayoutChangeEvent} from 'react-native';
-import {useScrollEnabled} from '../contexts';
+import type { GestureResponderEvent, LayoutChangeEvent, PanResponderGestureState } from 'react-native';
+import { useScrollEnabled } from '../contexts';
 // prettier-ignore
-import {useLayout, usePanResponder, useToggle, useAnimatedValue, useTransformStyle}
-from '../hooks';
+import { useAnimatedValue, useLayout, usePanResponder, useTransformStyle } from '../hooks';
+import { useToggle } from '../hooks/useToggle';
 
 type Event = GestureResponderEvent;
 type State = PanResponderGestureState;
@@ -26,7 +25,7 @@ export const LeftSwipe: FC<LeftSwipeProps> = ({
   ...viewProps
 }) => {
   const [scrollEnabled, setScrollEnabled] = useScrollEnabled();
-  const [{width: leftWidth}, setLayout] = useLayout();
+  const [{ width: leftWidth }, setLayout] = useLayout();
   const translateX = useAnimatedValue(0);
   const transformStyle = useTransformStyle(
     {
@@ -44,7 +43,7 @@ export const LeftSwipe: FC<LeftSwipeProps> = ({
         ios && setScrollEnabled(false);
       },
       onPanResponderMove(e: Event, s: State) {
-        const {dx} = s;
+        const { dx } = s;
         if (!show && dx < 0) {
           return; // 이 움직임을 무시합니다.
         }
@@ -52,7 +51,7 @@ export const LeftSwipe: FC<LeftSwipeProps> = ({
       },
       onPanResponderRelease(e: Event, s: State) {
         ios && setScrollEnabled(true);
-        const {dx} = s;
+        const { dx } = s;
         if (!show && dx < 0) {
           return; // 이 움직임을 무시합니다.
         }
@@ -67,14 +66,15 @@ export const LeftSwipe: FC<LeftSwipeProps> = ({
   return (
     <Animated.View
       style={[transformStyle, styles.animViewStyle, style]}
-      {...viewProps}>
+      {...viewProps}
+    >
       {left && left(setLayout)}
-      <View style={[{width: '100%'}]} {...panResponder.panHandlers}>
+      <View style={[{ width: '100%' }]} {...panResponder.panHandlers}>
         {children}
       </View>
     </Animated.View>
   );
 };
 const styles = StyleSheet.create({
-  animViewStyle: {flexDirection: 'row', width: '100%'},
+  animViewStyle: { flexDirection: 'row', width: '100%' },
 });
