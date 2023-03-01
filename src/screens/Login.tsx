@@ -1,128 +1,156 @@
-import React, { useState } from 'react';
 import {
+	DrawerActions,
+	useNavigation,
+	useTheme
+} from "@react-navigation/native";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+	ActivityIndicator,
+	Alert,
 	Platform,
 	StyleSheet,
-	Alert,
-	ActivityIndicator,
-	Linking
-} from 'react-native';
-import {
-	SafeAreaView,
-	View,
-	Text,
-	TextInput,
-	TouchableView,
-	MaterialCommunityIcon as Icon,
-	Switch,
-	NavigationHeader
-} from '../theme';
-import { Switch as RNSwitch } from 'react-native';
-import {
-	useNavigation,
-	useTheme,
-	DrawerActions
-} from '@react-navigation/native';
-import { useAutoFocus, AutoFocusProvider } from '../contexts';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { useCallback } from 'react';
-import 'dayjs/locale/ko';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+	Switch as RNSwitch
+} from "react-native";
+import { Colors } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import ModalLoginError from "../components/login/ModalLoginError";
+import constColors from "../constants/colors";
+import { AutoFocusProvider, useAutoFocus } from "../contexts";
+import { RootState } from "../store";
 import {
 	getLogin,
 	initialLogin,
-	setCookieTime,
 	setIdPw,
+	setLoginErrorModalVisible,
 	toggleRemember
-} from '../store/login';
-import { useEffect } from 'react';
-import { Colors } from 'react-native-paper';
-import dayjs from 'dayjs';
-import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
+} from "../store/login";
+import {
+	MaterialCommunityIcon as Icon,
+	NavigationHeader,
+	SafeAreaView,
+	Switch,
+	Text,
+	TextInput,
+	TouchableView,
+	View
+} from "../theme";
+import { TouchHeaderIconView } from "../theme/navigation/TouchHeaderIconView";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
 const marginBottom = 35;
 const fontSize = 17;
 
 export default function MainNavigator() {
 	const dispatch = useDispatch();
-	const { loginError, loadingLogin, name, id, pw, rememberID } = useSelector(
-		({ login, loading }: RootState) => ({
-			cookies: login.loginState.cookies,
-			name: login.name,
-			loginError: login.loginState.loginError,
-			outStayStGbn: login.loginState.outStayStGbn,
-			loadingLogin: loading['login/GET_LOGIN'],
-			id: login.id,
-			pw: login.pw,
-			rememberID: login.rememberID
-		})
-	);
+	const {
+		loginError,
+		loadingLogin,
+		name,
+		id,
+		pw,
+		rememberID,
+		loginErrorModalVisible
+	} = useSelector(({ login, loading }: RootState) => ({
+		cookies: login.loginState.cookies,
+		name: login.name,
+		loginError: login.loginState.loginError,
+		outStayStGbn: login.loginState.outStayStGbn,
+		loadingLogin: loading["login/GET_LOGIN"],
+		id: login.id,
+		pw: login.pw,
+		rememberID: login.rememberID,
+		loginErrorModalVisible: login.loginErrorModalVisible
+	}));
+	// FIRST RENDER
 	const focus = useAutoFocus();
+	const navigation = useNavigation();
+	// 1. 로그인 에러 모달
+	useEffect(() => {
+		dispatch(setLoginErrorModalVisible(!loginErrorModalVisible));
+	}, []);
+	// 2. 자동 로그인 판단
+	const [isAutoLogin, setAutoLogin] = useState(false);
+	useEffect(() => {
+		if (rememberID === "auto") setAutoLogin(true);
+		else setAutoLogin(false);
+	}, []);
+
+	const onPressLoginErrorText = useCallback(() => {
+		dispatch(setLoginErrorModalVisible(!loginErrorModalVisible));
+	}, [loginErrorModalVisible]);
+
+	// ACTION
 	const [userId, setId] = useState<string>(id);
 	const [userPw, setPW] = useState<string>(pw);
 
-	const [isEnabled, setIsEnabled] = useState(false);
-	useEffect(() => {
-		if (rememberID === 'auto') setIsEnabled(true);
-		else setIsEnabled(false);
-	}, []);
 	const toggleSwitch = useCallback(() => {
-		setIsEnabled(!isEnabled);
-		if (isEnabled) {
-			dispatch(toggleRemember('no'));
+		setAutoLogin(!isAutoLogin);
+		if (isAutoLogin) {
+			dispatch(toggleRemember("no"));
 			dispatch(initialLogin());
 		} else {
-			dispatch(toggleRemember('auto'));
+			dispatch(toggleRemember("auto"));
 		}
-	}, [isEnabled]);
+	}, [isAutoLogin]);
 
-	const onSubmit = useCallback(() => {
+	const onSubmitLoginForm = useCallback(() => {
 		dispatch(initialLogin());
 		dispatch(setIdPw({ userId, userPw }));
 		dispatch(getLogin({ userId, userPw }));
 	}, [userId, userPw]);
-	const navigation = useNavigation();
+
 	useEffect(() => {
 		if (name && !loadingLogin) {
-			navigation.navigate('TabNavigator');
-		} else {
-			if (loginError && !loadingLogin) Alert.alert('로그인 에러');
+			navigation.navigate("TabNavigator");
+		} else if (loginError && !loadingLogin) {
+			// Alert.alert("로그인 에러");
 		}
 	}, [loginError, name, loadingLogin]);
 
 	const open = useCallback(() => {
 		navigation.dispatch(DrawerActions.openDrawer());
 	}, []);
+
 	const isDark = useTheme().dark;
+
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
+			style={{
+				backgroundColor: isDark ? constColors.mainDarkColor : "#EDF3F7"
+			}}
 		>
 			<NavigationHeader
-				title="로그인"
+				title='로그인'
 				Left={() => (
 					<TouchHeaderIconView
-						underlayColor={isDark ? 'black' : '#EDF3F7'}
+						underlayColor={isDark ? "black" : "#EDF3F7"}
 						onPress={open}
 					>
-						<Icon name="menu" size={33} style={{ marginLeft: 10 }} />
+						<Icon name='menu' size={33} style={{ marginLeft: 10 }} />
 					</TouchHeaderIconView>
 				)}
 			/>
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+					{ backgroundColor: isDark ? constColors.mainDarkColor : "#EDF3F7" }
 				]}
 			>
 				<AutoFocusProvider contentContainerStyle={[styles.keyboardAwareFocus]}>
 					<View
 						style={[
 							styles.textView,
+
 							{
-								backgroundColor: isDark ? Colors.black : Colors.white,
+								backgroundColor: isDark
+									? constColors.mainDarkColor
+									: Colors.white,
 								marginBottom: 10
 							}
 						]}
@@ -130,11 +158,11 @@ export default function MainNavigator() {
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : Colors.blue100 }
+								{ backgroundColor: isDark ? "#222831" : Colors.blue100 }
 							]}
 						>
 							<Icon
-								name="account"
+								name='account'
 								size={30}
 								style={{
 									color: isDark ? Colors.white : Colors.grey900,
@@ -150,8 +178,8 @@ export default function MainNavigator() {
 								]}
 								value={userId}
 								onChangeText={(useId) => setId((text) => useId)}
-								autoCapitalize="none"
-								placeholder="201xxxxxxx"
+								autoCapitalize='none'
+								placeholder='201xxxxxxx'
 								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>
 						</View>
@@ -160,17 +188,19 @@ export default function MainNavigator() {
 					<View
 						style={[
 							styles.textView,
-							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+							{
+								backgroundColor: isDark ? constColors.mainDarkColor : "#EDF3F7"
+							}
 						]}
 					>
 						<View
 							style={[
 								styles.textInputView,
-								{ backgroundColor: isDark ? '#222831' : Colors.blue100 }
+								{ backgroundColor: isDark ? "#222831" : Colors.blue100 }
 							]}
 						>
 							<Icon
-								name="lock"
+								name='lock'
 								size={30}
 								style={{
 									color: isDark ? Colors.white : Colors.grey900,
@@ -180,8 +210,8 @@ export default function MainNavigator() {
 							/>
 							<TextInput
 								onFocus={focus}
-								autoCapitalize="none"
-								autoCompleteType="password"
+								autoCapitalize='none'
+								autoCompleteType='password'
 								secureTextEntry={true}
 								style={[
 									styles.textInput,
@@ -189,16 +219,31 @@ export default function MainNavigator() {
 								]}
 								value={userPw}
 								onChangeText={(userPw) => setPW((text) => userPw)}
-								placeholder="PW를 입력해 주세요"
+								placeholder='PW를 입력해 주세요'
 								placeholderTextColor={isDark ? Colors.grey400 : Colors.grey600}
 							/>
 						</View>
+					</View>
+					{/* 토글 영역 */}
+					<View
+						style={[
+							styles.textFlexEndView,
+							{
+								backgroundColor: isDark ? constColors.mainDarkColor : "#EDF3F7"
+							}
+						]}
+					>
+						<Text style={styles.modalText} onPress={onPressLoginErrorText}>
+							로그인 에러가 나타나요 😞
+						</Text>
 					</View>
 					<View style={{ marginBottom: 15 }} />
 					<View
 						style={[
 							styles.container,
-							{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+							{
+								backgroundColor: isDark ? constColors.mainDarkColor : "#EDF3F7"
+							}
 						]}
 					>
 						<Switch></Switch>
@@ -212,13 +257,13 @@ export default function MainNavigator() {
 						</Text>
 						<RNSwitch
 							trackColor={{
-								false: '#767577',
-								true: isDark ? '#222831' : '#3b5998'
+								false: "#767577",
+								true: isDark ? "#222831" : "#3b5998"
 							}}
-							thumbColor={isEnabled ? Colors.yellow400 : '#f4f3f4'}
-							ios_backgroundColor="#3e3e3e"
+							thumbColor={isAutoLogin ? Colors.yellow400 : "#f4f3f4"}
+							ios_backgroundColor='#3e3e3e'
 							onValueChange={toggleSwitch}
-							value={isEnabled}
+							value={isAutoLogin}
 						/>
 						<Text
 							style={{
@@ -234,12 +279,12 @@ export default function MainNavigator() {
 						notification
 						style={[
 							styles.touchableView,
-							{ backgroundColor: isDark ? '#152D35' : '#3b5998' }
+							{ backgroundColor: isDark ? "#152D35" : "#3b5998" }
 						]}
-						onPress={onSubmit}
+						onPress={onSubmitLoginForm}
 					>
 						{loadingLogin && (
-							<ActivityIndicator size="large" color={Colors.white} />
+							<ActivityIndicator size='large' color={Colors.white} />
 						)}
 						{!loadingLogin && (
 							<>
@@ -255,7 +300,7 @@ export default function MainNavigator() {
 									로그인
 								</Text>
 								<Icon
-									name="login"
+									name='login'
 									size={24}
 									style={{ color: isDark ? Colors.white : Colors.white }}
 								/>
@@ -264,44 +309,61 @@ export default function MainNavigator() {
 					</TouchableView>
 				</AutoFocusProvider>
 				<View style={[{ marginBottom: Platform.select({ ios: 50 }) }]} />
+				<ModalLoginError />
 			</View>
 		</SafeAreaView>
 	);
 }
 const styles = StyleSheet.create({
-	view: { flex: 1, justifyContent: 'space-between' },
+	view: { flex: 1, justifyContent: "space-between" },
 	text: { fontSize: 20 },
 	keyboardAwareFocus: {
 		flex: 1,
 		padding: 5,
-		alignItems: 'center',
-		justifyContent: 'center'
+		alignItems: "center",
+		justifyContent: "center"
 	},
 	textView: {
-		width: '90%',
+		width: "90%",
 		padding: 0,
 		marginBottom: marginBottom
 	},
 	textInput: { fontSize: fontSize, flex: 1 },
 	textInputView: {
-		flexDirection: 'row',
+		flexDirection: "row",
 		borderRadius: 10,
 		padding: 10,
 		color: Colors.white
 	},
 	touchableView: {
-		flexDirection: 'row',
+		flexDirection: "row",
 		height: 55,
 		borderRadius: 10,
-		width: '90%',
-		justifyContent: 'center',
-		alignItems: 'center'
+		width: "90%",
+		justifyContent: "center",
+		alignItems: "center"
 	},
 	container: {
-		width: '90%',
-		flexDirection: 'row',
+		display: "flex",
+		width: "90%",
+		flexDirection: "row",
 		marginRight: 10,
-		alignItems: 'center',
-		justifyContent: 'space-evenly'
+		alignItems: "center",
+		justifyContent: "space-evenly"
+	},
+	textFlexEndView: {
+		display: "flex",
+		width: "90%",
+		flexDirection: "row",
+		marginRight: 10,
+		alignItems: "center",
+		justifyContent: "flex-end"
+	},
+	modalText: {
+		display: "flex",
+		justifyContent: "flex-end",
+		alignItems: "flex-end",
+		alignContent: "flex-end",
+		alignSelf: "flex-end"
 	}
 });

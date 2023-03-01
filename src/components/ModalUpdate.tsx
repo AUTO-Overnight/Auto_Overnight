@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { Dimensions, StyleSheet, View, Linking, Platform } from 'react-native';
-import { Colors } from 'react-native-paper';
+import { Colors, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import MakeAlarm from '../lib/help/MakeAlarm';
+import constColors from '../constants/colors';
 import { RootState } from '../store';
 import { setUpdateModalVisible } from '../store/calendar';
 
@@ -20,6 +20,8 @@ export function ModalUpdate() {
 	const onPressClose = useCallback(() => {
 		dispatch(setUpdateModalVisible(false));
 	}, []);
+
+	const isDark = useTheme().dark;
 
 	const onPressOkay = useCallback(() => {
 		Platform.OS === 'ios'
@@ -39,21 +41,27 @@ export function ModalUpdate() {
 
 					<>
 						<Text style={styles.titleText}>주요 업데이트</Text>
-						<Text style={styles.subText}>{` 1. 앱스토어 출시`}</Text>
-						<Text style={styles.subText}>{` 2. 로그인 관련 오류 수정`}</Text>
+						<Text
+							style={styles.subText}
+						>{` 1. 로그인 에러 관련 설명 추가`}</Text>
+						{/* <Text style={styles.subText}>{` 2. 디자인 변경`}</Text> */}
 						<View style={{ height: 15 }} />
-						<Text style={styles.titleText}>새소식</Text>
+						<Text style={styles.titleText}>변경사항</Text>
 						<Text style={styles.subText}>
-							{` ⭐️드디어 앱 스토어에 정식 출시 되었습니다⭐️\n 앱스토어 개발자 등록 비용 때문에 부득이 하게\n 광고를 넣게 되었습니다... \n 양해 부탁 드리겠습니다 😂 `}
+							{`1. 로그인 화면에서의 로그인 에러 관련 설명이 추가 되었습니다. `}
+							{/* {` \n 2.달력의 디자인과 다크 모드 디자인이 변경 되었습니다. `} */}
 						</Text>
 						<View style={styles.blankView} />
-						<View style={styles.buttonOverLine} />
+						<View
+							style={[
+								styles.buttonOverLine,
+								{ borderColor: isDark ? Colors.grey100 : Colors.grey700 }
+							]}
+						/>
 						<Button
-							buttonNumber={2}
-							buttonText="아니요"
-							secondButtonText="설치해 보기"
+							buttonNumber={1}
+							buttonText="닫기"
 							onPressFunction={onPressClose}
-							secondOnPressFunction={onPressOkay}
 						/>
 					</>
 				</>
@@ -82,8 +90,8 @@ const styles = StyleSheet.create({
 	},
 	buttonOverLine: {
 		borderTopWidth: 0.4,
-		width: screen.width * 0.9,
+		width: screen.width * 0.94,
 		marginTop: 20,
-		borderColor: Colors.black
+		borderColor: constColors.mainDarkColor
 	}
 });

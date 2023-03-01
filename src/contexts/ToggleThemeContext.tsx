@@ -1,32 +1,33 @@
-import React, {createContext, FC, useContext} from 'react';
+import React, { createContext, FC, ReactNode, useContext } from 'react';
 
 export type ToggleThemeContextType = {
-  toggleTheme: () => void;
+	toggleTheme: () => void;
 };
 const defaultToggleThemeContext = {
-  toggleTheme: () => {},
+	toggleTheme: () => {}
 };
 
 const ToggleThemeContext = createContext<ToggleThemeContextType>(
-  defaultToggleThemeContext,
+	defaultToggleThemeContext
 );
 
 type ToggleThemeContextProps = {
-  toggleTheme: () => void;
+	toggleTheme: () => void;
+	children: ReactNode;
 };
 export const ToggleThemeProvider: FC<ToggleThemeContextProps> = ({
-  children,
-  toggleTheme,
+	children,
+	toggleTheme
 }) => {
-  const value = {toggleTheme};
-  return (
-    <ToggleThemeContext.Provider value={value}>
-      {children}
-    </ToggleThemeContext.Provider>
-  );
+	const value = { toggleTheme };
+	return (
+		<ToggleThemeContext.Provider value={value}>
+			{children}
+		</ToggleThemeContext.Provider>
+	);
 };
 
 export const useToggleTheme = () => {
-  const {toggleTheme} = useContext(ToggleThemeContext);
-  return toggleTheme;
+	const { toggleTheme } = useContext(ToggleThemeContext);
+	return toggleTheme;
 };

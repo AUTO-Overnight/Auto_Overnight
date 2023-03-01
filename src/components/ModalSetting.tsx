@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { Dimensions, StyleSheet, TouchableHighlight, View } from 'react-native';
 import { Colors } from 'react-native-paper';
-import { CloseButton, ModalView, Text } from '../theme';
+import { Button, CloseButton, ModalView, Text } from '../theme';
 import Font5Icon from 'react-native-vector-icons/FontAwesome5';
 import { useToggleTheme } from '../contexts';
 import { useTheme } from '@react-navigation/native';
+import constColors from '../constants/colors';
 
 const screen = Dimensions.get('screen');
 
@@ -44,7 +45,7 @@ export function ModalSetting({ modalVisible, setModalVisible }: props) {
 							{buttons.map((button) => (
 								<TouchableHighlight
 									activeOpacity={1}
-									underlayColor={isDark ? '#222831' : Colors.white}
+									underlayColor={isDark ? '#132A52' : Colors.white}
 									onPress={button.onPressFunction}
 									key={button.text}
 									style={[styles.touchButtonStyle, button.radius]}
@@ -56,7 +57,12 @@ export function ModalSetting({ modalVisible, setModalVisible }: props) {
 											color={Colors.blue500}
 											style={styles.iconStyle}
 										/>
-										<Text style={[styles.touchText, { color: Colors.black }]}>
+										<Text
+											style={[
+												styles.touchText,
+												{ color: constColors.mainDarkColor }
+											]}
+										>
 											{' '}
 											{button.text}
 										</Text>
@@ -64,7 +70,7 @@ export function ModalSetting({ modalVisible, setModalVisible }: props) {
 											<Font5Icon
 												name="angle-right"
 												size={19}
-												color={Colors.black}
+												color={constColors.mainDarkColor}
 												style={styles.rightIconStyle}
 											/>
 										</View>
@@ -73,6 +79,20 @@ export function ModalSetting({ modalVisible, setModalVisible }: props) {
 							))}
 						</View>
 					</View>
+					<View style={styles.blankView} />
+					<View
+						style={[
+							styles.buttonOverLine,
+							{ borderColor: isDark ? Colors.grey100 : Colors.grey700 }
+						]}
+					/>
+					<Button
+						buttonNumber={2}
+						buttonText="닫기"
+						secondButtonText="변경하기"
+						onPressFunction={onPressCloseBtn}
+						secondOnPressFunction={useToggleTheme()}
+					/>
 				</>
 			)}
 		/>
@@ -132,5 +152,11 @@ const styles = StyleSheet.create({
 	iconView: {
 		alignItems: 'flex-end',
 		flex: 1
+	},
+	buttonOverLine: {
+		borderTopWidth: 0.4,
+		width: screen.width * 0.94,
+		marginTop: 20,
+		borderColor: constColors.mainDarkColor
 	}
 });

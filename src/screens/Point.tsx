@@ -12,6 +12,7 @@ import { LeftRightNavigation, LeftRightNavigationMethods } from '../components';
 import { BonusTable } from '../components';
 import { TouchHeaderIconView } from '../theme/navigation/TouchHeaderIconView';
 import { StatusBar } from 'expo-status-bar';
+import constColors from '../constants/colors';
 export default function Point() {
 	const navigation = useNavigation();
 	const open = useCallback(() => {
@@ -22,12 +23,14 @@ export default function Point() {
 	const isDark = useTheme().dark;
 	return (
 		<SafeAreaView
-			style={{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }}
+			style={{
+				backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7'
+			}}
 		>
 			<View
 				style={[
 					styles.view,
-					{ backgroundColor: isDark ? Colors.black : '#EDF3F7' }
+					{ backgroundColor: isDark ? constColors.mainDarkColor : '#EDF3F7' }
 				]}
 			>
 				<ScrollView>

@@ -17,6 +17,7 @@ export interface Login {
 		removeButtonColor: string;
 		smallButtonColor: string;
 	};
+	loginErrorModalVisible: boolean;
 }
 
 export interface loginState {

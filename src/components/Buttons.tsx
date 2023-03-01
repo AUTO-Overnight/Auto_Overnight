@@ -8,14 +8,23 @@ import { useTheme } from '@react-navigation/native';
 import { green500 } from 'react-native-paper/lib/typescript/styles/colors';
 import { useDispatch } from 'react-redux';
 import { toggleDark } from '../store/calendar';
+import constColors from '../constants/colors';
 
 const selectBorderWidth = 3;
 const whiteModeBorderColor = Colors.green300;
-const darkModeBorderColor = Colors.grey700;
-export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
-	const [select, setSelect] = useState(1);
+const darkModeBorderColor = Colors.grey100;
+export function Buttons({
+	onPressDay,
+	onPressDays,
+	isDark,
+	loadingLogin,
+	select,
+	setSelect
+}) {
+	// const [select, setSelect] = useState(1);
 	const { buttonList } = useSendButtons();
 	const bottomColor = '#c8e473';
+	const bottomDarkColor = constColors.smallDarkColor;
 	const isRealDark = useTheme().dark;
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -30,7 +39,7 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 				width: '90%',
 				marginTop: '7%',
 				marginLeft: '4.5%',
-				justifyContent: 'space-between',
+				justifyContent: 'space-between'
 			}}
 		>
 			<TouchableView
@@ -40,10 +49,10 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 				style={[
 					styles.smallTouchableView,
 					{
-						backgroundColor: isDark ? '#023035' : bottomColor,
+						backgroundColor: isDark ? bottomDarkColor : bottomColor,
 						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
-						borderWidth: select === 1 ? selectBorderWidth : 0,
-					},
+						borderWidth: select === 1 ? selectBorderWidth : 0
+					}
 				]}
 			>
 				<Text
@@ -51,8 +60,8 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
-							fontWeight: '500',
-						},
+							fontWeight: '500'
+						}
 					]}
 				>
 					{buttonList[0].text}
@@ -65,10 +74,10 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 				style={[
 					styles.smallTouchableView,
 					{
-						backgroundColor: isDark ? '#023035' : bottomColor,
+						backgroundColor: isDark ? bottomDarkColor : bottomColor,
 						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
-						borderWidth: select === 2 ? selectBorderWidth : 0,
-					},
+						borderWidth: select === 2 ? selectBorderWidth : 0
+					}
 				]}
 			>
 				<Text
@@ -76,8 +85,8 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
-							fontWeight: '500',
-						},
+							fontWeight: '500'
+						}
 					]}
 				>
 					{buttonList[1].text}
@@ -90,10 +99,10 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 				style={[
 					styles.smallTouchableView,
 					{
-						backgroundColor: isDark ? '#023035' : bottomColor,
+						backgroundColor: isDark ? bottomDarkColor : bottomColor,
 						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
-						borderWidth: select === 3 ? selectBorderWidth : 0,
-					},
+						borderWidth: select === 3 ? selectBorderWidth : 0
+					}
 				]}
 			>
 				<Text
@@ -101,8 +110,8 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
-							fontWeight: '500',
-						},
+							fontWeight: '500'
+						}
 					]}
 				>
 					{buttonList[2].text}
@@ -115,10 +124,10 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 				style={[
 					styles.smallTouchableView,
 					{
-						backgroundColor: isDark ? '#023035' : bottomColor,
+						backgroundColor: isDark ? bottomDarkColor : bottomColor,
 						borderColor: isDark ? darkModeBorderColor : whiteModeBorderColor,
-						borderWidth: select === 4 ? selectBorderWidth : 0,
-					},
+						borderWidth: select === 4 ? selectBorderWidth : 0
+					}
 				]}
 			>
 				<Text
@@ -126,8 +135,8 @@ export function Buttons({ onPressDay, onPressDays, isDark, loadingLogin }) {
 						styles.buttonText,
 						{
 							color: isDark ? Colors.white : Colors.grey800,
-							fontWeight: '500',
-						},
+							fontWeight: '500'
+						}
 					]}
 				>
 					{buttonList[3].text}
@@ -144,9 +153,9 @@ const styles = StyleSheet.create({
 		width: '20%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		marginTop: '0%',
+		marginTop: '0%'
 	},
 	buttonText: {
-		fontSize: 12,
-	},
+		fontSize: 12
+	}
 });

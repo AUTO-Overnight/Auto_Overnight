@@ -18,13 +18,13 @@ export function ModalView({ modalVisible, ModalViewRender }: props) {
 			animationType="fade"
 			transparent={true}
 			visible={modalVisible}
-			style={{ backgroundColor: isDark ? '#222831' : Colors.white }}
+			style={{ backgroundColor: isDark ? '#132A52' : Colors.white }}
 		>
 			<View style={[styles.centeredView]}>
 				<View
 					style={[
 						styles.modalView,
-						{ backgroundColor: isDark ? '#222831' : Colors.white }
+						{ backgroundColor: isDark ? '#132A52' : Colors.white }
 					]}
 				>
 					{ModalViewRender()}
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.21,
 		shadowRadius: 1.0,
-		width: screen.width * 0.9,
+		width: screen.width * 0.946,
 		maxHeight: screen.height * 0.7
 	}
 });

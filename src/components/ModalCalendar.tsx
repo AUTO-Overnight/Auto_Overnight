@@ -13,6 +13,8 @@ import { Button, CloseButton, ModalView, Text } from '../theme';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
+import constColors from '../constants/colors';
+import { useCalendarTheme } from '../hooks';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -48,7 +50,7 @@ export function ModalCalendar() {
 		MakeAlarm({ endDate: date, color: '#fff', dispatch });
 		dispatch(setCalendarModalMode('loading'));
 	}, [lastSubmitDay]);
-
+	const { isDark } = useCalendarTheme();
 	return (
 		<ModalView
 			modalVisible={calendarModalVisible}
@@ -59,7 +61,12 @@ export function ModalCalendar() {
 						<>
 							<Text style={styles.titleText}>{lastDayText}</Text>
 							<View style={styles.blankView} />
-							<View style={styles.buttonOverLine} />
+							<View
+								style={[
+									styles.buttonOverLine,
+									{ borderColor: isDark ? Colors.grey100 : Colors.grey700 }
+								]}
+							/>
 							<Button
 								buttonNumber={2}
 								buttonText="아니요"
@@ -74,7 +81,12 @@ export function ModalCalendar() {
 						<>
 							<Text style={styles.titleText}>✅ 저장 되었습니다</Text>
 							<View style={styles.blankView} />
-							<View style={styles.buttonOverLine} />
+							<View
+								style={[
+									styles.buttonOverLine,
+									{ borderColor: isDark ? Colors.grey100 : Colors.grey700 }
+								]}
+							/>
 							<Button
 								buttonNumber={1}
 								buttonText="확인"
@@ -88,7 +100,12 @@ export function ModalCalendar() {
 								❌ 켈린더 권한을 승인해 주세요
 							</Text>
 							<View style={styles.blankView} />
-							<View style={styles.buttonOverLine} />
+							<View
+								style={[
+									styles.buttonOverLine,
+									{ borderColor: isDark ? Colors.grey100 : Colors.grey700 }
+								]}
+							/>
 							<Button
 								buttonNumber={1}
 								buttonText="확인"
@@ -115,8 +132,8 @@ const styles = StyleSheet.create({
 	},
 	buttonOverLine: {
 		borderTopWidth: 0.4,
-		width: screen.width * 0.9,
+		width: screen.width * 0.94,
 		marginTop: 20,
-		borderColor: Colors.black
+		borderColor: constColors.mainDarkColor
 	}
 });
